@@ -1,0 +1,51 @@
+Prototypes list:
+=========================
+Card
+Deck
+OpenDeck
+Game
+Player
+	PCPlayer
+	UserPlayer
+Stats
+
+
+Prototypes members and methods:
+=========================
+Card:
+	type: number, taki, stop, change_color, plus2
+	color: red, blue, green, yellow, none
+	number: 3-9,none
+	front_face: bool
+
+Deck:
+	count
+	cards
+	+	Pop
+
+OpenDeck:
+	cards
+	+	Put
+
+Game:
+	currentPlayer
+	deck
+	opendeck
+	players
+	+	Start
+	+	DoTurn
+
+Player:
+	countOneCardReached
+	cards
+	+	Leave
+	+	Play
+
+Stats:
+	countTurns
+	timeElapsed
+	turnsTimes (list)
+
+Utils:
+	Stack:
+		https://github.com/dariubs/stack-js/blob/master/index.js
