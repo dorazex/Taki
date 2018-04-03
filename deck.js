@@ -1,8 +1,9 @@
 function deck() {
+    ////////// private properties
     var cards = [];
 
-    function buildCards() {
-        cards = [];
+    ////////// private methods
+    function initCards() {
         // Cards that should have 2 occurences
         for (var k = 0; k < 2; k++) {
             // regular number cards
@@ -29,11 +30,10 @@ function deck() {
         };
     };
 
-    //public methods
+    ////////// public methods
 
-
-    this.buildDeck = function () {
-        buildCards();
+    this.init = function () {
+        initCards();
         cards = shuffleArray(cards);
         return cards;
     };
