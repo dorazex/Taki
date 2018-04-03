@@ -4,21 +4,6 @@ html, body, .viewport {
   margin: 0;
 }
 
-
-.player-cards-flex-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-self: center;
-  justify-content: center;
-  align-items: top;
-}
-
-.player-cards-flex-container > div {
-  margin: 0px;
-}
-
-
 .game-flex {
   display: flex;
   flex-direction: column;
@@ -41,6 +26,18 @@ html, body, .viewport {
 
 .board-flex-container > div {
   margin: 0px;
+}
+
+.player-cards-flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-self: center;
+  justify-content: center;
+  align-items: top;
+}
+
+.player-cards-flex-container > div {
 }
 
 .card {
