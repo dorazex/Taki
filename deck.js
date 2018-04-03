@@ -1,32 +1,33 @@
 function deck() {
-    var colors = ["green", "red", "yellow", "blue"];
-    var cardFaceNumber = [1, 3, 4, 5, 6, 7, 8, 9];
-    var cardFaceOperationWithColors = ["taki", "stop"];
-    var cardFaceOperationWithoutColors = ["changeColor"];
     var cards = [];
 
     function buildCards() {
         cards = [];
+        // Cards that should have 2 occurences
         for (var k = 0; k < 2; k++) {
-            for (i in colors) {
-                for (j in cardFaceNumber) {
-                    cards.push(new card(colors[i], cardFaceNumber[j], false, null));
-                }
-            }
-        }
+            // regular number cards
+            utilities.COLORS.forEach(function(color){
+                    utilities.NUMBERS.forEach(function(number){
+                        cards.push(new Card(color, number, null));
+                    });
+                });
+            // cards with colored action
+            utilities.COLORS.forEach(function(color){
+                utilities.ACTIONS_W_COLORS.forEach(
+                    function(action){
+                        cards.push(new Card(color, null, action));
+                    });
+            });
+        };
 
-        for (var k = 0; k < 2; k++) {
-            for (i in colors) {
-                for (j in cardFaceOperationWithColors) {
-                    cards.push(new card(colors[i], null, true, cardFaceOperationWithColors[j]));
-                }
-            }
-        }
-
+        // Cards that should have 4 occurences
         for (var i = 0; i < 4; i++) {
-            cards.push(new card(null, null, true, "changeColor"));
-        }
-    }
+            // action cards without colors
+            utilities.ACTIONS_WO_COLORS.forEach(function(action){
+                cards.push(new Card(null, null, action));
+            });
+        };
+    };
 
     //public methods
 
@@ -35,8 +36,8 @@ function deck() {
         buildCards();
         cards = shuffleArray(cards);
         return cards;
-    }
-}
+    };
+};
 
 // function Module() {
 
