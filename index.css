@@ -1,27 +1,46 @@
+html, body, .viewport {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+
 .player-cards-flex-container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   align-self: center;
   justify-content: center;
-  align-items: center;
+  align-items: top;
 }
 
 .player-cards-flex-container > div {
-  margin: 10px;
-  height: 100%;
+  margin: 0px;
 }
 
 
-.board-flex {
+.game-flex {
   display: flex;
   flex-direction: column;
   align-items: stretch;
   height: 100%;
 }
 
-.board-flex > div {
-  margin: 10px;
+.game-flex > div {
+  margin: 0px;
+}
+
+.board-flex-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: 100%;
+  align-self: center;
+  justify-content: center;
+}
+
+.board-flex-container > div {
+  margin: 0px;
 }
 
 .card {
