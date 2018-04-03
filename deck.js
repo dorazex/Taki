@@ -37,6 +37,20 @@ function deck() {
         cards = shuffleArray(cards);
         return cards;
     };
+
+    this.takeCards = function(numberOfCards){
+        takenCards = [];
+        for (var i =0; i < numberOfCards; i++){
+            takenCards.push(cards.pop());
+        };
+        return takenCards;
+    };
+
+    this.returnCards = function(cardsToReturn){
+        while (cardsToReturn.length > 0){
+            cards.push(cardsToReturn.pop());
+        };
+    };
 };
 
 // function Module() {

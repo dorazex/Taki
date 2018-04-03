@@ -12,3 +12,16 @@ function shuffleArray(array) {
     }
     return array;
 }
+
+
+var takeCardFromCardsArrayByFileName = function(cards, cardImgFileName){
+	cardToReturn = null;
+    for (var i = 0; i < cards.length; i++) {
+        if (cards[i].isFileNameMatch(cardImgFileName)){
+            cardToReturn = cards[i];
+            cards.splice(i, 1);
+            break;
+        }
+    }
+    return cardToReturn;
+};

@@ -4,17 +4,17 @@ window.onload = function () {
     //test
     var deckOfCards = new deck();
     cards = deckOfCards.init();
-    console.log(cards);
 
     var parent = document.getElementById("player-bottom-flex-container");
     console.log(parent);
 
     console.log(cards.length)
-    playerCards = cards.slice(76);
+    playerCards = deckOfCards.takeCards(8);
     console.log(playerCards.length)
-    computerCards = cards.slice(68,76);
+    computerCards = deckOfCards.takeCards(8);
     console.log(computerCards.length)
-    cards = cards.slice(0,68);
+    console.log(cards.length)
+    deckOfCards.returnCards(computerCards);
     console.log(cards.length)
 
 
@@ -23,7 +23,14 @@ window.onload = function () {
 	    var child = parent.appendChild(node);
 	    // console.log(child);
 	    child.innerHTML = "<img src=\"cards/" + card.getFileName() + " \"/>"
-	    child.addEventListener('click', function(){alert('asdasd')})
+	    child.addEventListener('click', function(event){
+	    	if (null == takeCardFromCardsArrayByFileName(playerCards, card.getFileName())){
+	    		console.log("Card Not Found");
+	    	} else{
+	    		child.innerHTML = "";
+	    	}
+	    	console.log(event);
+	    });
 	    // console.log(card.getFileName());
 	};
 
