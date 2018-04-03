@@ -1,6 +1,7 @@
-function Card(type, color, number, front_face) {
-  this.type = type;
+function card(color, number, isActionCard, action) {
   this.color = color;
   this.number = number;
-  this.front_face = front_face;
+  this.isActionCard = isActionCard;
+  this.action = action;
 }
+
