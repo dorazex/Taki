@@ -7,14 +7,14 @@ function deck() {
         // Cards that should have 2 occurences
         for (var k = 0; k < 2; k++) {
             // regular number cards
-            utilities.COLORS.forEach(function(color){
-                    utilities.NUMBERS.forEach(function(number){
+            COLORS.forEach(function(color){
+                    NUMBERS.forEach(function(number){
                         cards.push(new Card(color, number, null));
                     });
                 });
             // cards with colored action
-            utilities.COLORS.forEach(function(color){
-                utilities.ACTIONS_W_COLORS.forEach(
+            COLORS.forEach(function(color){
+                ACTIONS_W_COLORS.forEach(
                     function(action){
                         cards.push(new Card(color, null, action));
                     });
@@ -24,7 +24,7 @@ function deck() {
         // Cards that should have 4 occurences
         for (var i = 0; i < 4; i++) {
             // action cards without colors
-            utilities.ACTIONS_WO_COLORS.forEach(function(action){
+            ACTIONS_WO_COLORS.forEach(function(action){
                 cards.push(new Card(null, null, action));
             });
         };
