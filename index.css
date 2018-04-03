@@ -8,9 +8,8 @@
 }
 
 .player-cards-flex-container > div {
-  margin: 50px;
-  width: 100px;
-  height: 100px;
+  margin: 10px;
+  height: 100%;
 }
 
 
@@ -18,9 +17,11 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  height: 100%;
 }
 
 .board-flex > div {
+  margin: 10px;
 }
 
 .card {
