@@ -9,7 +9,7 @@ window.onload = function () {
     console.log(parent);
 
     console.log(cards.length)
-    playerCards = deckOfCards.takeCards(8);
+    playerCards = deckOfCards.takeCards(36);
     console.log(playerCards.length)
     computerCards = deckOfCards.takeCards(8);
     console.log(computerCards.length)

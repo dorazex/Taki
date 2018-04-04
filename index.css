@@ -8,24 +8,25 @@ html, body, .viewport {
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  justify-content: center;
 
 }
 
 .game-flex > div {
-  margin: 0px;
+  width:100vw;
 }
 
 .board-flex-container {
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  height: 100%;
   align-self: center;
   justify-content: center;
 }
 
 .board-flex-container > div {
-  margin: 0px;
+  min-height:18vh;
+  max-height:18vh;
 }
 
 .player-cards-flex-container {
@@ -34,12 +35,21 @@ html, body, .viewport {
   flex-wrap: wrap;
   align-self: center;
   justify-content: center;
-  align-items: top;
+  align-items: center;
 }
 
 .player-cards-flex-container > div {
+  min-height:18vh;
+  max-height:18vh;
+  min-width:5vw;
+  max-width:8vw;
 }
 
 .card {
 	
+}
+
+img {
+  max-height:18vh;
+  min-height:10vh;
 }
