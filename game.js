@@ -27,7 +27,7 @@ window.onload = function () {
 	    	if (null == takeCardFromCardsArrayByFileName(playerCards, card.getFileName())){
 	    		console.log("Card Not Found");
 	    	} else{
-	    		child.innerHTML = "";
+	    		parent.removeChild(child);
 	    	}
 	    	console.log(event);
 	    });
