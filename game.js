@@ -44,33 +44,27 @@ window.onload = function(){
     var game = new Game(numRegularPlayers, numComputerPlayers);
     game.init();
 
-    var DOMaddCardImgToDiv = function(playerCards, card){
-	    var node = document.createElement("div");
-	    var child = playerDiv.appendChild(node);
-	    // console.log(child);
-	    child.innerHTML = `<img src=\"cards/${card.getFileName()}\"/>`
-	    child.addEventListener('click', function(event){
-	    	if (null == takeCardFromCardsArrayByFileName(playerCards, card.getFileName())){
-	    		console.log("Card Not Found");
-	    	} else{
-	    		playerDiv.removeChild(child);
-	    	}
-	    	console.log(event);
-	    });
-	    // console.log(card.getFileName());
-	};
-
     var gameDiv = document.getElementById("game");
 	for (var i = 0; i < game.players.length; i++) {
 		playerDiv = document.createElement("div")
-		var playerDiv = gameDiv.appendChild(playerDiv);
 		playerDiv.className = "player-cards-flex-container";
+		playerDiv.id = `player-container-${i}`
+		gameDiv.appendChild(playerDiv);
 		
-		for (var j = 0; j < game.players.length; j++) {
-			for (var k = 0; k < game.players[j].cards.length; k++) {
-				DOMaddCardImgToDiv(game.players[j].cards, game.players[j].cards[k])
-			}
-			
+		for (var j = 0; j < game.players[i].cards.length; j++) {
+			var cardDiv = document.createElement("div")
+			card = game.players[i].cards[j]
+			cardDiv.id = `card-${j}`
+			cardDiv.innerHTML = `<img src=\"cards/${card.getFileName()}\"/>`
+			cardDiv.addEventListener('click', function(event){
+				cardDiv = event.path[1]
+				playerDiv = event.path[2]
+				var cardIndex = parseInt(cardDiv.id.split("-")[1])
+				var playerIndex = parseInt(playerDiv.id.split("-")[2])
+				game.players[playerIndex].cards.splice(cardIndex, 1)
+				playerDiv.removeChild(cardDiv)
+			})
+			playerDiv.appendChild(cardDiv);
 		}
 	}
 }
