@@ -30,8 +30,6 @@ function Game(numRegularPlayers, numComputerPlayers) {
 
 	    this.initPlayers();
   };
-
-
 };
 
 
@@ -45,6 +43,36 @@ window.onload = function(){
     // init
     var game = new Game(numRegularPlayers, numComputerPlayers);
     game.init();
+
+    var DOMaddCardImgToDiv = function(playerCards, card){
+	    var node = document.createElement("div");
+	    var child = playerDiv.appendChild(node);
+	    // console.log(child);
+	    child.innerHTML = `<img src=\"cards/${card.getFileName()}\"/>`
+	    child.addEventListener('click', function(event){
+	    	if (null == takeCardFromCardsArrayByFileName(playerCards, card.getFileName())){
+	    		console.log("Card Not Found");
+	    	} else{
+	    		playerDiv.removeChild(child);
+	    	}
+	    	console.log(event);
+	    });
+	    // console.log(card.getFileName());
+	};
+
+    var gameDiv = document.getElementById("game");
+	for (var i = 0; i < game.players.length; i++) {
+		playerDiv = document.createElement("div")
+		var playerDiv = gameDiv.appendChild(playerDiv);
+		playerDiv.className = "player-cards-flex-container";
+		
+		for (var j = 0; j < game.players.length; j++) {
+			for (var k = 0; k < game.players[j].cards.length; k++) {
+				DOMaddCardImgToDiv(game.players[j].cards, game.players[j].cards[k])
+			}
+			
+		}
+	}
 }
 
 // window.onload = function () {
@@ -54,23 +82,6 @@ window.onload = function(){
 
 
     
-//     var DOMaddCardImgToDiv = function(card){
-// 	    var node = document.createElement("div");
-// 	    var child = parent.appendChild(node);
-// 	    // console.log(child);
-// 	    child.innerHTML = `<img src=\"cards/${card.getFileName()}\"/>`
-// 	    child.addEventListener('click', function(event){
-// 	    	if (null == takeCardFromCardsArrayByFileName(playerCards, card.getFileName())){
-// 	    		console.log("Card Not Found");
-// 	    	} else{
-// 	    		parent.removeChild(child);
-// 	    	}
-// 	    	console.log(event);
-// 	    });
-// 	    // console.log(card.getFileName());
-// 	};
-
-//     playerCards.forEach(DOMaddCardImgToDiv);
 
 // };
 

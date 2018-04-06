@@ -3,6 +3,6 @@ function Player(isComputerPlayer) {
     this.isComputerPlayer = isComputerPlayer;
 
     this.addCards = function(cards){
-    	this.cards.push.apply(cards);
+    	this.cards = this.cards.concat(cards);
     };
 };

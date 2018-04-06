@@ -51,6 +51,10 @@ function deck() {
             cards.push(cardsToReturn.pop());
         };
     };
+
+    this.getNumberOfCards = function(){
+        return cards.length;
+    }
 };
 
 // function Module() {
