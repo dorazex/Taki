@@ -1,4 +1,4 @@
-var player = (function() {
-    var cards = [];
-    var isComputerPlayer = false;
-})();
+function Player(isComputerPlayer) {
+    this.cards = [];
+    this.isComputerPlayer = isComputerPlayer;
+};
