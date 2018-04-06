@@ -17,31 +17,18 @@ function Game(numRegularPlayers, numComputerPlayers) {
 	    for (var i = 0; i < this.NUM_COMPUTER_PLAYERS; i++) {
 	    	this.addPlayer(true);
 	    };
-
 	    this.players = shuffleArray(this.players);
+
+	    for (var i = 0; i < this.players.length; i++) {
+	    	this.players[i].addCards(this.deck.takeCards(NUM_INITIAL_CARDS));
+	    }
 	};
 
     this.init = function(){
-    	console.log("creating deck")
   		this.deck = new deck();
-  		console.log("finished creating deck")
-  		console.log(this.deck)
-    	console.log("initializing deck")
 	    this.deck.init();
-  		console.log("finished initializing deck")
-	    console.log("initializing deck")
 
 	    this.initPlayers();
-
-
-	    console.log(cards.length)
-	    playerCards = deckOfCards.takeCards(NUM_INITIAL_CARDS);
-	    console.log(playerCards.length)
-	    computerCards = deckOfCards.takeCards(NUM_INITIAL_CARDS);
-	    console.log(computerCards.length)
-	    console.log(cards.length)
-	    deckOfCards.returnCards(computerCards);
-	    console.log(cards.length)
   };
 
 
