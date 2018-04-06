@@ -27,15 +27,16 @@ function Game(numRegularPlayers, numComputerPlayers) {
     this.init = function(){
   		this.deck = new deck();
 	    this.deck.init();
-
+	    this.openDeck = new openDeck();
 	    this.initPlayers();
+
+	    this.openDeck.putCard(this.deck.takeCards(1)[0])
   };
 };
 
 
 window.onload = function(){
 	url = window.location.href
-	console.log(url)
 	urlParameters = url.split("?")[1]
 	numRegularPlayers = parseInt(urlParameters.split("&")[0].split("=")[1])
 	numComputerPlayers = parseInt(urlParameters.split("&")[1].split("=")[1])
@@ -61,21 +62,22 @@ window.onload = function(){
 				playerDiv = event.path[2]
 				var cardIndex = parseInt(cardDiv.id.split("-")[1])
 				var playerIndex = parseInt(playerDiv.id.split("-")[2])
-				game.players[playerIndex].cards.splice(cardIndex, 1)
+				if (game.players[playerIndex].cards[cardIndex] == undefined){
+					var a = 0;
+				}
 				playerDiv.removeChild(cardDiv)
+				game.openDeck.putCard(game.players[playerIndex].cards[cardIndex])
+				var card = game.players[playerIndex].cards[cardIndex] = undefined
+				updateOpenDeck(game)
 			})
 			playerDiv.appendChild(cardDiv);
 		}
 	}
+	updateOpenDeck(game)
 }
 
-// window.onload = function () {
-//     // init
-//     var game = new Game();
-//     game.init();
-
-
-    
-
-// };
-
+var updateOpenDeck = function(game){
+	var boardDiv = document.getElementById("open-deck")
+	var topCard = game.openDeck.cards[game.openDeck.cards.length - 1]
+	boardDiv.innerHTML = `<img src=\"cards/${topCard.getFileName()}\"/>`
+}

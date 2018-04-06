@@ -29,15 +29,15 @@ function Card(color, number, action) {
 	return text;
   }
 
-  this.isFileNameMatch = function(cardImgFileName){
-  	var fileNameNoSuffix = cardImgFileName.split(".")[0];
-  	cardProperties = fileNameNoSuffix.split("_");
-  	var action = cardProperties[0];
-  	var number = cardProperties[1];
-  	var color = cardProperties[2];
-  	return (((action == "0" && this.action == null) || action == this.action) && 
-  		((number == "0" && this.number == null) || number == this.number.toString()) && 
-  		((color == "0" && this.color == null) || color == this.color));
-  }
+  // this.isFileNameMatch = function(cardImgFileName){
+  // 	var fileNameNoSuffix = cardImgFileName.split(".")[0];
+  // 	cardProperties = fileNameNoSuffix.split("_");
+  // 	var action = cardProperties[0];
+  // 	var number = cardProperties[1];
+  // 	var color = cardProperties[2];
+  // 	return (((action == "0" && this.action == null) || action == this.action) && 
+  // 		((number == "0" && this.number == null) || number == this.number.toString()) && 
+  // 		((color == "0" && this.color == null) || color == this.color));
+  // }
 }
 
