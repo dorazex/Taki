@@ -73,7 +73,7 @@ var activeCardOnClick = function(event){
 	}
 	playerDiv.removeChild(cardDiv)
 	game.openDeck.putCard(game.players[playerIndex].cards[cardIndex])
-	var card = game.players[playerIndex].cards[cardIndex] = undefined
+	game.players[playerIndex].cards[cardIndex] = undefined
 }
 
 var updateGameView = function(){
