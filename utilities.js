@@ -13,3 +13,16 @@ function shuffleArray(array) {
     }
     return array;
 }
+
+function isChildExistById(parentId, childId){
+	var isExist = false;
+	playerDiv = document.getElementById(parentId)
+	childDiv = document.getElementById(childId)
+	if (playerDiv == null || childDiv == null) return false;
+	playerDiv.childNodes.forEach(function(node){
+			if (node.id == childId){
+				isExist = true;
+			}
+		})
+	return isExist;
+};

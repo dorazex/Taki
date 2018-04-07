@@ -48,33 +48,7 @@ window.onload = function(){
     game.init();
     window.game = game
 
-    var gameDiv = document.getElementById("game");
-	for (var i = 0; i < game.players.length; i++) {
-		playerDiv = document.createElement("div")
-		playerDiv.className = "player-cards-flex-container";
-		playerDiv.id = `player-container-${i}`
-		gameDiv.appendChild(playerDiv);
-		
-		for (var j = 0; j < game.players[i].cards.length; j++) {
-			var cardDiv = document.createElement("div")
-			card = game.players[i].cards[j]
-			cardDiv.id = `card-${j}`
-			cardDiv.innerHTML = `<img src=\"cards/${card.getFileName()}\"/>`
-			cardDiv.addEventListener('click', function(event){
-				cardDiv = event.path[1]
-				playerDiv = event.path[2]
-				var cardIndex = parseInt(cardDiv.id.split("-")[1])
-				var playerIndex = parseInt(playerDiv.id.split("-")[2])
-				if (game.players[playerIndex].cards[cardIndex] == undefined){
-					var a = 0;
-				}
-				playerDiv.removeChild(cardDiv)
-				game.openDeck.putCard(game.players[playerIndex].cards[cardIndex])
-				var card = game.players[playerIndex].cards[cardIndex] = undefined
-			})
-			playerDiv.appendChild(cardDiv);
-		}
-	}
+	updateGameView()
 	updateOpenDeck()
 	updateDeckCount()
 }
@@ -87,6 +61,52 @@ var updateOpenDeck = function(){
 var updateDeckCount = function(){
 	var deckTextDiv = document.getElementById("deck-text")
 	deckTextDiv.innerHTML = `${game.deck.getNumberOfCards()}`
+}
+
+var activeCardOnClick = function(event){
+	cardDiv = event.path[1]
+	playerDiv = event.path[2]
+	var cardIndex = parseInt(cardDiv.id.split("-")[1])
+	var playerIndex = parseInt(playerDiv.id.split("-")[2])
+	if (game.players[playerIndex].cards[cardIndex] == undefined){
+		var a = 0;
+	}
+	playerDiv.removeChild(cardDiv)
+	game.openDeck.putCard(game.players[playerIndex].cards[cardIndex])
+	var card = game.players[playerIndex].cards[cardIndex] = undefined
+}
+
+var updateGameView = function(){
+	var gameDiv = document.getElementById("game");
+	for (var i = 0; i < game.players.length; i++) {
+		var playerDivId = `player-container-${i}`;
+		if (!isChildExistById("game", playerDivId)){
+			playerDiv = document.createElement("div")
+			playerDiv.className = "player-cards-flex-container";
+			playerDiv.id = playerDivId
+			gameDiv.appendChild(playerDiv);
+		} else {
+			playerDiv = document.getElementById(playerDivId)
+		}
+		
+		for (var j = 0; j < game.players[i].cards.length; j++) {
+			var cardDivId = `card-${j}`
+			if (!isChildExistById(playerDivId, cardDivId)){
+				var cardDiv = document.createElement("div")
+				cardDiv.id = cardDivId
+				playerDiv.appendChild(cardDiv);
+			} else {
+				cardDiv = document.getElementById(cardDivId)
+			}
+			if (i == game.currentPlayerIndex){
+				var card = game.players[i].cards[j]
+				cardDiv.innerHTML = `<img src=\"cards/${card.getFileName()}\"/>`
+				cardDiv.addEventListener('click', activeCardOnClick)
+			} else {
+				cardDiv.innerHTML = '<img src="cards/cover_0_0.png"/>'
+			}
+		}
+	}
 }
 
 window.onclick = function(){
