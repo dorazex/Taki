@@ -16,10 +16,10 @@ function shuffleArray(array) {
 
 function isChildExistById(parentId, childId){
 	var isExist = false;
-	playerDiv = document.getElementById(parentId)
+	parentDiv = document.getElementById(parentId)
 	childDiv = document.getElementById(childId)
-	if (playerDiv == null || childDiv == null) return false;
-	playerDiv.childNodes.forEach(function(node){
+	if (parentDiv == null || childDiv == null){return false;}
+	parentDiv.childNodes.forEach(function(node){
 			if (node.id == childId){
 				isExist = true;
 			}
