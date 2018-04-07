@@ -34,6 +34,12 @@ function Game(numRegularPlayers, numComputerPlayers) {
     		this.openDeck.putCard(this.deck.takeCards(1)[0])
 	    } while (!this.openDeck.getTopCard().isValidStartCard())
   };
+
+  this.cyclicIncrementCurrentPlayerIndex = function(){
+  	this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length
+  	console.log(`changed player index to: ${this.currentPlayerIndex}`)
+  };
+
 };
 
 
@@ -113,4 +119,9 @@ window.onclick = function(){
 	console.log("click")
 	updateOpenDeck()
 	updateDeckCount()
+}
+
+var nextTurn = function(){
+	window.game.cyclicIncrementCurrentPlayerIndex()
+	updateGameView()
 }
