@@ -86,10 +86,11 @@ var updateOpenDeck = function(){
 
 var updateDeckCount = function(){
 	var deckTextDiv = document.getElementById("deck-text")
-	deckTextDiv.innerHTML = window.game.deck.getNumberOfCards()
+	deckTextDiv.innerHTML = `${game.deck.getNumberOfCards()}`
 }
 
 window.onclick = function(){
 	console.log("click")
 	updateOpenDeck()
+	updateDeckCount()
 }
