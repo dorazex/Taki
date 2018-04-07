@@ -1,11 +1,12 @@
-function deck() {
+function Deck() {
     ////////// private properties
-    var cards = [];
+    this.cards = [];
 
     ////////// private methods
-    function initCards() {
+    this.initCards = function() {
         // Cards that should have 2 occurences
         for (var k = 0; k < 2; k++) {
+            var cards = this.cards
             // regular number cards
             COLORS.forEach(function(color){
                     NUMBERS.forEach(function(number){
@@ -33,97 +34,26 @@ function deck() {
     ////////// public methods
 
     this.init = function () {
-        initCards();
-        cards = shuffleArray(cards);
-        return cards;
+        this.initCards();
+        this.cards = shuffleArray(this.cards);
+        return this.cards;
     };
 
     this.takeCards = function(numberOfCards){
         takenCards = [];
         for (var i =0; i < numberOfCards; i++){
-            takenCards.push(cards.pop());
+            takenCards.push(this.cards.pop());
         };
         return takenCards;
     };
 
     this.returnCards = function(cardsToReturn){
         while (cardsToReturn.length > 0){
-            cards.push(cardsToReturn.pop());
+            this.cards.push(cardsToReturn.pop());
         };
     };
 
     this.getNumberOfCards = function(){
-        return cards.length;
+        return this.cards.length;
     }
 };
-
-// function Module() {
-
-//     // private variables and functions
-//     var foo = 'bar';
-
-//     //public methods
-//     this.something = function () {
-
-//     }
-// }
-
-
-// var deck = (function () {
-//     var colors = ["green", "red", "yellow", "blue"];
-//     var cardFaceNumber = [1, 3, 4, 5, 6, 7, 8, 9];
-//     var cardFaceOperationWithColors = ["taki", "stop"];
-//     var cardFaceOperationWithoutColors = ["changeColor"];
-//     var cards = [];
-
-//     function buildCards() {
-//         cards = [];
-//         for (i in colors) {
-//             for (j in cardFaceNumber) {
-//                 for (var k = 0; k < 1; k++) {
-//                     cards.push(new card(i, j, false, null));
-//                 }
-//             }
-//         }
-
-//         for (i in colors) {
-//             for (j in cardFaceOperationWithColors) {
-//                 for (var k = 0; k < 1; k++) {
-//                     cards.push(new card(i, null, true, j));
-//                 }
-//             }
-//         }
-
-//         for (var i = 0; i < 4; i++) {
-//             cards.push(new card(null, null, true, "changeColor"));
-//         }
-//     }
-
-
-//     function shuffleArray(array) {
-//         for (var x = array.length - 1; x > 0; x--) {
-//             var i = Math.floor(Math.random() * (x + 1));
-//             var temp = array[x];
-//             array[x] = array[i];
-//             array[i] = temp;
-//         }
-//         return array;
-//     }
-
-
-//     return {
-
-//         publicProperty: '',
-
-//         buildDeck: function () {
-//            buildCards();
-//            shuffleArray(cards);
-//         },
-
-//         privilegedMethod: function (args) {
-//             return privateMethod(args);
-//         }
-//     };
-
-//     return deck;
-// })();

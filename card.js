@@ -29,6 +29,10 @@ function Card(color, number, action) {
 	return text;
   }
 
+  this.isValidStartCard = function(){
+  	return this.number != null
+  }
+
   // this.isFileNameMatch = function(cardImgFileName){
   // 	var fileNameNoSuffix = cardImgFileName.split(".")[0];
   // 	cardProperties = fileNameNoSuffix.split("_");

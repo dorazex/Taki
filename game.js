@@ -25,12 +25,14 @@ function Game(numRegularPlayers, numComputerPlayers) {
 	};
 
     this.init = function(){
-  		this.deck = new deck();
+  		this.deck = new Deck();
 	    this.deck.init();
 	    this.openDeck = new openDeck();
 	    this.initPlayers();
 
-	    this.openDeck.putCard(this.deck.takeCards(1)[0])
+	    do {
+    		this.openDeck.putCard(this.deck.takeCards(1)[0])
+	    } while (!this.openDeck.getTopCard().isValidStartCard())
   };
 };
 
@@ -44,6 +46,7 @@ window.onload = function(){
     // init
     var game = new Game(numRegularPlayers, numComputerPlayers);
     game.init();
+    window.game = game
 
     var gameDiv = document.getElementById("game");
 	for (var i = 0; i < game.players.length; i++) {
@@ -68,16 +71,25 @@ window.onload = function(){
 				playerDiv.removeChild(cardDiv)
 				game.openDeck.putCard(game.players[playerIndex].cards[cardIndex])
 				var card = game.players[playerIndex].cards[cardIndex] = undefined
-				updateOpenDeck(game)
 			})
 			playerDiv.appendChild(cardDiv);
 		}
 	}
-	updateOpenDeck(game)
+	updateOpenDeck()
+	updateDeckCount()
 }
 
-var updateOpenDeck = function(game){
-	var boardDiv = document.getElementById("open-deck")
-	var topCard = game.openDeck.cards[game.openDeck.cards.length - 1]
-	boardDiv.innerHTML = `<img src=\"cards/${topCard.getFileName()}\"/>`
+var updateOpenDeck = function(){
+	var openDeckDiv = document.getElementById("open-deck")
+	openDeckDiv.innerHTML = `<img src=\"cards/${window.game.openDeck.getTopCard().getFileName()}\"/>`
+}
+
+var updateDeckCount = function(){
+	var deckTextDiv = document.getElementById("deck-text")
+	deckTextDiv.innerHTML = window.game.deck.getNumberOfCards()
+}
+
+window.onclick = function(){
+	console.log("click")
+	updateOpenDeck()
 }
