@@ -3,6 +3,10 @@ function Card(color, number, action) {
   this.number = number;  // null if card is not a regular number card
   this.color = color;  // null if card is not colored
 
+  this.getColor = function() {
+	  return this.color;
+  }
+
   this.getFileName = function(){
   	var text = "";
   	if (null != this.action){
@@ -32,6 +36,8 @@ function Card(color, number, action) {
   this.isValidStartCard = function(){
   	return this.number != null
   }
+
+  
 
   // this.isFileNameMatch = function(cardImgFileName){
   // 	var fileNameNoSuffix = cardImgFileName.split(".")[0];

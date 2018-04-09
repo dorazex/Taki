@@ -1,24 +1,47 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<link rel="stylesheet" type="text/css" href="game.css">
-		<script src="game.js"></script>
-		<script src="player.js"></script>
-		<script src="utilities.js"></script>
-		<script src="deck.js"></script>
-		<script src="openDeck.js"></script>
-		<script src="card.js"></script>
-	</head>
-	<body>
-		<div id="game" class="game-flex">
-			<div id="board" class="board-flex-container">
-				<div class="deck-container">
-					<div id="deck"><img src="cards/cover_0_0.png"/></div>
-					<div id="deck-text" class="deck-text"></div>
+
+<head>
+	<link rel="stylesheet" type="text/css" href="game.css">
+	<script src="game.js"></script>
+	<script src="player.js"></script>
+	<script src="utilities.js"></script>
+	<script src="deck.js"></script>
+	<script src="openDeck.js"></script>
+	<script src="card.js"></script>
+</head>
+
+<body>
+	<div id="game" class="game-flex">
+		<div id="board" class="board-flex-container">
+			<div class="deck-container">
+				<div id="deck">
+					<img src="cards/cover_0_0.png" />
 				</div>
-				<div id="open-deck"><img src="cards/cover_0_0.png"/></div>
+				<div id="deck-text" class="deck-text"></div>
+			</div>
+			<div id="open-deck">
+				<img src="cards/cover_0_0.png" />
 			</div>
 		</div>
-		<button id="next-turn" onclick="nextTurn()">next turn</button>
-	</body>
+	</div>
+	<button id="finish-turn" onclick="finishTurn()">finish turn</button>
+	<p id="turn"></p>
+	<p id="message"></p>
+	<p id="color"></p>
+
+	<!-- The Modal -->
+	<div id="change-color-modal" class="modal">
+
+		<!-- Modal content -->
+		<div class="modal-content">
+			<button id="green" onclick="changeColor(this.id)">green</button>
+			<button id="red" onclick="changeColor(this.id)">red</button>
+			<button id="yellow" onclick="changeColor(this.id)">yellow</button>
+			<button id="blue" onclick="changeColor(this.id)">blue</button>
+		</div>
+
+	</div>
+</body>
+
 </html>
