@@ -287,23 +287,29 @@ function sleep(milliseconds) {
 	}
 }
 
+
+
+
+
 var nextTurn = function () {
-	document.getElementById("message").innerHTML = "";
 	updateTurn()
+	document.getElementById("message").innerHTML = "";
+	
 	playerIndex = window.game.currentPlayerIndex;
 	var currentPlayer = game.players[playerIndex];
 	console.log("turn of: " + playerIndex)
 	
 
 	var currentPlayer = game.players[playerIndex];
-	if (currentPlayer.isComputerPlayer == true) {
+	
+	while (currentPlayer.isComputerPlayer == true) {
 		
 		var playerDivId = `player-container-${playerIndex}`;
 		var playerDiv = document.getElementById(playerDivId)
 		var res = window.game.computerPlay();
 		updateColor()
 
-		// var i = 0;
+		 //i = 0;
 		// function myLoop() {             
 		// 	setTimeout(function () {    
 		// 		console.log("2. " + playerIndex)
@@ -321,15 +327,17 @@ var nextTurn = function () {
 		// 	}, 3000)
 		// }
 
-	//	myLoop()
+		// myLoop()
+		
 
 		for (var i = 0; i < res.length; i += 1) {
+			console.log("2. " + playerIndex)
 			var cardDivId = `card-${res[i][0]}-player-${playerIndex}`
 			var cardDiv = document.getElementById(cardDivId)
 			playerDiv.removeChild(cardDiv);
 			var openDeckDiv = document.getElementById("open-deck")
 			openDeckDiv.innerHTML = `<img src=\"cards/${res[i][1].getFileName()}\"/>`
-			sleep(3000)
+			//sleep(3000)
 		}
 		if (res.length == 0) {
 			var cardDivId = `card-${game.players[playerIndex].length}-player-${playerIndex}`
@@ -337,8 +345,12 @@ var nextTurn = function () {
 			cardDiv.id = cardDivId
 			playerDiv.appendChild(cardDiv);
 		}
+		//updateGameView()
+		//nextTurn()
 		updateGameView()
-		nextTurn()
+		updateTurn()
+		playerIndex = window.game.currentPlayerIndex;
+	var currentPlayer = game.players[playerIndex];
 	}
 
 
@@ -349,6 +361,7 @@ function changeColor(color) {
 	window.game.currentColor = color;
 	updateColor()
 	window.game.cyclicIncrementCurrentPlayerIndex()
+	//updateTurn()
 	nextTurn()
 }
 
