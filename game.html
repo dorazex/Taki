@@ -15,7 +15,7 @@
 	<div id="game" class="game-flex">
 		<div id="board" class="board-flex-container">
 			<div class="deck-container">
-				<div id="deck">
+				<div id="deck" onclick="pullCard()">
 					<img src="cards/cover_0_0.png" />
 				</div>
 				<div id="deck-text" class="deck-text"></div>
@@ -25,7 +25,7 @@
 			</div>
 		</div>
 	</div>
-	<button id="finish-turn" onclick="finishTurn()">finish turn</button>
+	<button id="finish-turn" onclick="finishTurnOnClick()">finish turn</button>
 	<p id="turn"></p>
 	<p id="message"></p>
 	<p id="color"></p>
