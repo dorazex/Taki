@@ -94,9 +94,14 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		}
 	}
 
+	this.moveCardToOpenDeck = function (card, cardIndex, playerIndex) {
+		this.currentColor = card.getColor();
+		this.openDeck.putCard(this.players[playerIndex].cards[cardIndex])
+		this.players[playerIndex].cards.splice(cardIndex, 1)
+	}
 
-	this.play = function (card, cardIndex) {
-		playerIndex = this.currentPlayerIndex;
+
+	this.play = function (card, cardIndex, playerIndex) {
 		this.message = "";
 
 		if (this.currentAction == "taki" && this.currentColor != card.getColor()) {
@@ -130,9 +135,7 @@ function Game(numRegularPlayers, numComputerPlayers) {
 			}
 		}
 
-		this.currentColor = card.getColor();
-		this.openDeck.putCard(this.players[playerIndex].cards[cardIndex])
-		this.players[playerIndex].cards.splice(cardIndex, 1)
+		this.moveCardToOpenDeck(card, cardIndex, playerIndex);
 		return true;
 	}
 };
@@ -168,6 +171,16 @@ var updateDeckCount = function () {
 	deckTextDiv.innerHTML = `${game.deck.getNumberOfCards()}`
 }
 
+var activeChangeColor = function (event) {
+	cardDiv = event.path[1]
+	playerDiv = event.path[2]
+	var cardIndex = parseInt(cardDiv.id.split("-")[1])
+	var playerIndex = parseInt(playerDiv.id.split("-")[2])
+	var card = game.players[playerIndex].cards[cardIndex];
+	window.game.moveCardToOpenDeck(card, cardIndex, playerIndex);
+	document.getElementById('change-color-modal').style.display = "block";
+}
+
 var activeCardOnClick = function (event) {
 	cardDiv = event.path[1]
 	playerDiv = event.path[2]
@@ -178,16 +191,10 @@ var activeCardOnClick = function (event) {
 
 	document.getElementById("message").innerHTML = window.game.message;
 
-	if (res == true) {
-		updateGameView()
-		updateOpenDeck()
-		updateColor();
-
-		if (window.game.currentAction == "taki") {
-			document.getElementById("finish-turn").style.visibility = 'visible';
-		}
+	if (window.game.currentAction == "taki") {
+		document.getElementById("finish-turn").style.visibility = 'visible';
 	}
-	updateTurn()
+
 	nextTurn()
 }
 
@@ -200,23 +207,12 @@ var updateTurn = function () {
 		var playerDivId = `player-container-${i}`;
 		var playerDiv = document.getElementById(playerDivId);
 		var c = playerDiv.children;
-		
+
 		var j;
 		for (j = 0; j < c.length; j++) {
-			if (i == window.game.currentPlayerIndex) {
-				//c[j].disabled = false;
-
-				//document.getElementById('my-input-id').disabled = false;
+			if (i == window.game.currentPlayerIndex)
 				c[j].classList.remove("disabled");
-				//c[j].className -= "disabled";
-				console.log("here curr " + c[j].classList);
-			}
-			else {
-				c[j].classList.add("disabled");
-				//c[j].disabled = true;
-				//c[j].className += "disabled";
-				console.log("here " + c[j].classList);
-			}
+			else c[j].classList.add("disabled");
 		}
 	}
 }
@@ -253,16 +249,19 @@ var updateGameView = function () {
 				var card = game.players[i].cards[j]
 				cardDiv.innerHTML = `<img src=\"cards/${card.getFileName()}\"/>`
 				if (card.action == "changeColor")
-					cardDiv.addEventListener('click', function () {
-						document.getElementById('change-color-modal').style.display = "block";
-					});
-				else cardDiv.addEventListener('click', activeCardOnClick)
+					cardDiv.addEventListener('click', activeChangeColor);
+				else cardDiv.addEventListener('click', activeCardOnClick);
 			} else {
 				var card = game.players[i].cards[j]
 				cardDiv.innerHTML = `<img src=\"cards/${card.getFileName()}\"/>`
 			}
 		}
 	}
+
+	updateOpenDeck()
+	updateColor();
+	updateTurn();
+
 }
 
 
@@ -272,6 +271,8 @@ window.onclick = function () {
 }
 
 var nextTurn = function () {
+	updateGameView();
+
 	playerIndex = window.game.currentPlayerIndex;
 	var currentPlayer = window.game.players[playerIndex];
 	console.log("turn of: " + playerIndex)
@@ -288,15 +289,7 @@ var nextTurn = function () {
 			var openDeckDiv = document.getElementById("open-deck")
 			openDeckDiv.innerHTML = `<img src=\"cards/${res[i][1].getFileName()}\"/>`
 		}
-		if (res.length == 0) {
-			var cardDivId = `card-${game.players[playerIndex].length}-player-${playerIndex}`
-			var cardDiv = document.createElement("div")
-			cardDiv.id = cardDivId
-			playerDiv.appendChild(cardDiv);
-		}
-
-		updateColor();
-		updateTurn()
+		updateGameView();
 		playerIndex = window.game.currentPlayerIndex;
 		currentPlayer = game.players[playerIndex];
 	}
@@ -305,7 +298,6 @@ var nextTurn = function () {
 function changeColor(color) {
 	document.getElementById('change-color-modal').style.display = "none";
 	window.game.currentColor = color;
-	updateColor()
 	window.game.cyclicIncrementCurrentPlayerIndex()
 	nextTurn()
 }
@@ -319,16 +311,11 @@ var finishTurnOnClick = function () {
 var pullCard = function () {
 	res = window.game.pullCard();
 	if (res == true) {
-		updateGameView()
 		nextTurn()
 	} else {
 		document.getElementById("message").innerHTML = window.game.message;
 	}
 }
-
-
-
-
 
 
 //function sleep(milliseconds) {
@@ -357,5 +344,4 @@ var pullCard = function () {
 // 		}                       
 // 	}, 3000)
 // }
-
-// myLoop()
+//// myLoop()

@@ -32,7 +32,7 @@ function Player(isComputerPlayer) {
                 this.cards.splice(i, 1);
                 for (var j = this.cards.length - 1; j >= 0; j -= 1) {
                     if (this.cards[j].color == currentColor) {
-                        if(j < 2) 
+                        if(j < i) 
                             res.push([j, this.cards[j]]);
                         else  res.push([j + 1, this.cards[j]]);
                         this.cards.splice(j, 1);
