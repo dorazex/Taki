@@ -42,7 +42,7 @@ function Game(numRegularPlayers, numComputerPlayers) {
 
 	this.cyclicIncrementCurrentPlayerIndex = function () {
 		this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length
-		//console.log(`changed player index to: ${this.currentPlayerIndex}`)
+		console.log(`changed player index to: ${this.currentPlayerIndex}`)
 	};
 
 
@@ -55,7 +55,7 @@ function Game(numRegularPlayers, numComputerPlayers) {
 
 		if (res.length == 0) {
 			this.players[this.currentPlayerIndex].addCards(this.deck.takeCards(1));
-			game.cyclicIncrementCurrentPlayerIndex()
+			this.cyclicIncrementCurrentPlayerIndex()
 		}
 		else {
 			if (res[res.length - 1][1].color != null) {
@@ -63,10 +63,10 @@ function Game(numRegularPlayers, numComputerPlayers) {
 			}
 
 			if (res[res.length - 1][1].action == "stop") {
-				game.cyclicIncrementCurrentPlayerIndex()
-				game.cyclicIncrementCurrentPlayerIndex()
+				this.cyclicIncrementCurrentPlayerIndex()
+				this.cyclicIncrementCurrentPlayerIndex()
 			}
-			else game.cyclicIncrementCurrentPlayerIndex()
+			else this.cyclicIncrementCurrentPlayerIndex()
 		}
 
 		return res;
@@ -80,76 +80,59 @@ function Game(numRegularPlayers, numComputerPlayers) {
 			return false;
 		}
 		this.players[window.game.currentPlayerIndex].addCards(this.deck.takeCards(1));
-		game.cyclicIncrementCurrentPlayerIndex()
+		this.cyclicIncrementCurrentPlayerIndex()
 		return true;
 	}
 
 	this.finishTurn = function () {
 		window.game.currentAction = undefined;
-		if (game.openDeck.getTopCard().action != "stop")
-			game.cyclicIncrementCurrentPlayerIndex()
+		if (this.openDeck.getTopCard().action != "stop")
+			this.cyclicIncrementCurrentPlayerIndex()
 		else {
-			game.cyclicIncrementCurrentPlayerIndex()
-			game.cyclicIncrementCurrentPlayerIndex()
+			this.cyclicIncrementCurrentPlayerIndex()
+			this.cyclicIncrementCurrentPlayerIndex()
 		}
 	}
 
-	this.play = function (card) {
-		res = false;
+
+	this.play = function (card, cardIndex) {
+		playerIndex = this.currentPlayerIndex;
 		this.message = "";
+
+		if (this.currentAction == "taki" && this.currentColor != card.getColor()) {
+			this.message = "not valid selection";
+			return false;
+		}
+
 		if (card.number != null) {
-			if (this.currentAction == "taki") {
-				if (this.currentColor != card.getColor()) {
-					this.message = "not valid selection";
-					return false;
-				}
+			if (this.currentColor != card.getColor() && this.openDeck.getTopCard().number != card.number) {
+				this.message = "not valid selection";
+				return false;
 			}
-			else {
-				if (this.currentColor != card.getColor()
-					&& this.openDeck.getTopCard().number != card.number) {
-					this.message = "not valid selection";
-					return false;
-				}
-				this.currentColor = card.getColor();
-				game.cyclicIncrementCurrentPlayerIndex()
-			}
+			if (this.currentAction != "taki")
+				this.cyclicIncrementCurrentPlayerIndex()
 		}
 		else if (card.action == "taki") {
-			if (this.currentAction == "taki") {
-				if (this.currentColor != card.getColor()) {
-					this.message = "not valid selection";
-					return false;
-				}
+			if (this.currentColor != card.getColor() && this.openDeck.getTopCard().action != "taki") {
+				this.message = "not valid selection";
+				return false;
 			}
-			else {
-				if (this.currentColor != card.getColor()
-					&& this.openDeck.getTopCard().action != "taki") {
-					this.message = "not valid selection";
-					return false;
-				}
-				this.currentAction = "taki";
-				this.currentColor = card.getColor();
-			}
+			this.currentAction = "taki";
 		}
 		else if (card.action == "stop") {
-			if (this.currentAction == "taki") {
-				if (this.currentColor != card.getColor()) {
-					this.message = "not valid selection";
-					return false;
-				}
+			if (this.currentColor != card.getColor() && this.openDeck.getTopCard().action != "stop") {
+				this.message = "not valid selection";
+				return false;
 			}
-			else {
-				if (this.currentColor != card.getColor()
-					&& this.openDeck.getTopCard().action != "stop") {
-					this.message = "not valid selection";
-					return false;
-				}
-				this.currentColor = card.getColor();
-				game.cyclicIncrementCurrentPlayerIndex()
-				game.cyclicIncrementCurrentPlayerIndex()
+			if (this.currentAction != "taki") {
+				this.cyclicIncrementCurrentPlayerIndex()
+				this.cyclicIncrementCurrentPlayerIndex()
 			}
 		}
 
+		this.currentColor = card.getColor();
+		this.openDeck.putCard(this.players[playerIndex].cards[cardIndex])
+		this.players[playerIndex].cards.splice(cardIndex, 1)
 		return true;
 	}
 };
@@ -171,6 +154,7 @@ window.onload = function () {
 	updateOpenDeck()
 	updateDeckCount()
 	updateColor()
+	updateTurn()
 	nextTurn()
 }
 
@@ -190,30 +174,21 @@ var activeCardOnClick = function (event) {
 	var cardIndex = parseInt(cardDiv.id.split("-")[1])
 	var playerIndex = parseInt(playerDiv.id.split("-")[2])
 	var card = game.players[playerIndex].cards[cardIndex];
-	var next = false;
-	var res = game.play(card);
+	var res = game.play(card, cardIndex, playerIndex);
 
 	document.getElementById("message").innerHTML = window.game.message;
 
 	if (res == true) {
+		updateGameView()
+		updateOpenDeck()
 		updateColor();
+
 		if (window.game.currentAction == "taki") {
 			document.getElementById("finish-turn").style.visibility = 'visible';
 		}
-
-		playerDiv.removeChild(cardDiv)
-		game.openDeck.putCard(game.players[playerIndex].cards[cardIndex])
-		game.players[playerIndex].cards.splice(cardIndex, 1)
-		updateOpenDeck()
-		updateGameView()
-
-		if (card.action == "changeColor") {
-			document.getElementById('change-color-modal').style.display = "block";
-		}
-		else {
-			nextTurn()
-		}
 	}
+	updateTurn()
+	nextTurn()
 }
 
 
@@ -225,11 +200,23 @@ var updateTurn = function () {
 		var playerDivId = `player-container-${i}`;
 		var playerDiv = document.getElementById(playerDivId);
 		var c = playerDiv.children;
+		
 		var j;
 		for (j = 0; j < c.length; j++) {
-			if (i == window.game.currentPlayerIndex)
-				c[j].className -= "disabled";
-			else c[j].className += "disabled";
+			if (i == window.game.currentPlayerIndex) {
+				//c[j].disabled = false;
+
+				//document.getElementById('my-input-id').disabled = false;
+				c[j].classList.remove("disabled");
+				//c[j].className -= "disabled";
+				console.log("here curr " + c[j].classList);
+			}
+			else {
+				c[j].classList.add("disabled");
+				//c[j].disabled = true;
+				//c[j].className += "disabled";
+				console.log("here " + c[j].classList);
+			}
 		}
 	}
 }
@@ -240,6 +227,7 @@ var updateColor = function () {
 }
 
 var updateGameView = function () {
+	console.log("update game view")
 	var gameDiv = document.getElementById("game");
 	for (var i = 0; i < game.players.length; i++) {
 		var playerDivId = `player-container-${i}`;
@@ -264,7 +252,11 @@ var updateGameView = function () {
 			if (game.players[i].isComputerPlayer == false) {
 				var card = game.players[i].cards[j]
 				cardDiv.innerHTML = `<img src=\"cards/${card.getFileName()}\"/>`
-				cardDiv.addEventListener('click', activeCardOnClick)
+				if (card.action == "changeColor")
+					cardDiv.addEventListener('click', function () {
+						document.getElementById('change-color-modal').style.display = "block";
+					});
+				else cardDiv.addEventListener('click', activeCardOnClick)
 			} else {
 				var card = game.players[i].cards[j]
 				cardDiv.innerHTML = `<img src=\"cards/${card.getFileName()}\"/>`
@@ -273,71 +265,28 @@ var updateGameView = function () {
 	}
 }
 
+
 window.onclick = function () {
-//	console.log("click")
+	//	console.log("click")
 	updateDeckCount()
 }
 
-function sleep(milliseconds) {
-	var start = new Date().getTime();
-	for (var i = 0; i < 1e7; i++) {
-		if ((new Date().getTime() - start) > milliseconds) {
-			break;
-		}
-	}
-}
-
-
-
-
-
 var nextTurn = function () {
-	updateTurn()
-	document.getElementById("message").innerHTML = "";
-	
 	playerIndex = window.game.currentPlayerIndex;
-	var currentPlayer = game.players[playerIndex];
+	var currentPlayer = window.game.players[playerIndex];
 	console.log("turn of: " + playerIndex)
-	
 
-	var currentPlayer = game.players[playerIndex];
-	
 	while (currentPlayer.isComputerPlayer == true) {
-		
 		var playerDivId = `player-container-${playerIndex}`;
 		var playerDiv = document.getElementById(playerDivId)
 		var res = window.game.computerPlay();
-		updateColor()
-
-		 //i = 0;
-		// function myLoop() {             
-		// 	setTimeout(function () {    
-		// 		console.log("2. " + playerIndex)
-		// 		var cardDivId = `card-${res[i][0]}-player-${playerIndex}`
-		// 		console.log(cardDivId)
-		// 		console.log("i " + i)
-		// 		var cardDiv = document.getElementById(cardDivId)
-		// 		playerDiv.removeChild(cardDiv);
-		// 		var openDeckDiv = document.getElementById("open-deck")
-		// 		openDeckDiv.innerHTML = `<img src=\"cards/${res[i][1].getFileName()}\"/>`
-		// 		i++;                    
-		// 		if (i < res.length) {           
-		// 			myLoop();             
-		// 		}                       
-		// 	}, 3000)
-		// }
-
-		// myLoop()
-		
 
 		for (var i = 0; i < res.length; i += 1) {
-			console.log("2. " + playerIndex)
 			var cardDivId = `card-${res[i][0]}-player-${playerIndex}`
 			var cardDiv = document.getElementById(cardDivId)
 			playerDiv.removeChild(cardDiv);
 			var openDeckDiv = document.getElementById("open-deck")
 			openDeckDiv.innerHTML = `<img src=\"cards/${res[i][1].getFileName()}\"/>`
-			//sleep(3000)
 		}
 		if (res.length == 0) {
 			var cardDivId = `card-${game.players[playerIndex].length}-player-${playerIndex}`
@@ -345,15 +294,12 @@ var nextTurn = function () {
 			cardDiv.id = cardDivId
 			playerDiv.appendChild(cardDiv);
 		}
-		//updateGameView()
-		//nextTurn()
-		updateGameView()
+
+		updateColor();
 		updateTurn()
 		playerIndex = window.game.currentPlayerIndex;
-	var currentPlayer = game.players[playerIndex];
+		currentPlayer = game.players[playerIndex];
 	}
-
-
 }
 
 function changeColor(color) {
@@ -361,7 +307,6 @@ function changeColor(color) {
 	window.game.currentColor = color;
 	updateColor()
 	window.game.cyclicIncrementCurrentPlayerIndex()
-	//updateTurn()
 	nextTurn()
 }
 
@@ -380,3 +325,37 @@ var pullCard = function () {
 		document.getElementById("message").innerHTML = window.game.message;
 	}
 }
+
+
+
+
+
+
+//function sleep(milliseconds) {
+// 	var start = new Date().getTime();
+// 	for (var i = 0; i < 1e7; i++) {
+// 		if ((new Date().getTime() - start) > milliseconds) {
+// 			break;
+// 		}
+// 	}
+// }
+
+//i = 0;
+// function myLoop() {             
+// 	setTimeout(function () {    
+// 		console.log("2. " + playerIndex)
+// 		var cardDivId = `card-${res[i][0]}-player-${playerIndex}`
+// 		console.log(cardDivId)
+// 		console.log("i " + i)
+// 		var cardDiv = document.getElementById(cardDivId)
+// 		playerDiv.removeChild(cardDiv);
+// 		var openDeckDiv = document.getElementById("open-deck")
+// 		openDeckDiv.innerHTML = `<img src=\"cards/${res[i][1].getFileName()}\"/>`
+// 		i++;                    
+// 		if (i < res.length) {           
+// 			myLoop();             
+// 		}                       
+// 	}, 3000)
+// }
+
+// myLoop()

@@ -31,7 +31,7 @@ function Player(isComputerPlayer) {
                 res.push([i, this.cards[i]]);
                 this.cards.splice(i, 1);
                 for (var j = this.cards.length - 1; j >= 0; j -= 1) {
-                    if (this.cards[j].color == topCard.color) {
+                    if (this.cards[j].color == currentColor) {
                         if(j < 2) 
                             res.push([j, this.cards[j]]);
                         else  res.push([j + 1, this.cards[j]]);
