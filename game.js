@@ -270,7 +270,19 @@ window.onclick = function () {
 	updateDeckCount()
 }
 
-var nextTurn = function () {
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+//   async function demo() {
+// 	console.log('Taking a break...');
+// 	await sleep(2000);
+// 	console.log('Two second later');
+//   }
+
+//   demo();
+
+var nextTurn = async function () {
 	updateGameView();
 
 	playerIndex = window.game.currentPlayerIndex;
@@ -283,6 +295,7 @@ var nextTurn = function () {
 		var res = window.game.computerPlay();
 
 		for (var i = 0; i < res.length; i += 1) {
+			await sleep(3000);
 			var cardDivId = `card-${res[i][0]}-player-${playerIndex}`
 			var cardDiv = document.getElementById(cardDivId)
 			playerDiv.removeChild(cardDiv);
