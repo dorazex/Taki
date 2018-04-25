@@ -8,6 +8,7 @@ function Game(numRegularPlayers, numComputerPlayers) {
 	this.message = undefined;
 	this.NUM_REGULAR_PLAYERS = numRegularPlayers;
 	this.NUM_COMPUTER_PLAYERS = numComputerPlayers;
+	this.statistics = new GameStatistics();
 
 	this.addPlayer = function (isComputerPlayer) {
 		this.players.push(new Player(isComputerPlayer))
