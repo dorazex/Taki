@@ -27,16 +27,21 @@
 			</div>
 		</div>
 	</div>
-	<button id="finish-turn" onclick="finishTurnOnClick()">finish turn</button>
-	<p id="turn"></p>
-	<p id="message"></p>
-	<p id="color"></p>
 	<div id="statistics">
-		<p id="turns-count">0</p>
-		<p id="game-duration">0</p>
-		<p id="turn-average">0</p>
-		<p id="single-card-count">0</p>
+		<table class="status-bar">
+			<tr>
+				<td><p id="turn"></p></td>
+				<td><p id="message"></p></td>
+				<td><p id="color"></p></td>
+				<td><p id="turns-count">0</p></td>
+				<td><p id="game-duration">0</p></td>
+				<td><p id="turn-average">0</p></td>
+				<td><p id="single-card-count">0</p></th>
+			</tr>
+		</table>
 	</div>
+	
+	<button id="finish-turn" onclick="finishTurnOnClick()">finish turn</button>
 
 	<!-- The Modal -->
 	<div id="change-color-modal" class="modal">
