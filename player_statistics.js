@@ -12,7 +12,7 @@ function PlayerStatistics() {
 		var endTime = new Date().getTime();
 		this.turnsDurations.push(endTime - this.currentTurnStart);
 		console.log("turn ended")
-		console.log("average: " + this.getAverageTurnTime()/1000)
+		console.log("average: " + this.getAverageTurnTime())
 	}
 
 	this.getAverageTurnTime = function(){

@@ -162,16 +162,15 @@ function Game(numRegularPlayers, numComputerPlayers) {
 
 var updateStatistics = function () {
 	console.log("Hello");
-	var game = window.game;
-	document.getElementById('turns-count').innerHTML = "Turns Count: " + game.statistics.turnsCount;
-	document.getElementById('game-duration').innerHTML = "Game Duration: " + game.statistics.getGameDuration();
-	document.getElementById('turn-average').innerHTML = "Turn Average Duration: " + game.players[game.currentPlayerIndex].statistics.getAverageTurnTime();
-	document.getElementById('single-card-count').innerHTML = "Single Card Count: " + game.statistics.singleCardCount;
+	document.getElementById('turns-count').innerHTML = "Turns Count: " + window.game.statistics.turnsCount;
+	document.getElementById('game-duration').innerHTML = "Game Duration: " + miliSecondsToTimeString(window.game.statistics.getGameDuration());
+	document.getElementById('turn-average').innerHTML = "Turn Average Duration: " + miliSecondsToTimeString(window.game.players[window.game.currentPlayerIndex].statistics.getAverageTurnTime());
+	document.getElementById('single-card-count').innerHTML = "Single Card Count: " + window.game.statistics.singleCardCount;
 }
 
 
 window.onload = function () {
-	setInterval(function(){ updateStatistics(); }, 1000);
+	setInterval(function(){ updateStatistics(); }, 500);
 	url = window.location.href
 	urlParameters = url.split("?")[1]
 	numRegularPlayers = parseInt(urlParameters.split("&")[0].split("=")[1])
@@ -326,7 +325,7 @@ var nextTurn = async function () {
 		// add cards to DOM
 		for (var i = 0; i < res.length; i += 1) {
 			// wait to make a "thinking" feel
-			await sleep(2000);
+			await sleep(5000);
 			// create DOM divs for the card the player chose in his turn
 			var cardDivId = `card-${res[i][0]}-player-${playerIndex}`
 			var cardDiv = document.getElementById(cardDivId)
