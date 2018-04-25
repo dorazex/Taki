@@ -42,12 +42,19 @@ function Game(numRegularPlayers, numComputerPlayers) {
 	};
 
 	this.cyclicIncrementCurrentPlayerIndex = function () {
+		this.statistics.turnsCount++;
+		
+		this.players[this.currentPlayerIndex].statistics.endTurn();
+
 		this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length
 		console.log(`changed player index to: ${this.currentPlayerIndex}`)
+
+		this.players[this.currentPlayerIndex].statistics.startTurn();
 	};
 
 
 	this.computerPlay = function () {
+
 		// let the computer play calculate its turn and return the cards to put
 		var res = this.players[this.currentPlayerIndex].computerPlay(this.openDeck.getTopCard(), this.currentColor);
 
@@ -152,8 +159,13 @@ function Game(numRegularPlayers, numComputerPlayers) {
 	}
 };
 
+var updateStatistics = function () {
+	console.log("Hello");
+}
+
 
 window.onload = function () {
+	setInterval(function(){ updateStatistics(); }, 1000);
 	url = window.location.href
 	urlParameters = url.split("?")[1]
 	numRegularPlayers = parseInt(urlParameters.split("&")[0].split("=")[1])
@@ -166,6 +178,7 @@ window.onload = function () {
 
 	document.getElementById("finish-turn").style.visibility = 'hidden';
 	updateGameView()
+	game.players[game.currentPlayerIndex].statistics.startTurn();
 
 	nextTurn()
 }
