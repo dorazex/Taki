@@ -35,7 +35,7 @@ function Deck() {
 
     this.init = function () {
         this.initCards();
-        this.cards = shuffleArray(this.cards);
+        shuffleArray(this.cards);
         return this.cards;
         
     };

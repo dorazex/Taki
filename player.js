@@ -9,7 +9,6 @@ function Player(isComputerPlayer) {
     this.computerPlay = function (topCard, currentColor) {
         res = []
 
-
         for (var i = this.cards.length - 1; i >= 0; i -= 1) {
             if (this.cards[i].action == "changeColor") {
                 res.push([i, this.cards[i]]);
@@ -50,7 +49,6 @@ function Player(isComputerPlayer) {
             }
         }
 
-
         if (topCard.number != null) {
             for (var i = this.cards.length - 1; i >= 0; i -= 1) {
                 if (this.cards[i].number == topCard.number) {
@@ -60,7 +58,6 @@ function Player(isComputerPlayer) {
                 }
             }
         }
-
 
         return res;
     }

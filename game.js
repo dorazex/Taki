@@ -1,11 +1,11 @@
 function Game(numRegularPlayers, numComputerPlayers) {
-	this.deck = [];
-	this.openDeck = [];
+	this.deck = undefined;
+	this.openDeck = undefined;
 	this.players = [];
 	this.currentPlayerIndex = 0;
 	this.currentColor = undefined;
 	this.currentAction = undefined;
-	this.message = "";
+	this.message = undefined;
 	this.NUM_REGULAR_PLAYERS = numRegularPlayers;
 	this.NUM_COMPUTER_PLAYERS = numComputerPlayers;
 
@@ -54,8 +54,7 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		}
 
 		if (res.length == 0) {
-			this.players[this.currentPlayerIndex].addCards(this.deck.takeCards(1));
-			this.cyclicIncrementCurrentPlayerIndex()
+			pullCard();
 		}
 		else {
 			if (res[res.length - 1][1].color != null) {
@@ -73,13 +72,21 @@ function Game(numRegularPlayers, numComputerPlayers) {
 	}
 
 	this.pullCard = function () {
-		if (this.players[this.currentPlayerIndex].isComputerPlayer == true)
-			return false;
+		//if (this.players[this.currentPlayerIndex].isComputerPlayer == true)
+		//	return false;
 		if (this.currentAction == "taki") {
 			this.message = "not enable pull card";
 			return false;
 		}
 		this.players[window.game.currentPlayerIndex].addCards(this.deck.takeCards(1));
+
+		if (this.deck.getNumberOfCards() == 0) {
+			var topCard = this.openDeck.cards.pop();
+			shuffleArray(this.openDeck.cards);
+			this.deck.returnCards(this.openDeck.cards);
+			this.openDeck.putCard(topCard);
+		}
+
 		this.cyclicIncrementCurrentPlayerIndex()
 		return true;
 	}
@@ -104,7 +111,7 @@ function Game(numRegularPlayers, numComputerPlayers) {
 	this.play = function (card, cardIndex, playerIndex) {
 		this.message = "";
 
-		if (this.currentAction == "taki" && this.currentColor != card.getColor()) {
+		if (this.rcurentAction == "taki" && this.currentColor != card.getColor()) {
 			this.message = "not valid selection";
 			return false;
 		}
@@ -154,10 +161,10 @@ window.onload = function () {
 
 	document.getElementById("finish-turn").style.visibility = 'hidden';
 	updateGameView()
-	updateOpenDeck()
-	updateDeckCount()
-	updateColor()
-	updateTurn()
+	// updateOpenDeck()
+	// updateDeckCount()
+	// updateColor()
+	// updateTurn()
 	nextTurn()
 }
 
@@ -206,6 +213,7 @@ var updateTurn = function () {
 	for (var i = 0; i < game.players.length; i++) {
 		var playerDivId = `player-container-${i}`;
 		var playerDiv = document.getElementById(playerDivId);
+		var deckDiv = document.getElementById("deck");
 		var c = playerDiv.children;
 
 		var j;
@@ -214,6 +222,10 @@ var updateTurn = function () {
 				c[j].classList.remove("disabled");
 			else c[j].classList.add("disabled");
 		}
+
+		if (game.players[window.game.currentPlayerIndex].isComputerPlayer == false)
+			deckDiv.classList.remove("disabled");
+		else deckDiv.classList.add("disabled");
 	}
 }
 
@@ -259,28 +271,24 @@ var updateGameView = function () {
 	}
 
 	updateOpenDeck()
-	updateColor();
-	updateTurn();
-
-}
-
-
-window.onclick = function () {
-	//	console.log("click")
 	updateDeckCount()
+	updateColor()
+	updateTurn()
+	// updateOpenDeck()
+	// updateColor();
+	// updateTurn();
+
 }
+
+
+// window.onclick = function () {
+// 	//	console.log("click")
+// 	updateDeckCount()
+// }
 
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
-
-//   async function demo() {
-// 	console.log('Taking a break...');
-// 	await sleep(2000);
-// 	console.log('Two second later');
-//   }
-
-//   demo();
 
 var nextTurn = async function () {
 	updateGameView();
@@ -295,7 +303,7 @@ var nextTurn = async function () {
 		var res = window.game.computerPlay();
 
 		for (var i = 0; i < res.length; i += 1) {
-			await sleep(3000);
+			await sleep(1000);
 			var cardDivId = `card-${res[i][0]}-player-${playerIndex}`
 			var cardDiv = document.getElementById(cardDivId)
 			playerDiv.removeChild(cardDiv);
@@ -331,30 +339,3 @@ var pullCard = function () {
 }
 
 
-//function sleep(milliseconds) {
-// 	var start = new Date().getTime();
-// 	for (var i = 0; i < 1e7; i++) {
-// 		if ((new Date().getTime() - start) > milliseconds) {
-// 			break;
-// 		}
-// 	}
-// }
-
-//i = 0;
-// function myLoop() {             
-// 	setTimeout(function () {    
-// 		console.log("2. " + playerIndex)
-// 		var cardDivId = `card-${res[i][0]}-player-${playerIndex}`
-// 		console.log(cardDivId)
-// 		console.log("i " + i)
-// 		var cardDiv = document.getElementById(cardDivId)
-// 		playerDiv.removeChild(cardDiv);
-// 		var openDeckDiv = document.getElementById("open-deck")
-// 		openDeckDiv.innerHTML = `<img src=\"cards/${res[i][1].getFileName()}\"/>`
-// 		i++;                    
-// 		if (i < res.length) {           
-// 			myLoop();             
-// 		}                       
-// 	}, 3000)
-// }
-//// myLoop()
