@@ -125,13 +125,13 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		this.message = "";
 
 		if (this.rcurentAction == "taki" && this.currentColor != card.getColor()) {
-			this.message = "not valid selection";
+			this.message = "not valid";
 			return false;
 		}
 
 		if (card.number != null) {
 			if (this.currentColor != card.getColor() && this.openDeck.getTopCard().number != card.number) {
-				this.message = "not valid selection";
+				this.message = "not valid";
 				return false;
 			}
 			if (this.currentAction != "taki")
@@ -139,14 +139,14 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		}
 		else if (card.action == "taki") {
 			if (this.currentColor != card.getColor() && this.openDeck.getTopCard().action != "taki") {
-				this.message = "not valid selection";
+				this.message = "not valid";
 				return false;
 			}
 			this.currentAction = "taki";
 		}
 		else if (card.action == "stop") {
 			if (this.currentColor != card.getColor() && this.openDeck.getTopCard().action != "stop") {
-				this.message = "not valid selection";
+				this.message = "not valid";
 				return false;
 			}
 			if (this.currentAction != "taki") {
@@ -161,11 +161,10 @@ function Game(numRegularPlayers, numComputerPlayers) {
 };
 
 var updateStatistics = function () {
-	console.log("Hello");
 	document.getElementById('turns-count').innerHTML = "Turns Count: " + window.game.statistics.turnsCount;
 	document.getElementById('game-duration').innerHTML = "Game Duration: " + miliSecondsToTimeString(window.game.statistics.getGameDuration());
 	document.getElementById('turn-average').innerHTML = "Turn Average Duration: " + miliSecondsToTimeString(window.game.players[window.game.currentPlayerIndex].statistics.getAverageTurnTime());
-	document.getElementById('single-card-count').innerHTML = "Single Card Count: " + window.game.statistics.singleCardCount;
+	document.getElementById('single-card-count').innerHTML = "Single Card Count: " + (window.game.statistics.singleCardCount==null ? 0 : window.game.statistics.singleCardCount);
 }
 
 
@@ -183,6 +182,7 @@ window.onload = function () {
 
 	document.getElementById("finish-turn").style.visibility = 'hidden';
 	updateGameView()
+	updateStatistics()
 	game.players[game.currentPlayerIndex].statistics.startTurn();
 
 	nextTurn()
@@ -325,7 +325,7 @@ var nextTurn = async function () {
 		// add cards to DOM
 		for (var i = 0; i < res.length; i += 1) {
 			// wait to make a "thinking" feel
-			await sleep(5000);
+			await sleep(3000);
 			// create DOM divs for the card the player chose in his turn
 			var cardDivId = `card-${res[i][0]}-player-${playerIndex}`
 			var cardDiv = document.getElementById(cardDivId)
