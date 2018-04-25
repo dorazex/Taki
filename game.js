@@ -46,6 +46,7 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		
 		this.players[this.currentPlayerIndex].statistics.endTurn();
 
+
 		this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length
 		console.log(`changed player index to: ${this.currentPlayerIndex}`)
 
@@ -161,6 +162,11 @@ function Game(numRegularPlayers, numComputerPlayers) {
 
 var updateStatistics = function () {
 	console.log("Hello");
+	var game = window.game;
+	document.getElementById('turns-count').innerHTML = "Turns Count: " + game.statistics.turnsCount;
+	document.getElementById('game-duration').innerHTML = "Game Duration: " + game.statistics.getGameDuration();
+	document.getElementById('turn-average').innerHTML = "Turn Average Duration: " + game.players[game.currentPlayerIndex].statistics.getAverageTurnTime();
+	document.getElementById('single-card-count').innerHTML = "Single Card Count: " + game.statistics.singleCardCount;
 }
 
 
@@ -209,7 +215,15 @@ var activeCardOnClick = function (event) {
 	var cardIndex = parseInt(cardDiv.id.split("-")[1])
 	var playerIndex = parseInt(playerDiv.id.split("-")[2])
 	var card = game.players[playerIndex].cards[cardIndex];
+	
+	var cardsCountBeforeTurn = game.players[playerIndex].cards.length;
 	var res = game.play(card, cardIndex, playerIndex);
+	var cardsCountAfterTurn = game.players[playerIndex].cards.length;
+
+
+	if (cardsCountBeforeTurn != 1 && cardsCountAfterTurn == 1){
+		game.players[playerIndex].statistics.singleCardCount++;
+	}
 
 	document.getElementById("message").innerHTML = window.game.message;
 
@@ -312,7 +326,7 @@ var nextTurn = async function () {
 		// add cards to DOM
 		for (var i = 0; i < res.length; i += 1) {
 			// wait to make a "thinking" feel
-			await sleep(600);
+			await sleep(2000);
 			// create DOM divs for the card the player chose in his turn
 			var cardDivId = `card-${res[i][0]}-player-${playerIndex}`
 			var cardDiv = document.getElementById(cardDivId)

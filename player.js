@@ -7,6 +7,13 @@ function Player(isComputerPlayer) {
         this.cards = this.cards.concat(cards);
     };
 
+    this.endTurn = function (cardsPut){
+    	if (this.cards.length!=1 && this.cards.length - cardsPut == 1){
+    		this.statistics.singleCardCount++;
+    	}
+    	return cardsPut;
+    }
+
     this.computerPlay = function (topCard, currentColor) {
         res = []
 
@@ -14,7 +21,7 @@ function Player(isComputerPlayer) {
             if (this.cards[i].action == "changeColor") {
                 res.push([i, this.cards[i]]);
                 this.cards.splice(i, 1);
-                return res;
+                return this.endTurn(res);
             }
         }
 
@@ -22,7 +29,7 @@ function Player(isComputerPlayer) {
             if (this.cards[i].action == "stop" && this.cards[i].color == currentColor) {
                 res.push([i, this.cards[i]]);
                 this.cards.splice(i, 1);
-                return res;
+                return this.endTurn(res);
             }
         }
 
@@ -38,7 +45,7 @@ function Player(isComputerPlayer) {
                         this.cards.splice(j, 1);
                     }
                 }
-                return res;
+                return this.endTurn(res);
             }
         }
 
@@ -46,7 +53,7 @@ function Player(isComputerPlayer) {
             if (this.cards[i].color == currentColor) {
                 res.push([i, this.cards[i]]);
                 this.cards.splice(i, 1);
-                return res;
+                return this.endTurn(res);
             }
         }
 
@@ -55,11 +62,11 @@ function Player(isComputerPlayer) {
                 if (this.cards[i].number == topCard.number) {
                     res.push([i, this.cards[i]]);
                     this.cards.splice(i, 1);
-                    return res;
+                    return this.endTurn(res);
                 }
             }
         }
 
-        return res;
+        return this.endTurn(res);
     }
 };

@@ -4,6 +4,6 @@ function GameStatistics() {
 
 	this.getGameDuration = function(){
 		var currentTime = new Date().getTime();
-		return (currentTime - startTime);
+		return (currentTime - this.startTime);
 	}
 }

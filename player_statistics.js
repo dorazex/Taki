@@ -16,6 +16,7 @@ function PlayerStatistics() {
 	}
 
 	this.getAverageTurnTime = function(){
+		if (this.turnsDurations.length == 0) return 0;
 		var sum = this.turnsDurations.reduce(function(a, b) { return a + b; });
 		var avg = sum / this.turnsDurations.length;
 		return avg;
