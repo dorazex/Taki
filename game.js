@@ -47,12 +47,15 @@ function Game(numRegularPlayers, numComputerPlayers) {
 
 
 	this.computerPlay = function () {
+		// let the computer play calculate its turn and return the cards to put
 		var res = this.players[this.currentPlayerIndex].computerPlay(this.openDeck.getTopCard(), this.currentColor);
 
+		// put the cards of the computer's turn if any
 		for (var i = 0; i < res.length; i += 1) {
 			this.openDeck.putCard(res[i][1]);
 		}
 
+		// computer has no valid cards to put
 		if (res.length == 0) {
 			pullCard();
 		}
@@ -61,13 +64,15 @@ function Game(numRegularPlayers, numComputerPlayers) {
 				this.currentColor = res[res.length - 1][1].color;
 			}
 
+			// additional increment of player to skip turn
+			// TODO: use finishTurn() instead
 			if (res[res.length - 1][1].action == "stop") {
 				this.cyclicIncrementCurrentPlayerIndex()
 				this.cyclicIncrementCurrentPlayerIndex()
-			}
-			else this.cyclicIncrementCurrentPlayerIndex()
+			} else this.cyclicIncrementCurrentPlayerIndex();
 		}
 
+		// return the turn's cards
 		return res;
 	}
 
@@ -92,7 +97,6 @@ function Game(numRegularPlayers, numComputerPlayers) {
 	}
 
 	this.finishTurn = function () {
-		window.game.currentAction = undefined;
 		if (this.openDeck.getTopCard().action != "stop")
 			this.cyclicIncrementCurrentPlayerIndex()
 		else {
@@ -161,10 +165,7 @@ window.onload = function () {
 
 	document.getElementById("finish-turn").style.visibility = 'hidden';
 	updateGameView()
-	// updateOpenDeck()
-	// updateDeckCount()
-	// updateColor()
-	// updateTurn()
+
 	nextTurn()
 }
 
@@ -259,7 +260,7 @@ var updateGameView = function () {
 			playerDiv.appendChild(cardDiv);
 			if (game.players[i].isComputerPlayer == false) {
 				var card = game.players[i].cards[j]
-				cardDiv.innerHTML = `<img src=\"cards/${card.getFileName()}\"/>`
+				cardDiv.innerHTML = `<img src=\"cards/${card.getFileName()}\" onmouseover=\"\" style=\"cursor: pointer;\"/>`
 				if (card.action == "changeColor")
 					cardDiv.addEventListener('click', activeChangeColor);
 				else cardDiv.addEventListener('click', activeCardOnClick);
@@ -274,17 +275,7 @@ var updateGameView = function () {
 	updateDeckCount()
 	updateColor()
 	updateTurn()
-	// updateOpenDeck()
-	// updateColor();
-	// updateTurn();
-
 }
-
-
-// window.onclick = function () {
-// 	//	console.log("click")
-// 	updateDeckCount()
-// }
 
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
@@ -293,25 +284,31 @@ function sleep(ms) {
 var nextTurn = async function () {
 	updateGameView();
 
-	playerIndex = window.game.currentPlayerIndex;
+	var playerIndex = window.game.currentPlayerIndex;
 	var currentPlayer = window.game.players[playerIndex];
 	console.log("turn of: " + playerIndex)
 
+	// now computers play their turns, updating the game view after each turn
 	while (currentPlayer.isComputerPlayer == true) {
 		var playerDivId = `player-container-${playerIndex}`;
 		var playerDiv = document.getElementById(playerDivId)
+		// computer calculates the actual turn and returns the cards he put
 		var res = window.game.computerPlay();
 
+		// add cards to DOM
 		for (var i = 0; i < res.length; i += 1) {
-			await sleep(1000);
+			// wait to make a "thinking" feel
+			await sleep(600);
+			// create DOM divs for the card the player chose in his turn
 			var cardDivId = `card-${res[i][0]}-player-${playerIndex}`
 			var cardDiv = document.getElementById(cardDivId)
 			playerDiv.removeChild(cardDiv);
+			// update the card of the open deck
 			var openDeckDiv = document.getElementById("open-deck")
 			openDeckDiv.innerHTML = `<img src=\"cards/${res[i][1].getFileName()}\"/>`
 		}
 		updateGameView();
-		playerIndex = window.game.currentPlayerIndex;
+		var playerIndex = window.game.currentPlayerIndex;
 		currentPlayer = game.players[playerIndex];
 	}
 }
@@ -324,6 +321,7 @@ function changeColor(color) {
 }
 
 var finishTurnOnClick = function () {
+	window.game.currentAction = undefined;
 	game.finishTurn()
 	document.getElementById("finish-turn").style.visibility = 'hidden';
 	nextTurn()
