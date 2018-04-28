@@ -116,7 +116,7 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		this.players[playerIndex].cards.splice(cardIndex, 1);
 		console.log("-----> Player " + playerIndex + ": " + this.players[playerIndex].cards.length);
 		if (this.players[playerIndex].cards.length == 0){
-			alert("WINNER")
+			alert(`The winner is: ${playerIndex}`)
 		}
 	}
 
