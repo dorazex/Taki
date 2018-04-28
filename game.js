@@ -51,7 +51,7 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		if(stop == true)
 			this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
 		  
-		console.log(`changed player index to: ${this.currentPlayerIndex}`)
+		// console.log(`changed player index to: ${this.currentPlayerIndex}`)
 
 		this.players[this.currentPlayerIndex].statistics.startTurn();
 	};
@@ -78,13 +78,13 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		//if (this.players[this.currentPlayerIndex].isComputerPlayer == true)
 		//	return false;
 		if (this.currentAction == "taki") {
-			this.message = "not enable pull card";
+			this.message = "pull card not valid";
 			return false;
 		}
 
 		var res = this.players[this.currentPlayerIndex].computerPlay(this.openDeck.getTopCard(), this.currentColor, this.currentAction);
 		if(res.length != 0) {
-			this.message = "not enable pull card";
+			this.message = "pull card not valid";
 			return false;
 		}
 
@@ -113,7 +113,11 @@ function Game(numRegularPlayers, numComputerPlayers) {
 	this.moveCardToOpenDeck = function (card, cardIndex, playerIndex) {
 		this.currentColor = card.getColor();
 		this.openDeck.putCard(this.players[playerIndex].cards[cardIndex])
-		this.players[playerIndex].cards.splice(cardIndex, 1)
+		this.players[playerIndex].cards.splice(cardIndex, 1);
+		console.log("-----> Player " + playerIndex + ": " + this.players[playerIndex].cards.length);
+		if (this.players[playerIndex].cards.length == 0){
+			alert("WINNER")
+		}
 	}
 
 
@@ -147,6 +151,7 @@ function Game(numRegularPlayers, numComputerPlayers) {
 			}
 			if (this.currentAction != "taki") 			
 				this.cyclicIncrementCurrentPlayerIndex(true)
+			// this.cyclicIncrementCurrentPlayerIndex(false)
 			
 		}
 
@@ -256,7 +261,7 @@ var updateColor = function () {
 }
 
 var updateGameView = function () {
-	console.log("update game view")
+	// console.log("update game view")
 	var gameDiv = document.getElementById("game");
 	for (var i = 0; i < game.players.length; i++) {
 		var playerDivId = `player-container-${i}`;
@@ -298,12 +303,12 @@ var updateGameView = function () {
 }
 
 
-var nextTurn = async function () {
+var nextTurn = function () {
 	updateGameView();
 
 	var playerIndex = window.game.currentPlayerIndex;
 	var currentPlayer = window.game.players[playerIndex];
-	console.log("turn of: " + playerIndex)
+	// console.log("turn of: " + playerIndex)
 
 	// now computers play their turns, updating the game view after each turn
 	while (currentPlayer.isComputerPlayer == true) {

@@ -5,7 +5,7 @@ function PlayerStatistics() {
 
 	this.startTurn = function () {
 		this.currentTurnStart = new Date().getTime();
-		console.log("turn started")
+		// console.log("turn started")
 	}
 
 	this.endTurn = function (cardsCountAfterTurn) {
@@ -14,8 +14,8 @@ function PlayerStatistics() {
 
 		var endTime = new Date().getTime();
 		this.turnsDurations.push(endTime - this.currentTurnStart);
-		console.log("turn ended")
-		console.log("average: " + this.getAverageTurnTime())
+		// console.log("turn ended")
+		// console.log("average: " + this.getAverageTurnTime())
 	}
 
 	this.getAverageTurnTime = function () {
