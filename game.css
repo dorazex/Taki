@@ -4,6 +4,13 @@ html, body, .viewport {
   margin: 0;
 }
 
+body {
+    background-image: url("pattern.png");
+    background-repeat: repeat-x repeat-y;
+}
+
+}
+
 .game-flex {
   display: flex;
   flex-direction: column;
@@ -106,14 +113,15 @@ img {
 .status-bar{
   width:100%;
   border: 1px solid black;
-  background-color: #adc9f7;
+  background-color: #5b8858;
   border-collapse: collapse;
   height:10px;
+  color:white;
 }
 .status-bar:hover{
   width:100%;
   border: 1px solid black;
-  background-color: #659bf2;
+  background-color: #5b8858;
   border-collapse: collapse;
   height:10px;
 }
