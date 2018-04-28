@@ -164,7 +164,7 @@ var updateStatistics = function () {
 
 
 window.onload = function () {
-	setInterval(function () { updateStatistics(); }, 500);
+	setInterval(function () { updateStatistics(); }, 100);
 	url = window.location.href
 	urlParameters = url.split("?")[1]
 	numRegularPlayers = parseInt(urlParameters.split("&")[0].split("=")[1])
