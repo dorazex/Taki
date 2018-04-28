@@ -106,12 +106,14 @@ img {
   margin: auto;
   padding: 0;
   border: 1px solid #888;
-  width: 80%;
+  width: 200px;
+  height: 200px;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
   -webkit-animation-name: animatetop;
   -webkit-animation-duration: 0.4s;
   animation-name: animatetop;
   animation-duration: 0.4s
+  align-items:center;
 }
 
 .status-bar{
@@ -131,7 +133,7 @@ img {
   border-collapse: collapse;
   height:10px;
 }
-td{
+.status-bar-td{
   /*border: 1px  solid black;*/
   border-width: 0px 1px 0px 0px;
   border-collapse: collapse;
@@ -146,7 +148,7 @@ td{
   /*transition: all 0.3s ease-out;*/
 
 }
-td:hover{
+.status-bar-td:hover{
   border: 2px  solid #06D85F;
   /*border-width: 0px 1px 0px 0px;*/
   /*border-collapse: collapse;*/

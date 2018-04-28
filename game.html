@@ -18,13 +18,13 @@
 	<div id="statistics">
 		<table class="status-bar">
 			<tr>
-				<td><div id="turn"></div></td>
-				<td><div id="color"></div></td>
-				<td><div id="turns-count">0</div></td>
-				<td><div id="game-duration">0</div></td>
-				<td><div id="turn-average">0</div></td>
-				<td><div id="single-card-count">0</div></th>
-				<td width="100px"><div id="message"></div></td>
+				<td class="status-bar-td"><div id="turn"></div></td>
+				<td class="status-bar-td"><div id="color"></div></td>
+				<td class="status-bar-td"><div id="turns-count">0</div></td>
+				<td class="status-bar-td"><div id="game-duration">0</div></td>
+				<td class="status-bar-td"><div id="turn-average">0</div></td>
+				<td class="status-bar-td"><div id="single-card-count">0</div></th>
+				<td class="status-bar-td" width="100px"><div id="message"></div></td>
 			</tr>
 		</table>
 	</div>
@@ -49,6 +49,24 @@
 
 		<!-- Modal content -->
 		<div class="modal-content">
+			<table>
+				<tr>
+					<td>
+						A
+					</td>
+					<td>
+						B
+					</td>
+				</tr>
+				<tr>
+					<td>
+						C
+					</td>
+					<td>
+						D
+					</td>
+				</tr>
+			</table>
 			<button id="green" onclick="changeColor(this.id)">green</button>
 			<button id="red" onclick="changeColor(this.id)">red</button>
 			<button id="yellow" onclick="changeColor(this.id)">yellow</button>
