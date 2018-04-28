@@ -177,7 +177,7 @@ window.onload = function () {
 
 	document.getElementById("finish-turn").style.visibility = 'hidden';
 	updateGameView()
-	//updateStatistics()
+	updateStatistics()
 	game.players[game.currentPlayerIndex].statistics.startTurn();
 
 	nextTurn()
@@ -234,9 +234,14 @@ var updateTurn = function () {
 
 		var j;
 		for (j = 0; j < c.length; j++) {
-			if (i == window.game.currentPlayerIndex)
+			if (i == window.game.currentPlayerIndex){
 				c[j].classList.remove("disabled");
-			else c[j].classList.add("disabled");
+				playerDiv.classList.add("currentplayerdiv");
+			}
+			else{
+				c[j].classList.add("disabled");
+				playerDiv.classList.remove("currentplayerdiv");
+			}
 		}
 
 		if (game.players[window.game.currentPlayerIndex].isComputerPlayer == false)
