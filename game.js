@@ -285,8 +285,8 @@ var updateGameView = function () {
 					cardDiv.addEventListener('click', activeChangeColor);
 				else cardDiv.addEventListener('click', activeCardOnClick);
 			} else {
-				var card = game.players[i].cards[j]
-				cardDiv.innerHTML = `<img src=\"cards/${card.getFileName()}\"/>`
+				// var card = game.players[i].cards[j]
+				cardDiv.innerHTML = `<img src=\"cards/cover_0_0.png\"/>`
 			}
 		}
 	}
@@ -298,10 +298,6 @@ var updateGameView = function () {
 }
 
 
-function sleep(ms) {
-	return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 var nextTurn = async function () {
 	updateGameView();
 
@@ -311,7 +307,6 @@ var nextTurn = async function () {
 
 	// now computers play their turns, updating the game view after each turn
 	while (currentPlayer.isComputerPlayer == true) {
-		await sleep(1500);   	        // wait to make a "thinking" feel
 		window.game.computerPlay();  	// computer calculates the actual turn 
 		updateGameView();
 		var playerIndex = window.game.currentPlayerIndex;
