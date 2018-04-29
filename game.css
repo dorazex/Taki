@@ -116,7 +116,7 @@ img {
 }
 
 /* Modal Content */
-.modal-content {
+.change-color-modal-content {
   position: relative;
   margin: auto;
   padding: 0;
@@ -164,4 +164,38 @@ img {
   /*border-width: 0px 1px 0px 0px;*/
   /*border-collapse: collapse;*/
   height:10px;
+}
+
+#withdraw, #end-ok-button{
+  background-color: chartreuse;
+  font-family: Courier;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding:0px;
+  margin: 0px
+}
+
+#end-game-modal {
+  display: none; /* Hidden by default */
+  position: absolute;
+  z-index: 1; /* Sit on top */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: white;
+  align-self: center;
+  padding:30px;
+  position: fixed;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+.end-game-modal-content {
+  position: relative;
+  margin: auto;
+  /*padding: 20px;*/
+  width: stretch;
+  height: stretch;
 }

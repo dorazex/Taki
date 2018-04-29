@@ -29,6 +29,12 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		}
 	};
 
+	this.getComputerPlayerIndex = function(){
+		for (var i = 0; i < this.players.length; i++) {
+			if (this.players[i].isComputerPlayer) return i;
+		}
+	}
+
 	this.init = function () {
 		this.deck = new Deck();
 		this.deck.init();
@@ -55,7 +61,6 @@ function Game(numRegularPlayers, numComputerPlayers) {
 
 		this.players[this.currentPlayerIndex].statistics.startTurn();
 	};
-
 
 	this.computerPlay = function () {
 		// let the computer play calculate its turn and return the card to put
@@ -165,6 +170,13 @@ var updateStatistics = function () {
 	document.getElementById('game-duration').innerHTML = "Game Duration: " + miliSecondsToTimeString(window.game.statistics.getGameDuration());
 	document.getElementById('turn-average').innerHTML = "Turn Average Duration: " + miliSecondsToTimeString(window.game.players[window.game.currentPlayerIndex].statistics.getAverageTurnTime());
 	document.getElementById('single-card-count').innerHTML = "Single Card Count: " + window.game.players[window.game.currentPlayerIndex].statistics.singleCardCount;
+
+	playerStatsTable = document.getElementById("player-statistics-table")
+
+	var game = window.game;
+	for (var i = 0; i < game.players.length; i++) {
+		game.players[i]
+	}
 }
 
 
@@ -342,3 +354,16 @@ var pullCard = function () {
 }
 
 
+var withdraw = function () {
+	modalTitleFont = document.getElementById("end-game-modal-winner-title").innerHTML = "The winner is: " + window.game.getComputerPlayerIndex()
+	document.getElementById('end-turns-count').innerHTML = window.game.statistics.turnsCount;
+	document.getElementById('end-game-duration').innerHTML = miliSecondsToTimeString(window.game.statistics.getGameDuration());
+	endGameModal = document.getElementById('end-game-modal');
+	endGameModal.style.display = "block";
+	// endGameModal.addEventListener('click', hideStatistics);
+}
+
+var hideStatistics = function(){
+	endGameModal = document.getElementById('end-game-modal');
+	endGameModal.style.display = "none";
+}
