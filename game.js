@@ -171,11 +171,24 @@ var updateStatistics = function () {
 	document.getElementById('turn-average').innerHTML = "Turn Average Duration: " + miliSecondsToTimeString(window.game.players[window.game.currentPlayerIndex].statistics.getAverageTurnTime());
 	document.getElementById('single-card-count').innerHTML = "Single Card Count: " + window.game.players[window.game.currentPlayerIndex].statistics.singleCardCount;
 
-	playerStatsTable = document.getElementById("player-statistics-table")
+	playerStatsTable = document.getElementById("players-statistics-table")
+	playerStatsTable.innerHTML = "";
 
 	var game = window.game;
 	for (var i = 0; i < game.players.length; i++) {
-		game.players[i]
+		player = game.players[i]
+		var avg = miliSecondsToTimeString(player.statistics.getAverageTurnTime())
+		var singleCount = player.statistics.singleCardCount
+
+		var row = playerStatsTable.insertRow(i);
+		
+		var cell1 = row.insertCell(0);
+		var cell2 = row.insertCell(1);
+		var cell3 = row.insertCell(2);
+
+		cell1.innerHTML = i;
+		cell2.innerHTML = avg;
+		cell3.innerHTML = singleCount;
 	}
 }
 
@@ -360,7 +373,6 @@ var withdraw = function () {
 	document.getElementById('end-game-duration').innerHTML = miliSecondsToTimeString(window.game.statistics.getGameDuration());
 	endGameModal = document.getElementById('end-game-modal');
 	endGameModal.style.display = "block";
-	// endGameModal.addEventListener('click', hideStatistics);
 }
 
 var hideStatistics = function(){
