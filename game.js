@@ -121,7 +121,7 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		this.players[playerIndex].cards.splice(cardIndex, 1);
 		console.log("-----> Player " + playerIndex + ": " + this.players[playerIndex].cards.length);
 		if (this.players[playerIndex].cards.length == 0){
-			alert(`The winner is: ${playerIndex}`)
+			endGame(playerIndex)
 		}
 	}
 
@@ -366,9 +366,13 @@ var pullCard = function () {
 	}
 }
 
+var withdraw = function(){
+	endGame(window.game.getComputerPlayerIndex());
+}
 
-var withdraw = function () {
-	modalTitleFont = document.getElementById("end-game-modal-winner-title").innerHTML = "The winner is: " + window.game.getComputerPlayerIndex()
+
+var endGame = function (winnerIndex) {
+	modalTitleFont = document.getElementById("end-game-modal-winner-title").innerHTML = "The winner is: " + winnerIndex
 	document.getElementById('end-turns-count').innerHTML = window.game.statistics.turnsCount;
 	document.getElementById('end-game-duration').innerHTML = miliSecondsToTimeString(window.game.statistics.getGameDuration());
 	endGameModal = document.getElementById('end-game-modal');
