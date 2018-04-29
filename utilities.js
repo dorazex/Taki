@@ -2,7 +2,7 @@ var COLORS = ["green", "red", "yellow", "blue"];
 var NUMBERS = [1, 3, 4, 5, 6, 7, 8, 9];
 var ACTIONS_W_COLORS = ["taki", "stop"];
 var ACTIONS_WO_COLORS = ["changeColor"];
-var NUM_INITIAL_CARDS = 8;
+var NUM_INITIAL_CARDS = 2;
 
 function shuffleArray(array) {
     for (var x = array.length - 1; x > 0; x--) {

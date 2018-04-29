@@ -190,6 +190,8 @@ var updateStatistics = function () {
 		cell2.innerHTML = avg;
 		cell3.innerHTML = singleCount;
 	}
+
+	playerStatsTable.insertRow(0).innerHTML = "<tr><th>Player</th><th>Average turn duration</th><th>Single card occasions</th></tr>"
 }
 
 

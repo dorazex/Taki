@@ -182,7 +182,7 @@ img {
   position: absolute;
   z-index: 1; /* Sit on top */
   overflow: auto; /* Enable scroll if needed */
-  background-color: white;
+  background-color: #d0d0d0;
   align-self: center;
   padding:30px;
   position: fixed;
