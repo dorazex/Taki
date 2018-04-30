@@ -393,6 +393,28 @@ function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+// var computerPlay = function()
+// {
+//    var playerIndex = window.game.currentPlayerIndex;
+//    var currentPlayer = window.game.players[playerIndex];
+
+//    if (currentPlayer.isComputerPlayer == true) {
+// 	   window.game.computerPlay();  	// computer calculates the actual turn 
+// 	   updateGameView();
+// 	   var playerIndex = window.game.currentPlayerIndex;
+// 	   currentPlayer = game.players[playerIndex];
+//    }
+//    else clearInterval(refreshIntervalId);	
+// }
+
+
+// var nextTurn = async function () {
+//    updateGameView();
+
+//    // console.log("turn of: " + playerIndex)
+//    refreshIntervalId = setInterval(computerPlay, 2500);
+// }
+
 var nextTurn = async function () {
 	updateGameView();
 
