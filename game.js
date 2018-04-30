@@ -29,7 +29,7 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		}
 	};
 
-	this.getComputerPlayerIndex = function(){
+	this.getComputerPlayerIndex = function () {
 		for (var i = 0; i < this.players.length; i++) {
 			if (this.players[i].isComputerPlayer) return i;
 		}
@@ -47,16 +47,43 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		} while (!this.openDeck.getTopCard().isValidStartCard())
 	};
 
+	this.newGame = function () {
+		this.deck = new Deck();
+		this.deck.init();
+		this.openDeck = new openDeck();
+		this.currentPlayerIndex = 0;
+		this.currentColor = undefined;
+		this.currentAction = undefined;
+		this.message = undefined;
+		this.statistics.turnsCount = 0;
+		this.statistics.startTime = new Date().getTime();
+
+		for (var i = 0; i < this.players.length; i++) {
+			clearArray(this.players[i].cards);
+			this.players[i].addCards(this.deck.takeCards(NUM_INITIAL_CARDS));
+			//this.players[i].statistics = new PlayerStatistics()
+			this.players[i].statistics.singleCardCount = 0;
+			this.players[i].statistics.numOfTurnsCurrentGame = 0;
+			this.players[i].statistics.avgTurnsDurationsCurrentGame = 0;
+		}
+
+		do {
+			this.openDeck.putCard(this.deck.takeCards(1)[0])
+			this.currentColor = this.openDeck.getTopCard().getColor();
+		} while (!this.openDeck.getTopCard().isValidStartCard())
+	}
+
 	this.cyclicIncrementCurrentPlayerIndex = function (stop) {
+		this.currentAction = undefined;
 		this.statistics.turnsCount++;
 
 		var cardsCountAfterTurn = this.players[this.currentPlayerIndex].cards.length;
 		this.players[this.currentPlayerIndex].statistics.endTurn(cardsCountAfterTurn);
-		
+
 		this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
-		if(stop == true)
+		if (stop == true)
 			this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
-		  
+
 		// console.log(`changed player index to: ${this.currentPlayerIndex}`)
 
 		this.players[this.currentPlayerIndex].statistics.startTurn();
@@ -88,7 +115,7 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		}
 
 		var res = this.players[this.currentPlayerIndex].computerPlay(this.openDeck.getTopCard(), this.currentColor, this.currentAction);
-		if(res.length != 0) {
+		if (res.length != 0) {
 			this.message = "pull card not valid";
 			return false;
 		}
@@ -108,11 +135,14 @@ function Game(numRegularPlayers, numComputerPlayers) {
 
 	this.finishTurn = function () {
 		this.currentAction = undefined;
-		if (this.openDeck.getTopCard().action != "stop")
+
+		if (this.openDeck.getTopCard().action == "plus")
+			this.message = "another turn";
+		else if (this.openDeck.getTopCard().action != "stop")
 			this.cyclicIncrementCurrentPlayerIndex(false)
-		else {
+		else
 			this.cyclicIncrementCurrentPlayerIndex(true)
-		}
+
 	}
 
 	this.moveCardToOpenDeck = function (card, cardIndex, playerIndex) {
@@ -120,9 +150,21 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		this.openDeck.putCard(this.players[playerIndex].cards[cardIndex])
 		this.players[playerIndex].cards.splice(cardIndex, 1);
 		console.log("-----> Player " + playerIndex + ": " + this.players[playerIndex].cards.length);
-		if (this.players[playerIndex].cards.length == 0){
+		if (this.players[playerIndex].cards.length == 0 && this.openDeck.getTopCard().action != "plus") {
 			endGame(playerIndex)
 		}
+	}
+
+	this.changeColor = function (card, cardIndex, playerIndex) {
+		this.message = "";
+
+		if (this.currentAction == "taki") {
+			this.message = "not valid";
+			return false;
+		}
+
+		this.moveCardToOpenDeck(card, cardIndex, playerIndex);
+		return true;
 	}
 
 
@@ -134,30 +176,40 @@ function Game(numRegularPlayers, numComputerPlayers) {
 			return false;
 		}
 
-		if (card.number != null) {
-			if (this.currentColor != card.getColor() && this.openDeck.getTopCard().number != card.number) {
-				this.message = "not valid";
-				return false;
-			}
-			if (this.currentAction != "taki")
+		if (this.currentAction != "taki") {
+
+			if (card.number != null) {
+				if (this.currentColor != card.getColor() && this.openDeck.getTopCard().number != card.number) {
+					this.message = "not valid";
+					return false;
+				}
+				//if (this.currentAction != "taki")
 				this.cyclicIncrementCurrentPlayerIndex(false)
-		}
-		else if (card.action == "taki") {
-			if (this.currentColor != card.getColor() && this.openDeck.getTopCard().action != "taki") {
-				this.message = "not valid";
-				return false;
 			}
-			this.currentAction = "taki";
-		}
-		else if (card.action == "stop") {
-			if (this.currentColor != card.getColor() && this.openDeck.getTopCard().action != "stop") {
-				this.message = "not valid";
-				return false;
+			else if (card.action == "taki") {
+				if (this.currentColor != card.getColor() && this.openDeck.getTopCard().action != "taki") {
+					this.message = "not valid";
+					return false;
+				}
+				this.currentAction = "taki";
 			}
-			if (this.currentAction != "taki") 			
+			else if (card.action == "stop") {
+				if (this.currentColor != card.getColor() && this.openDeck.getTopCard().action != "stop") {
+					this.message = "not valid";
+					return false;
+				}
+				//if (this.currentAction != "taki")
 				this.cyclicIncrementCurrentPlayerIndex(true)
-			// this.cyclicIncrementCurrentPlayerIndex(false)
-			
+				// this.cyclicIncrementCurrentPlayerIndex(false)
+			}
+			else if (card.action == "plus") {
+				if (this.currentColor != card.getColor() && this.openDeck.getTopCard().action != "plus") {
+					this.message = "not valid";
+					return false;
+				}
+				//this.currentAction = "plus";
+				this.message = "another turn";
+			}
 		}
 
 		this.moveCardToOpenDeck(card, cardIndex, playerIndex);
@@ -168,7 +220,8 @@ function Game(numRegularPlayers, numComputerPlayers) {
 var updateStatistics = function () {
 	document.getElementById('turns-count').innerHTML = "Turns Count: " + window.game.statistics.turnsCount;
 	document.getElementById('game-duration').innerHTML = "Game Duration: " + miliSecondsToTimeString(window.game.statistics.getGameDuration());
-	document.getElementById('turn-average').innerHTML = "Turn Average Duration: " + miliSecondsToTimeString(window.game.players[window.game.currentPlayerIndex].statistics.getAverageTurnTime());
+	document.getElementById('turn-average').innerHTML = "Turn Average Duration: " + miliSecondsToTimeString(window.game.players[window.game.currentPlayerIndex].statistics.avgTurnsDurationsCurrentGame);
+	document.getElementById('turn-average-all-games').innerHTML = "Turn Average Duration All Games: " + miliSecondsToTimeString(window.game.players[window.game.currentPlayerIndex].statistics.avgTurnsDurationsAllGames);
 	document.getElementById('single-card-count').innerHTML = "Single Card Count: " + window.game.players[window.game.currentPlayerIndex].statistics.singleCardCount;
 
 	playerStatsTable = document.getElementById("players-statistics-table")
@@ -177,11 +230,11 @@ var updateStatistics = function () {
 	var game = window.game;
 	for (var i = 0; i < game.players.length; i++) {
 		player = game.players[i]
-		var avg = miliSecondsToTimeString(player.statistics.getAverageTurnTime())
+		var avg = miliSecondsToTimeString(player.statistics.avgTurnsDurationsCurrentGame)
 		var singleCount = player.statistics.singleCardCount
 
 		var row = playerStatsTable.insertRow(i);
-		
+
 		var cell1 = row.insertCell(0);
 		var cell2 = row.insertCell(1);
 		var cell3 = row.insertCell(2);
@@ -226,13 +279,19 @@ var updateDeckCount = function () {
 }
 
 var activeChangeColor = function (event) {
+
 	cardDiv = event.path[1]
 	playerDiv = event.path[2]
 	var cardIndex = parseInt(cardDiv.id.split("-")[1])
 	var playerIndex = parseInt(playerDiv.id.split("-")[2])
 	var card = game.players[playerIndex].cards[cardIndex];
-	window.game.moveCardToOpenDeck(card, cardIndex, playerIndex);
-	document.getElementById('change-color-modal').style.display = "block";
+
+	var res = game.changeColor(card, cardIndex, playerIndex);
+
+	document.getElementById("message").innerHTML = window.game.message;
+
+	if (res == true)
+		document.getElementById('change-color-modal').style.display = "block";
 }
 
 var activeCardOnClick = function (event) {
@@ -266,11 +325,11 @@ var updateTurn = function () {
 
 		var j;
 		for (j = 0; j < c.length; j++) {
-			if (i == window.game.currentPlayerIndex){
+			if (i == window.game.currentPlayerIndex) {
 				c[j].classList.remove("disabled");
 				playerDiv.classList.add("currentplayerdiv");
 			}
-			else{
+			else {
 				c[j].classList.add("disabled");
 				playerDiv.classList.remove("currentplayerdiv");
 			}
@@ -317,8 +376,9 @@ var updateGameView = function () {
 					cardDiv.addEventListener('click', activeChangeColor);
 				else cardDiv.addEventListener('click', activeCardOnClick);
 			} else {
-				// var card = game.players[i].cards[j]
-				cardDiv.innerHTML = `<img src=\"cards/cover_0_0.png\"/>`
+				var card = game.players[i].cards[j]
+				cardDiv.innerHTML = `<img src=\"cards/${card.getFileName()}\"/>`
+				//cardDiv.innerHTML = `<img src=\"cards/cover_0_0.png\"/>`
 			}
 		}
 	}
@@ -329,8 +389,11 @@ var updateGameView = function () {
 	updateTurn()
 }
 
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-var nextTurn = function () {
+var nextTurn = async function () {
 	updateGameView();
 
 	var playerIndex = window.game.currentPlayerIndex;
@@ -339,6 +402,7 @@ var nextTurn = function () {
 
 	// now computers play their turns, updating the game view after each turn
 	while (currentPlayer.isComputerPlayer == true) {
+		await sleep(2000);
 		window.game.computerPlay();  	// computer calculates the actual turn 
 		updateGameView();
 		var playerIndex = window.game.currentPlayerIndex;
@@ -355,6 +419,7 @@ function changeColor(color) {
 
 var finishTurnOnClick = function () {
 	game.finishTurn()
+	document.getElementById("message").innerHTML = window.game.message;
 	document.getElementById("finish-turn").style.visibility = 'hidden';
 	nextTurn()
 }
@@ -368,7 +433,7 @@ var pullCard = function () {
 	}
 }
 
-var withdraw = function(){
+var withdraw = function () {
 	endGame(window.game.getComputerPlayerIndex());
 }
 
@@ -381,7 +446,20 @@ var endGame = function (winnerIndex) {
 	endGameModal.style.display = "block";
 }
 
-var hideStatistics = function(){
+var hideStatistics = function () {
 	endGameModal = document.getElementById('end-game-modal');
 	endGameModal.style.display = "none";
+}
+
+
+var newGame = function () {
+	hideStatistics();
+	game.newGame();
+
+	document.getElementById("finish-turn").style.visibility = 'hidden';
+	updateGameView()
+	updateStatistics()
+	game.players[game.currentPlayerIndex].statistics.startTurn();
+
+	nextTurn()
 }
