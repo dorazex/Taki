@@ -1,6 +1,5 @@
 function PlayerStatistics() {
 	this.currentTurnStart = 0;
-	//this.turnsDurations = [];
 	this.singleCardCount = 0;
 
 	this.avgTurnsDurationsCurrentGame = 0;
@@ -23,15 +22,5 @@ function PlayerStatistics() {
 		this.avgTurnsDurationsCurrentGame = (this.avgTurnsDurationsCurrentGame * this.numOfTurnsCurrentGame + duration) / ++this.numOfTurnsCurrentGame;
 		this.avgTurnsDurationsAllGames = (this.avgTurnsDurationsAllGames * this.numOfTurnsAllGames + duration) / ++this.numOfTurnsAllGames;
 		
-	
-		// console.log("turn ended")
-		// console.log("average: " + this.getAverageTurnTime())
 	}
-
-	// this.getAverageTurnTime = function () {
-	// 	if (this.turnsDurations.length == 0) return 0;
-	// 	var sum = this.turnsDurations.reduce(function (a, b) { return a + b; });
-	// 	var avg = sum / this.turnsDurations.length;
-	// 	return avg;
-	// }
 }

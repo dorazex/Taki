@@ -77,9 +77,6 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		this.currentAction = undefined;
 		this.statistics.turnsCount++;
 
-		var cardsCountAfterTurn = this.players[this.currentPlayerIndex].cards.length;
-		this.players[this.currentPlayerIndex].statistics.endTurn(cardsCountAfterTurn);
-
 		this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
 		if (stop == true)
 			this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
@@ -149,7 +146,11 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		this.currentColor = card.getColor();
 		this.openDeck.putCard(this.players[playerIndex].cards[cardIndex])
 		this.players[playerIndex].cards.splice(cardIndex, 1);
-		console.log("-----> Player " + playerIndex + ": " + this.players[playerIndex].cards.length);
+		
+		cardsCountAfterTurn = this.players[playerIndex].cards.length;
+		this.players[playerIndex].statistics.endTurn(cardsCountAfterTurn);
+		
+		// console.log("-----> Player " + playerIndex + ": " + this.players[playerIndex].cards.length);
 		if (this.players[playerIndex].cards.length == 0 && this.openDeck.getTopCard().action != "plus") {
 			endGame(playerIndex)
 		}
@@ -377,8 +378,8 @@ var updateGameView = function () {
 				else cardDiv.addEventListener('click', activeCardOnClick);
 			} else {
 				var card = game.players[i].cards[j]
-				cardDiv.innerHTML = `<img src=\"cards/${card.getFileName()}\"/>`
-				//cardDiv.innerHTML = `<img src=\"cards/cover_0_0.png\"/>`
+				// cardDiv.innerHTML = `<img src=\"cards/${card.getFileName()}\"/>`
+				cardDiv.innerHTML = `<img src=\"cards/cover_0_0.png\"/>`
 			}
 		}
 	}
@@ -393,28 +394,6 @@ function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// var computerPlay = function()
-// {
-//    var playerIndex = window.game.currentPlayerIndex;
-//    var currentPlayer = window.game.players[playerIndex];
-
-//    if (currentPlayer.isComputerPlayer == true) {
-// 	   window.game.computerPlay();  	// computer calculates the actual turn 
-// 	   updateGameView();
-// 	   var playerIndex = window.game.currentPlayerIndex;
-// 	   currentPlayer = game.players[playerIndex];
-//    }
-//    else clearInterval(refreshIntervalId);	
-// }
-
-
-// var nextTurn = async function () {
-//    updateGameView();
-
-//    // console.log("turn of: " + playerIndex)
-//    refreshIntervalId = setInterval(computerPlay, 2500);
-// }
-
 var nextTurn = async function () {
 	updateGameView();
 
@@ -424,7 +403,7 @@ var nextTurn = async function () {
 
 	// now computers play their turns, updating the game view after each turn
 	while (currentPlayer.isComputerPlayer == true) {
-		await sleep(2000);
+		// await sleep(2000);
 		window.game.computerPlay();  	// computer calculates the actual turn 
 		updateGameView();
 		var playerIndex = window.game.currentPlayerIndex;
