@@ -394,7 +394,7 @@ function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-var nextTurn = async function () {
+var nextTurn = function () {
 	updateGameView();
 
 	var playerIndex = window.game.currentPlayerIndex;
