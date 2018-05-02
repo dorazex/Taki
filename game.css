@@ -166,7 +166,7 @@ img {
   height:10px;
 }
 
-#withdraw, #end-ok-button{
+#withdraw{
   background-color: chartreuse;
   font-family: Courier;
   cursor: pointer;
@@ -177,15 +177,15 @@ img {
   margin: 0px
 }
 
-#withdraw, #end-new-game-button{
+#end-ok-button,#end-new-game-button{
   background-color: chartreuse;
   font-family: Courier;
   cursor: pointer;
   display: block;
-  width: 100%;
+  width: 80%;
   height: 100%;
-  padding:0px;
-  margin: 0px
+  padding:3px;
+  margin: 5px;
 }
 
 
@@ -194,20 +194,41 @@ img {
   position: absolute;
   z-index: 1; /* Sit on top */
   overflow: auto; /* Enable scroll if needed */
-  background-color: #d0d0d0;
+  background-color: #7ba858;
   align-self: center;
   padding:30px;
   position: fixed;
   top: 25%;
   left: 50%;
   transform: translate(-50%, -50%);
+  border-radius: 25px;
+  border: 4px solid #555528;
 }
 
 
 .end-game-modal-content {
+  font-family: Courier;
   position: relative;
   margin: auto;
   /*padding: 20px;*/
   width: stretch;
   height: stretch;
+}
+
+#game-statistics-table, #players-statistics-table{
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+
+table#game-statistics-table tr, table#players-statistics-table tr {
+  border: 1px solid black;
+}
+
+
+table#players-statistics-table td,table#players-statistics-table th {
+  border: 1px solid black;
+}
+
+#message{
+  background-color: #ad0000;
 }
