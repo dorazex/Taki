@@ -149,7 +149,7 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		
 		cardsCountAfterTurn = this.players[playerIndex].cards.length;
 		this.players[playerIndex].statistics.endTurn(cardsCountAfterTurn);
-		
+
 		// console.log("-----> Player " + playerIndex + ": " + this.players[playerIndex].cards.length);
 		if (this.players[playerIndex].cards.length == 0 && this.openDeck.getTopCard().action != "plus") {
 			endGame(playerIndex)
@@ -245,7 +245,7 @@ var updateStatistics = function () {
 		cell3.innerHTML = singleCount;
 	}
 
-	playerStatsTable.insertRow(0).innerHTML = "<tr><th>Player</th><th>Average turn duration</th><th>Single card occasions</th></tr>"
+	playerStatsTable.insertRow(0).innerHTML = "<tr><th>Player</th><th>Avg turn duration</th><th>Single card occasions</th></tr>"
 }
 
 
@@ -451,7 +451,6 @@ var hideStatistics = function () {
 	endGameModal = document.getElementById('end-game-modal');
 	endGameModal.style.display = "none";
 }
-
 
 var newGame = function () {
 	hideStatistics();
