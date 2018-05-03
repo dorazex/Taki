@@ -32,7 +32,7 @@ function miliSecondsToTimeString(timeInMiliSeconds) {
 	var seconds = Math.floor(timeInSeconds % 60)
 	var minutes = Math.floor(timeInSeconds / 60);
 	var hours = Math.floor(minutes / 60);
-	return `${hours}:${minutes}:${seconds}`
+	return hours + ":" + minutes + ":" + seconds
 }
 
 function clearArray(array) {

@@ -271,12 +271,12 @@ window.onload = function () {
 
 var updateOpenDeck = function () {
 	var openDeckDiv = document.getElementById("open-deck")
-	openDeckDiv.innerHTML = `<img src=\"cards/${window.game.openDeck.getTopCard().getFileName()}\"/>`
+	openDeckDiv.innerHTML = "<img src=\"cards/" + window.game.openDeck.getTopCard().getFileName() + "\"/>"
 }
 
 var updateDeckCount = function () {
 	var deckTextDiv = document.getElementById("deck-text")
-	deckTextDiv.innerHTML = `${game.deck.getNumberOfCards()}`
+	deckTextDiv.innerHTML = game.deck.getNumberOfCards()
 }
 
 var activeChangeColor = function (event) {
@@ -319,7 +319,7 @@ var updateTurn = function () {
 	document.getElementById("turn").innerHTML = "Turn of " + turnOf;
 
 	for (var i = 0; i < game.players.length; i++) {
-		var playerDivId = `player-container-${i}`;
+		var playerDivId = "player-container-" + i;
 		var playerDiv = document.getElementById(playerDivId);
 		var deckDiv = document.getElementById("deck");
 		var c = playerDiv.children;
@@ -351,7 +351,7 @@ var updateGameView = function () {
 	// console.log("update game view")
 	var gameDiv = document.getElementById("game");
 	for (var i = 0; i < game.players.length; i++) {
-		var playerDivId = `player-container-${i}`;
+		var playerDivId = "player-container-" + i;
 		if (!isChildExistById("game", playerDivId)) {
 			playerDiv = document.createElement("div")
 			playerDiv.className = "player-cards-flex-container";
@@ -366,20 +366,19 @@ var updateGameView = function () {
 		}
 
 		for (var j = 0; j < game.players[i].cards.length; j++) {
-			var cardDivId = `card-${j}-player-${i}`
+			var cardDivId = "card-" + j + "-player-" + i;
 			var cardDiv = document.createElement("div")
 			cardDiv.id = cardDivId
 			playerDiv.appendChild(cardDiv);
 			if (game.players[i].isComputerPlayer == false) {
 				var card = game.players[i].cards[j]
-				cardDiv.innerHTML = `<img src=\"cards/${card.getFileName()}\" onmouseover=\"\" style=\"cursor: pointer;\"/>`
+				cardDiv.innerHTML = "<img src=\"cards/" + card.getFileName() + "\" onmouseover=\"\" style=\"cursor: pointer;\"/>"
 				if (card.action == "changeColor")
 					cardDiv.addEventListener('click', activeChangeColor);
 				else cardDiv.addEventListener('click', activeCardOnClick);
 			} else {
 				var card = game.players[i].cards[j]
-				// cardDiv.innerHTML = `<img src=\"cards/${card.getFileName()}\"/>`
-				cardDiv.innerHTML = `<img src=\"cards/cover_0_0.png\"/>`
+				cardDiv.innerHTML = "<img src=\"cards/cover_0_0.png\"/>"
 			}
 		}
 	}
