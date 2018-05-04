@@ -9,7 +9,6 @@ function PlayerStatistics() {
 	
 	this.startTurn = function () {
 		this.currentTurnStart = new Date().getTime();
-		// console.log("turn started")
 	}
 
 	this.endTurn = function (cardsCountAfterTurn) {
@@ -20,7 +19,6 @@ function PlayerStatistics() {
 		var duration = endTime - this.currentTurnStart;
 	
 		this.avgTurnsDurationsCurrentGame = (this.avgTurnsDurationsCurrentGame * this.numOfTurnsCurrentGame + duration) / ++this.numOfTurnsCurrentGame;
-		this.avgTurnsDurationsAllGames = (this.avgTurnsDurationsAllGames * this.numOfTurnsAllGames + duration) / ++this.numOfTurnsAllGames;
-		
+		this.avgTurnsDurationsAllGames = (this.avgTurnsDurationsAllGames * this.numOfTurnsAllGames + duration) / ++this.numOfTurnsAllGames;	
 	}
 }

@@ -61,7 +61,6 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		for (var i = 0; i < this.players.length; i++) {
 			clearArray(this.players[i].cards);
 			this.players[i].addCards(this.deck.takeCards(NUM_INITIAL_CARDS));
-			//this.players[i].statistics = new PlayerStatistics()
 			this.players[i].statistics.singleCardCount = 0;
 			this.players[i].statistics.numOfTurnsCurrentGame = 0;
 			this.players[i].statistics.avgTurnsDurationsCurrentGame = 0;
@@ -80,8 +79,6 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
 		if (stop == true)
 			this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
-
-		// console.log(`changed player index to: ${this.currentPlayerIndex}`)
 
 		this.players[this.currentPlayerIndex].statistics.startTurn();
 	};
@@ -104,16 +101,14 @@ function Game(numRegularPlayers, numComputerPlayers) {
 	}
 
 	this.pullCard = function () {
-		//if (this.players[this.currentPlayerIndex].isComputerPlayer == true)
-		//	return false;
 		if (this.currentAction == "taki") {
-			this.message = "pull card not valid";
+			this.message = "Invalid choice";
 			return false;
 		}
 
 		var res = this.players[this.currentPlayerIndex].computerPlay(this.openDeck.getTopCard(), this.currentColor, this.currentAction);
 		if (res.length != 0) {
-			this.message = "pull card not valid";
+			this.message = "Cannot pull - a valid card's in your hand";
 			return false;
 		}
 
@@ -150,7 +145,6 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		cardsCountAfterTurn = this.players[playerIndex].cards.length;
 		this.players[playerIndex].statistics.endTurn(cardsCountAfterTurn);
 
-		// console.log("-----> Player " + playerIndex + ": " + this.players[playerIndex].cards.length);
 		if (this.players[playerIndex].cards.length == 0 && this.openDeck.getTopCard().action != "plus") {
 			endGame(playerIndex)
 		}
@@ -173,7 +167,7 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		this.message = "";
 
 		if (this.currentAction == "taki" && this.currentColor != card.getColor()) {
-			this.message = "not valid";
+			this.message = "Invalid choice";
 			return false;
 		}
 
@@ -181,34 +175,30 @@ function Game(numRegularPlayers, numComputerPlayers) {
 
 			if (card.number != null) {
 				if (this.currentColor != card.getColor() && this.openDeck.getTopCard().number != card.number) {
-					this.message = "not valid";
+					this.message = "Invalid choice";
 					return false;
 				}
-				//if (this.currentAction != "taki")
 				this.cyclicIncrementCurrentPlayerIndex(false)
 			}
 			else if (card.action == "taki") {
 				if (this.currentColor != card.getColor() && this.openDeck.getTopCard().action != "taki") {
-					this.message = "not valid";
+					this.message = "Invalid choice";
 					return false;
 				}
 				this.currentAction = "taki";
 			}
 			else if (card.action == "stop") {
 				if (this.currentColor != card.getColor() && this.openDeck.getTopCard().action != "stop") {
-					this.message = "not valid";
+					this.message = "Invalid choice";
 					return false;
 				}
-				//if (this.currentAction != "taki")
 				this.cyclicIncrementCurrentPlayerIndex(true)
-				// this.cyclicIncrementCurrentPlayerIndex(false)
 			}
 			else if (card.action == "plus") {
 				if (this.currentColor != card.getColor() && this.openDeck.getTopCard().action != "plus") {
-					this.message = "not valid";
+					this.message = "Invalid choice";
 					return false;
 				}
-				//this.currentAction = "plus";
 				this.message = "another turn";
 			}
 		}
@@ -348,7 +338,6 @@ var updateColor = function () {
 }
 
 var updateGameView = function () {
-	// console.log("update game view")
 	var gameDiv = document.getElementById("game");
 	for (var i = 0; i < game.players.length; i++) {
 		var playerDivId = "player-container-" + i;
@@ -389,20 +378,15 @@ var updateGameView = function () {
 	updateTurn()
 }
 
-function sleep(ms) {
-	return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 var nextTurn = function () {
 	updateGameView();
 
 	var playerIndex = window.game.currentPlayerIndex;
 	var currentPlayer = window.game.players[playerIndex];
-	// console.log("turn of: " + playerIndex)
 
 	// now computers play their turns, updating the game view after each turn
 	while (currentPlayer.isComputerPlayer == true) {
-		// await sleep(2000);
 		window.game.computerPlay();  	// computer calculates the actual turn 
 		updateGameView();
 		var playerIndex = window.game.currentPlayerIndex;

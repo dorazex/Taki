@@ -1,7 +1,7 @@
 function Card(color, number, action) {
   this.action = action;  // null if card is a regular number card
   this.number = number;  // null if card is not a regular number card
-  this.color = color;  // null if card is not colored
+  this.color = color;    // null if card is not colored
 
   this.getColor = function() {
 	  return this.color;
