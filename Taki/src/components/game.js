@@ -24,14 +24,9 @@ export default class GameComp extends React.Component {
 	activeChangeColor(cardIndex, playerIndex) {
 		let card = this.state.game.players[playerIndex].cards[cardIndex];
 		let res = this.state.game.changeColor(card, cardIndex, playerIndex);
-
-		
-
-		if (res == true)
-			;//document.getElementById('change-color-modal').style.display = "block";
+		if (res == true);
+		//document.getElementById('change-color-modal').style.display = "block";
 	}
-
-
 
 	pullCard() {
 		res = this.state.game.pullCard();
@@ -65,16 +60,10 @@ export default class GameComp extends React.Component {
 
 	render() {
 		const { game } = this.state;
-
-			return (<div>
-				<BoardComp game={game} quitClicked={this.quitClicked}
-												cardClicked={this.cardClicked} onColorChoosed={this.onColorChoosed}
-												deckClicked={this.deckClicked} commitTaki={this.commitTaki}
-												nextClick={this.nextClick}
-												prevClick={this.prevClick}
-												onRestart={this.onRestart}
-				/>
-				<StatusBarComp game={game}/>
+	
+		return (
+			<div>
+				<BoardComp game={game}/>
 			</div>);
 	}
 
