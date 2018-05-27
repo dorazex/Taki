@@ -1,5 +1,6 @@
 import React from 'react';
 import CardComp from './card';
+import '../style.css';
 
 export default class CardsComp extends React.Component {
     render (){

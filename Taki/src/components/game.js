@@ -5,6 +5,8 @@ import BoardComp from './board';
 import StatusBarComp from './status_bar';
 import GameFactory from '../models/game_factory';
 
+import '../style.css';
+
 
 export default class GameComp extends React.Component {
 	constructor(props) {
@@ -96,7 +98,7 @@ export default class GameComp extends React.Component {
 
 		return (
 			<div>
-				<StatusBarComp game={game}/>
+				<StatusBarComp game={game} className="status-bar"/>
 				<BoardComp game={game}/>
 			</div>);
 	}

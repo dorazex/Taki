@@ -1,6 +1,7 @@
 import React from 'react';
 import DecksComp from './decks';
 import PlayerComp from './player';
+import '../style.css';
 
 export default class BoardComp extends React.Component{
     render() {
