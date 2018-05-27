@@ -12,7 +12,8 @@ export default class BoardComp extends React.Component{
         return (
                 <div>
                     <div id="board" className="board-flex-container">
-                        <DecksComp game={game} />
+                        <DecksComp game={game} open="false" />
+                        <DecksComp game={game} open="true" />
                     </div>
                     <div id="players">
                         {game.players.map(
