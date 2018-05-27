@@ -246,6 +246,43 @@ let Game = function(numRegularPlayers, numComputerPlayers) {
 		this.moveCardToOpenDeck(card, cardIndex, playerIndex);
 		return true;
 	}
+
+
+	this.nextTurn = function() {
+		// updateGameView();
+
+		var playerIndex = this.currentPlayerIndex;
+		var currentPlayer = this.players[playerIndex];
+
+		// now computers play their turns, updating the game view after each turn
+		while (currentPlayer.isComputerPlayer == true) {
+			this.computerPlay();  	// computer calculates the actual turn 
+			console.log("morann")
+			// await sleep(3000);
+			// updateGameView();
+			var playerIndex = this.currentPlayerIndex;
+			currentPlayer = this.players[playerIndex];
+		}
+	}
 };
+
+////////////////////////////////////////////////////
+
+Game.prototype.updateOpenDeck = function () {
+	var openDeckDiv = document.getElementById("open-deck")
+	openDeckDiv.innerHTML = "<img src=\"cards/" + this.openDeck.getTopCard().getFileName() + "\"/>"
+}
+
+
+Game.prototype.updateDeckCount = function () {
+	var deckTextDiv = document.getElementById("deck-text")
+	deckTextDiv.innerHTML = this.deck.getNumberOfCards()
+}
+
+
+Game.prototype.withdraw = function () {
+	endGame(this.getComputerPlayerIndex());
+}
+////////////////////////////////////////////////////
 
 export default Game;

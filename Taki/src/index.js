@@ -6,10 +6,14 @@ import GameFactory from './models/game_factory';
 import "./style.css";
 
 ReactDOM.render(
-    <GameComp game={GameFactory.createGameOneOnOne()} />,
-    // React.createElement('div',null, 'hello world'),
+	<div>
+	    <GameComp game={GameFactory.createGameOneOnOne()} />
+    </div>,
     document.getElementById("root")
 );
 
-
+// ReactDOM.render(
+//     <BoardComp />,
+//     document.getElementById("root")
+// );
 

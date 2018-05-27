@@ -1,37 +1,37 @@
 import React from 'react';
 
-const CardComp = (props) => {
-    const clickHandler = (event) => {
-        if (props.card.action == 'changeColor')
-            props.onChangeColorClicked(props.key, props.player);
-        else props.onCardClicked(props.key, props.player);
+export default class CardComp extends React.Component {
+    constructor(props) {
+        super(...props);
+
+        this.state = {
+            cardKey: props.cardKey,
+            card: props.card,
+            player: props.player,
+            game: props.game,
+        }
+
+        this.onClick = this.onClick.bind(this);
+    }
+
+    onClick(){
+        console.log("card onClick")
+        props.onCardClicked(props.cardKey, props.player);
     };
 
-    return (
-        <div className="card-container" onClick={this.clickHandler}>
-            {
-                <button>
-                    {
-                        props.player.isComputerPlayer == false ?
-                            <img src="\cards/{props.card.getFileName()}" /> :
-                            <img src="\cards/cover_0_0.png" />
-                    }
-                </button>
-            }
-        </div>
-    );
-};
+    render (){
+        const { cardKey, card, player, game } = this.state;
 
-export default CardComp;
-
-
-
-
-
-
-
-
-
-
-
-
+        return(
+            <div className="card-container" onClick={this.onClick}>
+                    <button>
+                        {
+                            player.isComputerPlayer == false ?
+                                <img src={`cards/${card.getFileName()}`} /> :
+                                <img src="cards/cover_0_0.png" />
+                        }
+                    </button>
+            </div>
+        )
+    }
+}

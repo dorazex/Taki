@@ -1,14 +1,23 @@
 import React from 'react';
 import DecksComp from './decks';
-import CardsComp from './cards';
+import PlayerComp from './player';
 
 export default class BoardComp extends React.Component{
     render() {
         const { game } = this.props;
-        return (<div id="game" className="game-flex" >
-            <div id="board" className="board-flex-container">
-                <DecksComp game={game} />
-            </div>
-        </div>)
+
+        const currentPlayer = game.players[game.currentPlayerIndex];
+
+        return (
+                <div>
+                    <div id="board" className="board-flex-container">
+                        <DecksComp game={game} />
+                    </div>
+                    <div id="players">
+                        {game.players.map(
+                            (player, i) => <PlayerComp key={i} playerKey={i} player={player} game={game}/>)}
+                    </div>
+                </div>
+        )
     };
 }

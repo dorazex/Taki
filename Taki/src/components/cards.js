@@ -1,8 +1,8 @@
 import React from 'react';
 import CardComp from './card';
 
-const CardsComp = (props) => {
-    return (
+export default class CardsComp extends React.Component {
+    render (){
         <div>
             {
                 props.player.cards.map((card, i) => (
@@ -17,7 +17,5 @@ const CardsComp = (props) => {
                 ))
             }
         </div>
-    );
+    };
 };
-
-export default CardsComp;
