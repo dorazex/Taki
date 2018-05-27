@@ -22,3 +22,5 @@ function PlayerStatistics() {
 		this.avgTurnsDurationsAllGames = (this.avgTurnsDurationsAllGames * this.numOfTurnsAllGames + duration) / ++this.numOfTurnsAllGames;	
 	}
 }
+
+export default PlayerStatistics;

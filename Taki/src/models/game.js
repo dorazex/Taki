@@ -1,4 +1,12 @@
-function Game(numRegularPlayers, numComputerPlayers) {
+import GameStatistics from './game_statistics';
+import Deck from './deck';
+import OpenDeck from './open_deck';
+import Player from './player';
+import PlayerStatistics from './player_statistics';
+import * as constants from './constants'
+import * as utilities from './utilities'
+
+let Game = function(numRegularPlayers, numComputerPlayers) {
 	this.deck = undefined;
 	this.openDeck = undefined;
 	this.players = [];
@@ -23,10 +31,10 @@ function Game(numRegularPlayers, numComputerPlayers) {
 			this.addPlayer(true);
 		};
 
-		this.players = shuffleArray(this.players);
+		this.players = utilities.shuffleArray(this.players);
 
 		for (var i = 0; i < this.players.length; i++) {
-			this.players[i].addCards(this.deck.takeCards(NUM_INITIAL_CARDS));
+			this.players[i].addCards(this.deck.takeCards(constants.NUM_INITIAL_CARDS));
 		}
 	};
 
@@ -39,7 +47,7 @@ function Game(numRegularPlayers, numComputerPlayers) {
 	this.init = function () {
 		this.deck = new Deck();
 		this.deck.init();
-		this.openDeck = new openDeck();
+		this.openDeck = new OpenDeck();
 		this.initPlayers();
 
 		do {
@@ -96,8 +104,8 @@ function Game(numRegularPlayers, numComputerPlayers) {
 			this.pullCard();
 		else if (res[1].action == "changeColor") {
 			window.game.moveCardToOpenDeck(res[1], res[0], this.currentPlayerIndex);
-			var i = Math.floor(Math.random() * COLORS.length);
-			this.currentColor = COLORS[i];
+			var i = Math.floor(Math.random() * constants.COLORS.length);
+			this.currentColor = constants.COLORS[i];
 			this.cyclicIncrementCurrentPlayerIndex(false);
 		}  // put the card of the computer's turn if any
 		else {
@@ -122,7 +130,7 @@ function Game(numRegularPlayers, numComputerPlayers) {
 
 		if (this.deck.getNumberOfCards() == 0) {
 			var topCard = this.openDeck.cards.pop();
-			shuffleArray(this.openDeck.cards);
+			utilities.shuffleArray(this.openDeck.cards);
 			this.deck.returnCards(this.openDeck.cards);
 			this.openDeck.putCard(topCard);
 		}
@@ -240,248 +248,4 @@ function Game(numRegularPlayers, numComputerPlayers) {
 	}
 };
 
-var updateStatistics = function () {
-	document.getElementById('turns-count').innerHTML = "Turns Count: " + window.game.statistics.turnsCount;
-	document.getElementById('game-duration').innerHTML = "Game Duration: " + miliSecondsToTimeString(window.game.statistics.getGameDuration());
-	document.getElementById('turn-average').innerHTML = "Turn Average Duration: " + miliSecondsToTimeString(window.game.players[window.game.currentPlayerIndex].statistics.avgTurnsDurationsCurrentGame);
-	document.getElementById('turn-average-all-games').innerHTML = "Turn Average Duration All Games: " + miliSecondsToTimeString(window.game.players[window.game.currentPlayerIndex].statistics.avgTurnsDurationsAllGames);
-	document.getElementById('single-card-count').innerHTML = "Single Card Count: " + window.game.players[window.game.currentPlayerIndex].statistics.singleCardCount;
-
-	playerStatsTable = document.getElementById("players-statistics-table")
-	playerStatsTable.innerHTML = "";
-
-	var game = window.game;
-	for (var i = 0; i < game.players.length; i++) {
-		player = game.players[i]
-		var avg = miliSecondsToTimeString(player.statistics.avgTurnsDurationsCurrentGame)
-		var singleCount = player.statistics.singleCardCount
-
-		var row = playerStatsTable.insertRow(i);
-
-		var cell1 = row.insertCell(0);
-		var cell2 = row.insertCell(1);
-		var cell3 = row.insertCell(2);
-
-		cell1.innerHTML = i;
-		cell2.innerHTML = avg;
-		cell3.innerHTML = singleCount;
-	}
-
-	playerStatsTable.insertRow(0).innerHTML = "<tr><th>Player</th><th>Avg turn duration</th><th>Single card occasions</th></tr>"
-}
-
-
-window.onload = function () {
-	setInterval(function () { updateStatistics(); }, 100);
-	url = window.location.href
-	urlParameters = url.split("?")[1]
-	numRegularPlayers = parseInt(urlParameters.split("&")[0].split("=")[1])
-	numComputerPlayers = parseInt(urlParameters.split("&")[1].split("=")[1])
-
-	// init
-	var game = new Game(numRegularPlayers, numComputerPlayers);
-	game.init();
-	window.game = game
-
-	document.getElementById("finish-turn").style.visibility = 'hidden';
-	updateGameView()
-	updateStatistics()
-	game.players[game.currentPlayerIndex].statistics.startTurn();
-
-	nextTurn()
-}
-
-var updateOpenDeck = function () {
-	var openDeckDiv = document.getElementById("open-deck")
-	openDeckDiv.innerHTML = "<img src=\"cards/" + window.game.openDeck.getTopCard().getFileName() + "\"/>"
-}
-
-var updateDeckCount = function () {
-	var deckTextDiv = document.getElementById("deck-text")
-	deckTextDiv.innerHTML = game.deck.getNumberOfCards()
-}
-
-var activeChangeColor = function (event) {
-
-	cardDiv = event.path[1]
-	playerDiv = event.path[2]
-	var cardIndex = parseInt(cardDiv.id.split("-")[1])
-	var playerIndex = parseInt(playerDiv.id.split("-")[2])
-	var card = game.players[playerIndex].cards[cardIndex];
-
-	var res = game.changeColor(card, cardIndex, playerIndex);
-
-	document.getElementById("message").innerHTML = window.game.message;
-
-	if (res == true)
-		document.getElementById('change-color-modal').style.display = "block";
-}
-
-var activeCardOnClick = function (event) {
-	cardDiv = event.path[1]
-	playerDiv = event.path[2]
-	var cardIndex = parseInt(cardDiv.id.split("-")[1])
-	var playerIndex = parseInt(playerDiv.id.split("-")[2])
-	var card = game.players[playerIndex].cards[cardIndex];
-
-	var res = game.play(card, cardIndex, playerIndex);
-
-	document.getElementById("message").innerHTML = window.game.message;
-
-	if (window.game.currentAction == "taki") {
-		document.getElementById("finish-turn").style.visibility = 'visible';
-	}
-
-	nextTurn()
-}
-
-
-var updateTurn = function () {
-	var turnOf = game.players[window.game.currentPlayerIndex].isComputerPlayer == true ? "Computer" : "Human";
-	document.getElementById("turn").innerHTML = "Turn of " + turnOf;
-
-	for (var i = 0; i < game.players.length; i++) {
-		var playerDivId = "player-container-" + i;
-		var playerDiv = document.getElementById(playerDivId);
-		var deckDiv = document.getElementById("deck");
-		var c = playerDiv.children;
-
-		var j;
-		for (j = 0; j < c.length; j++) {
-			if (i == window.game.currentPlayerIndex) {
-				c[j].classList.remove("disabled");
-				playerDiv.classList.add("currentplayerdiv");
-			}
-			else {
-				c[j].classList.add("disabled");
-				playerDiv.classList.remove("currentplayerdiv");
-			}
-		}
-
-		if (game.players[window.game.currentPlayerIndex].isComputerPlayer == false)
-			deckDiv.classList.remove("disabled");
-		else deckDiv.classList.add("disabled");
-	}
-}
-
-
-var updateColor = function () {
-	document.getElementById("color").innerHTML = game.currentColor;
-}
-
-var updateGameView = function () {
-	var gameDiv = document.getElementById("game");
-	for (var i = 0; i < game.players.length; i++) {
-		var playerDivId = "player-container-" + i;
-		if (!isChildExistById("game", playerDivId)) {
-			playerDiv = document.createElement("div")
-			playerDiv.className = "player-cards-flex-container";
-			playerDiv.id = playerDivId
-			gameDiv.appendChild(playerDiv);
-		} else {
-			playerDiv = document.getElementById(playerDivId)
-		}
-
-		while (playerDiv.firstChild) {
-			playerDiv.removeChild(playerDiv.firstChild);
-		}
-
-		for (var j = 0; j < game.players[i].cards.length; j++) {
-			var cardDivId = "card-" + j + "-player-" + i;
-			var cardDiv = document.createElement("div")
-			cardDiv.id = cardDivId
-			playerDiv.appendChild(cardDiv);
-			if (game.players[i].isComputerPlayer == false) {
-				var card = game.players[i].cards[j]
-				cardDiv.innerHTML = "<img src=\"cards/" + card.getFileName() + "\" onmouseover=\"\" style=\"cursor: pointer;\"/>"
-				if (card.action == "changeColor")
-					cardDiv.addEventListener('click', activeChangeColor);
-				else cardDiv.addEventListener('click', activeCardOnClick);
-			} else {
-				var card = game.players[i].cards[j]
-				//cardDiv.innerHTML = "<img src=\"cards/cover_0_0.png\"/>"
-				cardDiv.innerHTML = "<img src=\"cards/" + card.getFileName() + "\"/>"
-			}
-		}
-	}
-
-	updateOpenDeck()
-	updateDeckCount()
-	updateColor()
-	updateTurn()
-}
-
-
-function sleep(ms) {
-	return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-var nextTurn = async function () {
-	updateGameView();
-
-	var playerIndex = window.game.currentPlayerIndex;
-	var currentPlayer = window.game.players[playerIndex];
-
-	// now computers play their turns, updating the game view after each turn
-	while (currentPlayer.isComputerPlayer == true) {
-		window.game.computerPlay();  	// computer calculates the actual turn 
-		console.log("morann")
-		await sleep(3000);
-		updateGameView();
-		var playerIndex = window.game.currentPlayerIndex;
-		currentPlayer = game.players[playerIndex];
-	}
-}
-
-function changeColor(color) {
-	document.getElementById('change-color-modal').style.display = "none";
-	window.game.currentColor = color;
-	window.game.cyclicIncrementCurrentPlayerIndex(false);
-	nextTurn();
-}
-
-var finishTurnOnClick = function () {
-	game.finishTurn()
-	document.getElementById("message").innerHTML = window.game.message;
-	document.getElementById("finish-turn").style.visibility = 'hidden';
-	nextTurn()
-}
-
-var pullCard = function () {
-	res = window.game.pullCard();
-	if (res == true) {
-		nextTurn()
-	} else {
-		document.getElementById("message").innerHTML = window.game.message;
-	}
-}
-
-var withdraw = function () {
-	endGame(window.game.getComputerPlayerIndex());
-}
-
-
-var endGame = function (winnerIndex) {
-	modalTitleFont = document.getElementById("end-game-modal-winner-title").innerHTML = "The winner is: " + winnerIndex
-	document.getElementById('end-turns-count').innerHTML = window.game.statistics.turnsCount;
-	document.getElementById('end-game-duration').innerHTML = miliSecondsToTimeString(window.game.statistics.getGameDuration());
-	endGameModal = document.getElementById('end-game-modal');
-	endGameModal.style.display = "block";
-}
-
-var hideStatistics = function () {
-	endGameModal = document.getElementById('end-game-modal');
-	endGameModal.style.display = "none";
-}
-
-var newGame = function () {
-	hideStatistics();
-	game.newGame();
-
-	document.getElementById("finish-turn").style.visibility = 'hidden';
-	updateGameView();
-	updateStatistics();
-	game.players[game.currentPlayerIndex].statistics.startTurn();
-
-	nextTurn();
-}
+export default Game;

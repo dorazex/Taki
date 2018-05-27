@@ -1,17 +1,27 @@
 {
-  "name": "es6-with-webpack",
+  "name": "taki",
   "version": "1.0.0",
-  "description": "es6 deployed using webpack",
+  "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "build-watch": "webpack --watch"
   },
-  "author": "Spivak Ofer",
+  "engines": {
+    "node": "9.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://dorazex@github.com/dorazex/Taki.git"
+  },
+  "author": "",
   "license": "ISC",
+  "homepage": "https://github.com/dorazex/Taki#readme",
   "devDependencies": {
     "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
+    "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "css-loader": "^0.28.7",
@@ -20,6 +30,7 @@
     "webpack": "^3.10.0"
   },
   "dependencies": {
+    "express": "^4.16.3",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
   }

@@ -1,3 +1,7 @@
+import * as constants from './constants'
+import * as utilities from './utilities'
+import Card from './card';
+
 function Deck() {
     ////////// private properties
     this.cards = [];
@@ -8,14 +12,14 @@ function Deck() {
         for (var k = 0; k < 2; k++) {
             var cards = this.cards
             // regular number cards
-            COLORS.forEach(function(color){
-                    NUMBERS.forEach(function(number){
+            constants.COLORS.forEach(function(color){
+                    constants.NUMBERS.forEach(function(number){
                         cards.push(new Card(color, number, null));
                     });
                 });
             // cards with colored action
-            COLORS.forEach(function(color){
-                ACTIONS_W_COLORS.forEach(
+            constants.COLORS.forEach(function(color){
+                constants.ACTIONS_W_COLORS.forEach(
                     function(action){
                         cards.push(new Card(color, null, action));
                     });
@@ -25,7 +29,7 @@ function Deck() {
         // Cards that should have 4 occurences
         for (var i = 0; i < 4; i++) {
             // action cards without colors
-            ACTIONS_WO_COLORS_4.forEach(function(action){
+            constants.ACTIONS_WO_COLORS_4.forEach(function(action){
                 cards.push(new Card(null, null, action));
             });
         };
@@ -33,7 +37,7 @@ function Deck() {
          // Cards that should have 2 occurences
          for (var i = 0; i < 2; i++) {
             // action cards without colors
-            ACTIONS_WO_COLORS_2.forEach(function(action){
+            constants.ACTIONS_WO_COLORS_2.forEach(function(action){
                 cards.push(new Card(null, null, action));
             });
         };
@@ -43,13 +47,13 @@ function Deck() {
 
     this.init = function () {
         this.initCards();
-        shuffleArray(this.cards);
+        utilities.shuffleArray(this.cards);
         return this.cards;
         
     };
 
     this.takeCards = function(numberOfCards){
-        takenCards = [];
+        var takenCards = [];
         for (var i =0; i < numberOfCards; i++){
             takenCards.push(this.cards.pop());
         };
@@ -66,3 +70,5 @@ function Deck() {
         return this.cards.length;
     }
 };
+
+export default Deck;

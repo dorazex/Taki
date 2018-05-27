@@ -7,3 +7,5 @@ function GameStatistics() {
 		return (currentTime - this.startTime);
 	}
 }
+
+export default GameStatistics;

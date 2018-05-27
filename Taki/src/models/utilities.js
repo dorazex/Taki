@@ -1,11 +1,4 @@
-var COLORS = ["green", "red", "yellow", "blue"];
-var NUMBERS = [1, 3, 4, 5, 6, 7, 8, 9];
-var ACTIONS_W_COLORS = ["taki", "stop", "plus", "plus2"];
-var ACTIONS_WO_COLORS_4 = ["changeColor"];
-var ACTIONS_WO_COLORS_2 = ["superTaki"];
-var NUM_INITIAL_CARDS = 8;
-
-function shuffleArray(array) {
+export function shuffleArray(array) {
 	for (var x = array.length - 1; x > 0; x--) {
 		var i = Math.floor(Math.random() * (x + 1));
 		var temp = array[x];
@@ -15,7 +8,7 @@ function shuffleArray(array) {
 	return array;
 }
 
-function isChildExistById(parentId, childId) {
+export function isChildExistById(parentId, childId) {
 	var isExist = false;
 	parentDiv = document.getElementById(parentId)
 	childDiv = document.getElementById(childId)
@@ -28,7 +21,7 @@ function isChildExistById(parentId, childId) {
 	return isExist;
 };
 
-function miliSecondsToTimeString(timeInMiliSeconds) {
+export function miliSecondsToTimeString(timeInMiliSeconds) {
 	var timeInSeconds = Math.round(timeInMiliSeconds / 1000);
 	var seconds = Math.floor(timeInSeconds % 60)
 	var minutes = Math.floor(timeInSeconds / 60);
@@ -36,7 +29,7 @@ function miliSecondsToTimeString(timeInMiliSeconds) {
 	return hours + ":" + minutes + ":" + seconds
 }
 
-function clearArray(array) {
+export function clearArray(array) {
 	while (array.length) {
 		array.pop();
 	}

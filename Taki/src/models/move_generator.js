@@ -93,3 +93,5 @@ function MoveGenerator() {
 		return res;
 	}
 }
+
+export default MoveGenerator;

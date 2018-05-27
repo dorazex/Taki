@@ -1,3 +1,6 @@
+import PlayerStatistics from './player_statistics';
+import MoveGenerator from './move_generator';
+
 function Player(isComputerPlayer) {
     this.cards = [];
     this.isComputerPlayer = isComputerPlayer;
@@ -13,3 +16,5 @@ function Player(isComputerPlayer) {
         return res;
     }
 };
+
+export default Player;

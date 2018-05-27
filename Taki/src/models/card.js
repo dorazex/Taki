@@ -38,3 +38,4 @@ function Card(color, number, action) {
   }
 }
 
+export default Card;
