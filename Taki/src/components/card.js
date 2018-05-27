@@ -25,13 +25,11 @@ export default class CardComp extends React.Component {
 
         return(
             <div className="card-container" onClick={this.onClick}>
-                    <button>
                         {
                             player.isComputerPlayer == false ?
-                                <img src={`cards/${card.getFileName()}`} /> :
+                                <img src={`cards/${card.getFileName()}`} style={{cursor: "pointer"}} /> :
                                 <img src="cards/cover_0_0.png" />
                         }
-                    </button>
             </div>
         )
     }
