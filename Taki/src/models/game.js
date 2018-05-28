@@ -68,11 +68,11 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 		this.currentAction = undefined;
 		this.plus2 = 0;
 		this.message = undefined;
+		this.statistics = new GameStatistics();
 		this.statistics.turnsCount = 0;
 		this.statistics.startTime = new Date().getTime();
 		this.NUM_REGULAR_PLAYERS = this.numRegularPlayers;
 		this.NUM_COMPUTER_PLAYERS = this.numComputerPlayers;
-		this.statistics = new GameStatistics();
 		this.ended = false;
 		this.winnerIndex = undefined;
 
