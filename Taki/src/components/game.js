@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import BoardComp from './board';
 import StatusBarComp from './status_bar';
 import ChangeColorComp from './change_color';
+import EndGameStatisticsComp from './end_game_statistics';
 import GameFactory from '../models/game_factory';
 
 import '../style.css';
@@ -15,7 +16,8 @@ export default class GameComp extends React.Component {
 
 		this.state = {
 			game: props.game,
-			showColorModal: false
+			showColorModal: false,
+			showEndModal: false,
 		};
 
 		this.cardClicked = this.cardClicked.bind(this);
@@ -23,6 +25,8 @@ export default class GameComp extends React.Component {
 		this.finishTurn = this.finishTurn.bind(this);
 		this.pullCard = this.pullCard.bind(this);
 		this.hideColorModal = this.hideColorModal.bind(this);
+		this.showEndModal = this.showEndModal.bind(this);
+		this.hideEndModal = this.hideEndModal.bind(this);
 	}
 
 
@@ -37,9 +41,19 @@ export default class GameComp extends React.Component {
 	showColorModal() {
 		this.setState({
 			game: this.state.game,
-			showColorModal: true
+			showColorModal: true,
 		});
 	};
+
+	showEndModal ()  {
+    	this.setState({ showEndModal: true });
+  	};
+
+	hideEndModal () {
+		this.setState({ showEndModal: false });
+	};
+
+
 
 	hideColorModal(color) {
 		const game = this.state.game;
@@ -106,10 +120,11 @@ export default class GameComp extends React.Component {
 	//handleClose={this.hideColorModal}
 	render() {
 		const { game } = this.props;
+		const showEndModal = this.state.showEndModal;
 
 		return (
 			<div>
-				<StatusBarComp game={game} className="status-bar" />
+				<StatusBarComp game={game} className="status-bar" withdraw={this.showEndModal} />
 				<BoardComp
 					game={game}
 					cardClicked={this.cardClicked}
@@ -117,6 +132,7 @@ export default class GameComp extends React.Component {
 					finishTurn={this.finishTurn}
 					pullCard={this.pullCard} />
 				<ChangeColorComp show={this.state.showColorModal} handleClose={this.hideColorModal} />
+				<EndGameStatisticsComp show={showEndModal} handleClose={this.hideEndModal}/>
 			</div>);
 	}
 }

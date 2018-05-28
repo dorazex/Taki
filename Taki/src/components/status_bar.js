@@ -10,7 +10,7 @@ export default class StatusBarComp extends React.Component {
                     <tbody>
                         <tr>
                             <td className="status-bar-td">
-                                <button id="withdraw" onClick={game.withdraw}>
+                                <button id="withdraw" onClick={this.props.withdraw}>
                                     Withdraw!
                                 </button>
                             </td>

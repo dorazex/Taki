@@ -18,6 +18,7 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 	this.NUM_REGULAR_PLAYERS = numRegularPlayers;
 	this.NUM_COMPUTER_PLAYERS = numComputerPlayers;
 	this.statistics = new GameStatistics();
+	this.ended = false;
 
 	this.addPlayer = function (isComputerPlayer) {
 		this.players.push(new Player(isComputerPlayer))
@@ -66,6 +67,7 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 		this.message = undefined;
 		this.statistics.turnsCount = 0;
 		this.statistics.startTime = new Date().getTime();
+		this.ended = false;
 
 		for (var i = 0; i < this.players.length; i++) {
 			clearArray(this.players[i].cards);
@@ -267,9 +269,9 @@ Game.prototype.updateDeckCount = function () {
 }
 
 
-Game.prototype.withdraw = function () {
-	endGame(this.getComputerPlayerIndex());
-}
+// Game.prototype.withdraw = function () {
+// 	endGame(this.getComputerPlayerIndex());
+// }
 ////////////////////////////////////////////////////
 
 export default Game;
