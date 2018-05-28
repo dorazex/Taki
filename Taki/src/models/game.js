@@ -6,7 +6,7 @@ import PlayerStatistics from './player_statistics';
 import * as constants from './constants'
 import * as utilities from './utilities'
 
-let Game = function(numRegularPlayers, numComputerPlayers) {
+let Game = function (numRegularPlayers, numComputerPlayers) {
 	this.deck = undefined;
 	this.openDeck = undefined;
 	this.players = [];
@@ -92,7 +92,13 @@ let Game = function(numRegularPlayers, numComputerPlayers) {
 		this.players[this.currentPlayerIndex].statistics.startTurn();
 	};
 
-	this.computerPlay = function () {
+	//this.sleep = function(ms) {
+	//	return new Promise(resolve => setTimeout(resolve, ms));
+	//}
+
+	this.computerPlay =  function () {
+
+		//await this.sleep(2000);
 		// let the computer play calculate its turn and return the card to put
 		var res = this.players[this.currentPlayerIndex].computerPlay(this.openDeck.getTopCard(), this.currentColor, this.currentAction, this.plus2);
 
@@ -159,6 +165,12 @@ let Game = function(numRegularPlayers, numComputerPlayers) {
 	}
 
 	this.moveCardToOpenDeck = function (card, cardIndex, playerIndex) {
+		console.log("mcard" + card)
+		console.log("mcardindex" + cardIndex)
+		console.log("mplayerindex" + playerIndex)
+
+
+
 		this.currentColor = card.getColor();
 		this.openDeck.putCard(this.players[playerIndex].cards[cardIndex])
 		this.players[playerIndex].cards.splice(cardIndex, 1);
@@ -248,22 +260,6 @@ let Game = function(numRegularPlayers, numComputerPlayers) {
 	}
 
 
-	this.nextTurn = function() {
-		// updateGameView();
-
-		var playerIndex = this.currentPlayerIndex;
-		var currentPlayer = this.players[playerIndex];
-
-		// now computers play their turns, updating the game view after each turn
-		while (currentPlayer.isComputerPlayer == true) {
-			this.computerPlay();  	// computer calculates the actual turn 
-			console.log("morann")
-			// await sleep(3000);
-			// updateGameView();
-			var playerIndex = this.currentPlayerIndex;
-			currentPlayer = this.players[playerIndex];
-		}
-	}
 
 	// this.makeTurn = function(callback, args){
 	// 	var result = {};

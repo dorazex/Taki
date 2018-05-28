@@ -1,5 +1,4 @@
 import React from 'react';
-import CardsComp from './cards';
 import CardComp from './card';
 import '../style.css';
 
@@ -20,6 +19,7 @@ export default class PlayerComp extends React.Component {
     render (){
         const { player, game, playerKey, cardClicked, colorChosen } = this.state;
         const currentPlayer = game.players[game.currentPlayerIndex];
+
         return(
             <div id={`player-container-${playerKey}`}
              className={currentPlayer == player ? "player-cards-flex-container currentplayerdiv" : "player-cards-flex-container" }>

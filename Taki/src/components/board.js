@@ -10,7 +10,7 @@ export default class BoardComp extends React.Component{
         return (
                 <div>
                     <div id="board" className="board-flex-container">
-                        <DecksComp game={game} open={false} />
+                        <DecksComp game={game} open={false} finishTurn={this.props.finishTurn} pullCard={this.props.pullCard}/>
                         <DecksComp game={game} open={true} />
                     </div>
                     <div id="players">

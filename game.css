@@ -168,7 +168,7 @@ img {
   margin: 0px
 }
 
-#end-ok-button,#end-new-game-button{
+#end-ok-button,#end-new-game-button,#end-navigate-button{
   background-color: chartreuse;
   font-family: Courier;
   cursor: pointer;
@@ -178,7 +178,6 @@ img {
   padding:3px;
   margin: 5px;
 }
-
 
 #end-game-modal {
   display: none; /* Hidden by default */

@@ -10,6 +10,11 @@ function Game(numRegularPlayers, numComputerPlayers) {
 	this.NUM_REGULAR_PLAYERS = numRegularPlayers;
 	this.NUM_COMPUTER_PLAYERS = numComputerPlayers;
 	this.statistics = new GameStatistics();
+	this.undoCaretaker = new UndoCaretaker();
+	this.prevUndoFrame = null;
+	this.navigateMode = false;
+	this.statisticInterval = null;
+
 
 	this.addPlayer = function (isComputerPlayer) {
 		this.players.push(new Player(isComputerPlayer))
@@ -40,18 +45,32 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		this.deck = new Deck();
 		this.deck.init();
 		this.openDeck = new openDeck();
+		this.undoCaretaker = new UndoCaretaker();
 		this.initPlayers();
 
 		do {
 			this.openDeck.putCard(this.deck.takeCards(1)[0])
 			this.currentColor = this.openDeck.getTopCard().getColor();
 		} while (!this.openDeck.getTopCard().isValidStartCard())
+
+
+		prevUndoFrame = new UndoFrame(this.deck.getNumberOfCards(),
+			this.openDeck.getTopCard(),
+			this.currentColor,
+			this.players[0].isComputerPlayer == true ? "Computer" : "Human",
+			this.players[0].cards,
+			this.players[1].cards,
+			this.players[0].statistics,
+			0,
+			0
+		);
 	};
 
 	this.newGame = function () {
 		this.deck = new Deck();
 		this.deck.init();
 		this.openDeck = new openDeck();
+		this.undoCaretaker = new UndoCaretaker();
 		this.currentPlayerIndex = 0;
 		this.currentColor = undefined;
 		this.currentAction = undefined;
@@ -71,11 +90,35 @@ function Game(numRegularPlayers, numComputerPlayers) {
 			this.openDeck.putCard(this.deck.takeCards(1)[0])
 			this.currentColor = this.openDeck.getTopCard().getColor();
 		} while (!this.openDeck.getTopCard().isValidStartCard())
+
+		prevUndoFrame = new UndoFrame(this.deck.getNumberOfCards(),
+			this.openDeck.getTopCard(),
+			this.currentColor,
+			this.players[0].isComputerPlayer == true ? "Computer" : "Human",
+			this.players[0].cards,
+			this.players[1].cards,
+			this.players[0].statistics,
+			0,
+			0
+		);
 	}
 
 	this.cyclicIncrementCurrentPlayerIndex = function (stop) {
 		this.currentAction = undefined;
 		this.statistics.turnsCount++;
+
+		this.undoCaretaker.pushUndoFrame(prevUndoFrame);
+
+		prevUndoFrame = new UndoFrame(this.deck.getNumberOfCards(),
+			this.openDeck.getTopCard(),
+			this.currentColor,
+			this.players[this.currentPlayerIndex].isComputerPlayer == true ? "Computer" : "Human",
+			this.players[0].cards,
+			this.players[1].cards,
+			this.players[this.currentPlayerIndex].statistics,
+			this.statistics.turnsCount,
+			this.statistics.getGameDuration()
+		);
 
 		this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
 		if (stop == true)
@@ -148,6 +191,25 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		else
 			this.cyclicIncrementCurrentPlayerIndex(true)
 
+	}
+
+	this.prev = function () {
+		var frame = this.undoCaretaker.popUndoFrame();
+		if (frame == null)
+			return null; //nothing will happen if no undo frames exist
+
+		this.undoCaretaker.pushRedoFrame(frame);
+		return frame;
+	}
+
+	this.next = function () {
+		var frame = this.undoCaretaker.popRedoFrame();
+		if (frame == null)
+			return null; //nothing will happen if no frames exist
+
+
+		this.undoCaretaker.pushUndoFrame(frame);
+		return frame;
 	}
 
 	this.moveCardToOpenDeck = function (card, cardIndex, playerIndex) {
@@ -272,7 +334,7 @@ var updateStatistics = function () {
 
 
 window.onload = function () {
-	setInterval(function () { updateStatistics(); }, 100);
+	statisticInterval = setInterval(function () { updateStatistics(); }, 100);
 	url = window.location.href
 	urlParameters = url.split("?")[1]
 	numRegularPlayers = parseInt(urlParameters.split("&")[0].split("=")[1])
@@ -283,10 +345,12 @@ window.onload = function () {
 	game.init();
 	window.game = game
 
+
 	document.getElementById("finish-turn").style.visibility = 'hidden';
 	updateGameView()
 	updateStatistics()
 	game.players[game.currentPlayerIndex].statistics.startTurn();
+
 
 	nextTurn()
 }
@@ -412,9 +476,13 @@ var updateGameView = function () {
 }
 
 
-function sleep(ms) {
-	return new Promise(resolve => setTimeout(resolve, ms));
-}
+// function sleep(ms) {
+// 	return new Promise(resolve => setTimeout(resolve, ms));
+// }
+
+// // now computers play their turns, updating the game view after each turn
+
+// await sleep(3000);
 
 var nextTurn = async function () {
 	updateGameView();
@@ -462,6 +530,7 @@ var withdraw = function () {
 
 
 var endGame = function (winnerIndex) {
+	clearInterval(statisticInterval);
 	modalTitleFont = document.getElementById("end-game-modal-winner-title").innerHTML = "The winner is: " + winnerIndex
 	document.getElementById('end-turns-count').innerHTML = window.game.statistics.turnsCount;
 	document.getElementById('end-game-duration').innerHTML = miliSecondsToTimeString(window.game.statistics.getGameDuration());
@@ -476,6 +545,7 @@ var hideStatistics = function () {
 
 var newGame = function () {
 	hideStatistics();
+	statisticInterval = setInterval(function () { updateStatistics(); }, 100);
 	game.newGame();
 
 	document.getElementById("finish-turn").style.visibility = 'hidden';
@@ -485,3 +555,80 @@ var newGame = function () {
 
 	nextTurn();
 }
+
+var navigate = function () {
+	hideStatistics();
+	document.getElementById("finish-turn").style.visibility = 'hidden';
+	updateGameView();
+}
+
+
+var prev = function () {
+	console.log("prev");
+	var frame = window.game.prev();
+	if (frame == null)
+		return null; //nothing will happen if no undo frames exist
+
+	updateBoard(frame);
+}
+
+var next = function () {
+	var frame = window.game.next();
+	if (frame == null)
+		return null; //nothing will happen if no frames exist
+
+		console.log("next");
+	updateBoard(frame);
+}
+
+
+var updateBoard = function (frame) {
+	document.getElementById('turns-count').innerHTML = "Turns Count: " + frame.turnsCount;
+	document.getElementById('game-duration').innerHTML = "Game Duration: " + miliSecondsToTimeString(frame.gameDuration);
+	document.getElementById('turn-average').innerHTML = "Turn Average Duration: " + miliSecondsToTimeString(frame.statisticsPlayer.avgTurnsDurationsCurrentGame);
+	document.getElementById('turn-average-all-games').innerHTML = "Turn Average Duration All Games: " + miliSecondsToTimeString(frame.statisticsPlayer.avgTurnsDurationsAllGames);
+	document.getElementById('single-card-count').innerHTML = "Single Card Count: " + frame.statisticsPlayer.singleCardCount;
+	document.getElementById("color").innerHTML = frame.color;
+
+	var gameDiv = document.getElementById("game");
+	var cards;
+	for (var i = 0; i < game.players.length; i++) {
+		var playerDivId = "player-container-" + i;
+		if (!isChildExistById("game", playerDivId)) {
+			playerDiv = document.createElement("div")
+			playerDiv.className = "player-cards-flex-container";
+			playerDiv.id = playerDivId
+			gameDiv.appendChild(playerDiv);
+		} else {
+			playerDiv = document.getElementById(playerDivId)
+		}
+
+		while (playerDiv.firstChild) {
+			playerDiv.removeChild(playerDiv.firstChild);
+		}
+
+
+		if (i == 0)
+			cards = frame.firstPlayerCards;
+		else cards = frame.secondPlayerCards;
+
+		for (var j = 0; j < cards.length; j++) {
+			var cardDivId = "card-" + j + "-player-" + i;
+			var cardDiv = document.createElement("div")
+			cardDiv.id = cardDivId
+			playerDiv.appendChild(cardDiv);
+			var card = cards[j]
+			cardDiv.innerHTML = "<img src=\"cards/" + card.getFileName() + "\" />"
+		}
+	}
+
+	document.getElementById("turn").innerHTML = "Turn of " + frame.turnOf;
+
+	var openDeckDiv = document.getElementById("open-deck");
+	openDeckDiv.innerHTML = "<img src=\"cards/" + frame.topCard.getFileName() + "\"/>";
+
+	var deckTextDiv = document.getElementById("deck-text");
+	deckTextDiv.innerHTML = frame.deckCount;
+}
+
+

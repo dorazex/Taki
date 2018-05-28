@@ -1,8 +1,8 @@
 var COLORS = ["green", "red", "yellow", "blue"];
 var NUMBERS = [1, 3, 4, 5, 6, 7, 8, 9];
-var ACTIONS_W_COLORS = ["taki", "stop", "plus", "plus2"];
+var ACTIONS_W_COLORS = ["taki", "stop", "plus"];  //["taki", "stop", "plus", "plus2"]
 var ACTIONS_WO_COLORS_4 = ["changeColor"];
-var ACTIONS_WO_COLORS_2 = ["superTaki"];
+var ACTIONS_WO_COLORS_2 = []; //["superTaki"];
 var NUM_INITIAL_CARDS = 8;
 
 function shuffleArray(array) {
