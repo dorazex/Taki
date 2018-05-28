@@ -11,12 +11,11 @@ export default class CardComp extends React.Component {
     onClick(event){
         console.log("card onClick")
         if (this.props.card.action == "changeColor"){
-            ;
+            this.props.colorChosen(this.props.card, this.props.cardKey, this.props.playerKey);
         } else {
            
             this.props.cardClicked(this.props.card, this.props.cardKey, this.props.playerKey);
         }
-      
     };
 
     colorChosen(color){      

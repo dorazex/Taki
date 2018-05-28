@@ -144,7 +144,6 @@ function Game(numRegularPlayers, numComputerPlayers) {
 			this.cyclicIncrementCurrentPlayerIndex(false);
 		}  // put the card of the computer's turn if any
 		else {
-			console.log("aaa")
 			this.play(res[1], res[0], this.currentPlayerIndex);
 		}
 	}

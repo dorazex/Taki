@@ -14,13 +14,15 @@ export default class GameComp extends React.Component {
 		super(props);
 
 		this.state = {
-			game: props.game
+			game: props.game,
+			showColorModal: false
 		};
 
 		this.cardClicked = this.cardClicked.bind(this);
 		this.colorChosen = this.colorChosen.bind(this);
 		this.finishTurn = this.finishTurn.bind(this);
 		this.pullCard = this.pullCard.bind(this);
+		this.hideColorModal = this.hideColorModal.bind(this);
 	}
 
 
@@ -31,6 +33,26 @@ export default class GameComp extends React.Component {
 	componentWillUnmount() {
 		//TODO
 	}
+
+	showColorModal() {
+		this.setState({
+			game: this.state.game,
+			showColorModal: true
+		});
+	};
+
+	hideColorModal(color) {
+		const game = this.state.game;
+		game.currentColor = color;
+		game.cyclicIncrementCurrentPlayerIndex(false);
+		
+		this.setState({
+			game: this.state.game,
+			showColorModal: false,
+		}, () => {
+			this.nextTurn();
+		});
+	};
 
 	pullCard() {
 		const game = this.state.game;
@@ -45,6 +67,13 @@ export default class GameComp extends React.Component {
 		var res = game.play(card, cardKey, playerKey);
 		this.setState(this.state);
 		this.nextTurn();
+	}
+
+	colorChosen(card, cardKey, playerKey) {
+		const game = this.state.game;
+		var res = game.changeColor(card, cardKey, playerKey);
+		if (res == true)
+			this.showColorModal();
 	}
 
 	finishTurn() {
@@ -74,20 +103,7 @@ export default class GameComp extends React.Component {
 		}
 	}
 
-	colorChosen(color, card, player) {
-		const { game } = this.state;
-
-		game.turn(function (args) {
-			const { game, card, player } = args;
-
-			player.putCard(game.heap, card);
-			game.heap.currentColor = color.toUpperCase();
-
-			var step = { card, color, player };
-			return { updateTurnInfo: true, moveNextPlayer: true, step };
-		}, { game, color, card, player });
-	}
-
+	//handleClose={this.hideColorModal}
 	render() {
 		const { game } = this.props;
 
@@ -100,7 +116,7 @@ export default class GameComp extends React.Component {
 					colorChosen={this.colorChosen}
 					finishTurn={this.finishTurn}
 					pullCard={this.pullCard} />
-				<ChangeColorComp game={game} />
+				<ChangeColorComp show={this.state.showColorModal} handleClose={this.hideColorModal} />
 			</div>);
 	}
 }

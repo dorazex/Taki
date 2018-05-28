@@ -96,9 +96,20 @@ img {
   background-color:#007f00;
 }
 
+/*.display-block {
+  display: block;
+}
+
+.display-none {
+  display: none;
+}*/
+
+
+
+
 /* The Modal (background) */
 .modal {
-  display: none; /* Hidden by default */
+/*  display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
   padding-top: 100px; /* Location of the box */

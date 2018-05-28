@@ -1,36 +1,28 @@
 import React from 'react';
 
-export default class ChangeColorComp extends React.Component {
-    constructor(props) {
-        super(...props);
+const ChangeColorComp = (props) => {
+    if (props.show == false)
+        return null;
 
-        this.state = {
-            game: props.game,
-            visible: props.visible
-        }
-    }
+    return (
+        <div id="change-color-modal" className="modal">
+            <div className="change-color-modal-content">
+                <table width="100%" height="100%">
+                    <tbody>
+                        <tr>
+                            <td id="yellow" onClick={() => props.handleClose('yellow')} />
+                            <td id="red" onClick={() => props.handleClose('red')} />
+                        </tr>
+                        <tr>
+                            <td id="blue" onClick={() => props.handleClose('blue')} />
+                            <td id="green" onClick={() => props.handleClose('green')} />
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    )
+};
 
-    render(){
-        const { game, visible } = this.state;
-        if (visible){
-            return(
-                <div id="change-color-modal" className="modal">
-                    <div className="change-color-modal-content">
-                        <table width="100%" height="100%">
-                            <tr>
-                                <td id="yellow" onClick={game.changeColor("yellow")} />
-                                <td id="red" onClick={game.changeColor("red")} />
-                            </tr>
-                            <tr>
-                                <td id="blue" onClick={game.changeColor("blue")} />
-                                <td  id="green" onClick={game.changeColor("green")} />
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            ) 
-        } else {
-            return "";
-        }
-    }
-}
+export default ChangeColorComp;
+

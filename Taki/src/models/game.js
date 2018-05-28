@@ -115,7 +115,6 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 			this.cyclicIncrementCurrentPlayerIndex(false);
 		}  // put the card of the computer's turn if any
 		else {
-			console.log("aaa")
 			this.play(res[1], res[0], this.currentPlayerIndex);
 		}
 	}
@@ -165,12 +164,6 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 	}
 
 	this.moveCardToOpenDeck = function (card, cardIndex, playerIndex) {
-		console.log("mcard" + card)
-		console.log("mcardindex" + cardIndex)
-		console.log("mplayerindex" + playerIndex)
-
-
-
 		this.currentColor = card.getColor();
 		this.openDeck.putCard(this.players[playerIndex].cards[cardIndex])
 		this.players[playerIndex].cards.splice(cardIndex, 1);
@@ -258,15 +251,6 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 		this.moveCardToOpenDeck(card, cardIndex, playerIndex);
 		return true;
 	}
-
-
-
-	// this.makeTurn = function(callback, args){
-	// 	var result = {};
-	// 	if (callback){
-	// 		result = callback(args);
-	// 	}
-	// }
 };
 
 ////////////////////////////////////////////////////
