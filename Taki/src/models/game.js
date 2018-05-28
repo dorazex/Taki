@@ -19,6 +19,7 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 	this.NUM_COMPUTER_PLAYERS = numComputerPlayers;
 	this.statistics = new GameStatistics();
 	this.ended = false;
+	this.winnerIndex = undefined;
 
 	this.addPlayer = function (isComputerPlayer) {
 		this.players.push(new Player(isComputerPlayer))
@@ -73,6 +74,7 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 		this.NUM_COMPUTER_PLAYERS = this.numComputerPlayers;
 		this.statistics = new GameStatistics();
 		this.ended = false;
+		this.winnerIndex = undefined;
 
 		for (var i = 0; i < this.players.length; i++) {
 			utilities.clearArray(this.players[i].cards);
@@ -179,7 +181,7 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 		this.players[playerIndex].statistics.endTurn(cardsCountAfterTurn);
 
 		if (this.players[playerIndex].cards.length == 0 && this.openDeck.getTopCard().action != "plus") {
-			endGame(playerIndex)
+			this.winnerIndex = playerIndex;
 		}
 	}
 

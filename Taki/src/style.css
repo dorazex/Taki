@@ -88,8 +88,8 @@ img {
 }
 
 .disabled {
-  pointer-events:none;  
-  opacity:0.6;      
+  pointer-events:none;
+  opacity:0.6;
 }
 
 .currentplayerdiv {
@@ -231,4 +231,9 @@ table#players-statistics-table td,table#players-statistics-table th {
 
 #message{
   background-color: #ad0000;
+}
+
+#main-div{
+  pointer-events:none;
+  opacity:0.6;
 }

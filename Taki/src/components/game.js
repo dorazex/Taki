@@ -32,7 +32,7 @@ export default class GameComp extends React.Component {
 
 	newGame(){
 		this.state.game.newGame();
-		this.hideEndModal()
+		this.setState({ showEndModal: false });
 	}
 
 	componentDidMount() {
@@ -55,6 +55,7 @@ export default class GameComp extends React.Component {
   	};
 
 	hideEndModal () {
+		this.state.game.ended = true;
 		this.setState({ showEndModal: false });
 	};
 
@@ -118,10 +119,11 @@ export default class GameComp extends React.Component {
 	//handleClose={this.hideColorModal}
 	render() {
 		const { game } = this.props;
-		const showEndModal = this.state.showEndModal;
+		const winnerIndex = game.winnerIndex;
+		const showEndModal = winnerIndex != undefined ? true : this.state.showEndModal;
 
 		return (
-			<div>
+			<div id={game.ended ? "main-div" : ""}>
 				<StatusBarComp game={game} className="status-bar" withdraw={this.showEndModal} />
 				<BoardComp
 					game={game}
