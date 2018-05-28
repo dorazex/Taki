@@ -8,32 +8,22 @@ export default class CardComp extends React.Component {
         super(props);
     }
 
-    onClick(event){
+    onClick(event) {
         console.log("card onClick")
-        if (this.props.card.action == "changeColor"){
+        if (this.props.card.action == "changeColor")
             this.props.colorChosen(this.props.card, this.props.cardKey, this.props.playerKey);
-        } else {
-           
-            this.props.cardClicked(this.props.card, this.props.cardKey, this.props.playerKey);
-        }
+        this.props.cardClicked(this.props.card, this.props.cardKey, this.props.playerKey);
     };
 
-    colorChosen(color){      
-        this.state.changeColor = false;
-        this.setState(this.state);
-        const { card, player } = this.props;
-        this.props.onColorChoosed(color, card, player);     
-    }
-
-    render (){
-        return(
+    render() {
+        return (
             <div className="card-container" onClick={(e) => this.onClick(e)}>
-                        {
-                            this.props.player.isComputerPlayer == false ?
-                                <img src={`cards/${this.props.card.getFileName()}`} style={{cursor: "pointer"}} /> :
-                                <img src={`cards/${this.props.card.getFileName()}`} /> 
-                                //<img src="cards/cover_0_0.png"/>
-                        }
+                {
+                    this.props.player.isComputerPlayer == false ?
+                        <img src={`cards/${this.props.card.getFileName()}`} style={{ cursor: "pointer" }} /> :
+                        <img src={`cards/${this.props.card.getFileName()}`} />
+                    //<img src="cards/cover_0_0.png"/>
+                }
             </div>
         )
     }
