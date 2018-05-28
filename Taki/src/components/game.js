@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 
 import BoardComp from './board';
 import StatusBarComp from './status_bar';
+import ChangeColorComp from './change_color';
 import GameFactory from '../models/game_factory';
 
 import '../style.css';
@@ -16,28 +17,12 @@ export default class GameComp extends React.Component {
 			game: props.game
 		};
 
-		this.activeCardOnClick = this.activeCardOnClick.bind(this);
-		this.activeChangeColor = this.activeChangeColor.bind(this);
+		this.cardClicked = this.cardClicked.bind(this);
+		this.colorChosen = this.colorChosen.bind(this);
 		this.pullCard = this.pullCard.bind(this);
 		this.sleep = this.sleep.bind(this);
 		this.nextTurn = this.nextTurn.bind(this);
 		this.updateStatistics = this.updateStatistics.bind(this);
-	}
-
-	activeCardOnClick(cardIndex, playerIndex) {
-		const { game } = this.state;
-		const card = game.players[playerIndex].cards[cardIndex];
-
-		game.play(card, cardIndex, playerIndex);
-	};
-
-	activeChangeColor(cardIndex, playerIndex) {
-		const { game } = this.state;
-
-		let card = game.players[playerIndex].cards[cardIndex];
-		let res = game.changeColor(card, cardIndex, playerIndex);
-		if (res == true);
-		//document.getElementById('change-color-modal').style.display = "block";
 	}
 
 	pullCard() {
@@ -58,8 +43,10 @@ export default class GameComp extends React.Component {
 
 	nextTurn() {
 		const { game } = this.state;
-		updateGameView();
+		// updateGameView();
 		game.nextTurn();
+		this.setState(this.state);
+		// updateGameView();
 	}
 
 	updateStatistics() {
@@ -93,13 +80,47 @@ export default class GameComp extends React.Component {
 		playerStatsTable.insertRow(0).innerHTML = "<tr><th>Player</th><th>Avg turn duration</th><th>Single card occasions</th></tr>"
 	}
 
-	render() {
+	cardClicked(cardState) {
+		const { player, card, cardKey, playerKey } = cardState;
+		const game = this.state.game;
+
+		var args = {};
+		args.card = card;
+		args.player = player;
+		args.game = game;
+
+		var res = game.play(card, cardKey, playerKey);
+		this.nextTurn();
+		this.setState(this.state);
+	}
+
+
+	colorChosen(color, card, player) {
 		const { game } = this.state;
+
+		game.turn(function(args) {
+			const { game, card, player } = args;
+
+			player.putCard(game.heap, card);
+			game.heap.currentColor = color.toUpperCase();
+
+			var step = { card, color, player };
+			return { updateTurnInfo: true, moveNextPlayer: true, step };
+		}, { game, color, card, player });
+	}
+
+
+	render() {
+		const { game } = this.props;
 
 		return (
 			<div>
 				<StatusBarComp game={game} className="status-bar"/>
-				<BoardComp game={game}/>
+				<BoardComp
+				 game={game}
+				 cardClicked={this.cardClicked}
+				 colorChosen={this.colorChosen}/>
+				<ChangeColorComp game={game}/>
 			</div>);
 	}
 

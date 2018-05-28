@@ -1,6 +1,6 @@
 function MoveGenerator() {
 	this.play = function (cards, topCard, currentColor, action, plus2) {
-		res = []
+		var res = []
 
 		if(plus2 != 0) {
 			console.log(plus2)

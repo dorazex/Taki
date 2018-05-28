@@ -1,27 +1,28 @@
 import React from 'react';
 
 const DecksComp = (props) => {
-    if (props.open == true){
+    const {game, open} = props;
+    if (open == false){
         return (
             <div className="deck-container">
-                <div id="deck" onClick={props.deckClicked} className={props.game.players[props.game.currentPlayerIndex].isComputerPlayer == false ? 'disable' : 'enable'}>
+                <div id="deck" onClick={game.pullCard}>
                     <img src="cards/cover_0_0.png" styles="cursor: pointer;" />
                 </div>
                 <div id="deck-text" className="deck-text">
-                    {props.game.deck.getNumberOfCards()}
+                    {game.deck.getNumberOfCards()}
                 </div>
                 <div>
                     <button id="finish-turn" 
-                        styles={{ visibility: props.game.currentAction == "taki" ? 'visible' : 'hidden' }} 
+                        style={{ visibility: (game.currentAction != undefined && game.currentAction == "taki") ? 'visible' : 'hidden' }} 
                         className="deck-finish-turn-button" 
-                        onClick={props.finishTurnOnClick} />
+                        onClick={game.finishTurnOnClick} />
                 </div>
             </div>
         );
     } else {
         return (
                 <div id="open-deck">
-                        <img src={`cards/${props.game.openDeck.getTopCard().getFileName()}`}/>
+                        <img src={`cards/${game.openDeck.getTopCard().getFileName()}`}/>
                 </div>
         );
     }

@@ -103,7 +103,7 @@ let Game = function(numRegularPlayers, numComputerPlayers) {
 		else if (res.length == 0 && this.plus2 != 0)  // computer has no valid cards to put
 			this.pullCard();
 		else if (res[1].action == "changeColor") {
-			window.game.moveCardToOpenDeck(res[1], res[0], this.currentPlayerIndex);
+			this.moveCardToOpenDeck(res[1], res[0], this.currentPlayerIndex);
 			var i = Math.floor(Math.random() * constants.COLORS.length);
 			this.currentColor = constants.COLORS[i];
 			this.cyclicIncrementCurrentPlayerIndex(false);
@@ -126,7 +126,7 @@ let Game = function(numRegularPlayers, numComputerPlayers) {
 			return false;
 		}
 
-		this.players[window.game.currentPlayerIndex].addCards(this.deck.takeCards(1));
+		this.players[this.currentPlayerIndex].addCards(this.deck.takeCards(1));
 
 		if (this.deck.getNumberOfCards() == 0) {
 			var topCard = this.openDeck.cards.pop();
@@ -163,7 +163,7 @@ let Game = function(numRegularPlayers, numComputerPlayers) {
 		this.openDeck.putCard(this.players[playerIndex].cards[cardIndex])
 		this.players[playerIndex].cards.splice(cardIndex, 1);
 
-		cardsCountAfterTurn = this.players[playerIndex].cards.length;
+		var cardsCountAfterTurn = this.players[playerIndex].cards.length;
 		this.players[playerIndex].statistics.endTurn(cardsCountAfterTurn);
 
 		if (this.players[playerIndex].cards.length == 0 && this.openDeck.getTopCard().action != "plus") {
@@ -264,6 +264,13 @@ let Game = function(numRegularPlayers, numComputerPlayers) {
 			currentPlayer = this.players[playerIndex];
 		}
 	}
+
+	// this.makeTurn = function(callback, args){
+	// 	var result = {};
+	// 	if (callback){
+	// 		result = callback(args);
+	// 	}
+	// }
 };
 
 ////////////////////////////////////////////////////
