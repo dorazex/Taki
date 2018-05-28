@@ -58,20 +58,25 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 	};
 
 	this.newGame = function () {
+
 		this.deck = new Deck();
 		this.deck.init();
-		this.openDeck = new openDeck();
+		this.openDeck = new OpenDeck();
 		this.currentPlayerIndex = 0;
 		this.currentColor = undefined;
 		this.currentAction = undefined;
+		this.plus2 = 0;
 		this.message = undefined;
 		this.statistics.turnsCount = 0;
 		this.statistics.startTime = new Date().getTime();
+		this.NUM_REGULAR_PLAYERS = this.numRegularPlayers;
+		this.NUM_COMPUTER_PLAYERS = this.numComputerPlayers;
+		this.statistics = new GameStatistics();
 		this.ended = false;
 
 		for (var i = 0; i < this.players.length; i++) {
-			clearArray(this.players[i].cards);
-			this.players[i].addCards(this.deck.takeCards(NUM_INITIAL_CARDS));
+			utilities.clearArray(this.players[i].cards);
+			this.players[i].addCards(this.deck.takeCards(constants.NUM_INITIAL_CARDS));
 			this.players[i].statistics.singleCardCount = 0;
 			this.players[i].statistics.numOfTurnsCurrentGame = 0;
 			this.players[i].statistics.avgTurnsDurationsCurrentGame = 0;

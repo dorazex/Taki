@@ -20,7 +20,7 @@ export default class StatusBarComp extends React.Component {
                             <td className="status-bar-td"><div id="game-duration">Game Duration: {this.miliSecondsToTimeString(this.props.game.statistics.getGameDuration())}</div></td>
                             <td className="status-bar-td"><div id="turn-average">Turn Average Duration: {this.miliSecondsToTimeString(this.props.game.players[this.props.game.currentPlayerIndex].statistics.avgTurnsDurationsCurrentGame)}</div></td>
                             <td className="status-bar-td"><div id="turn-average-all-games">Turn Average Duration All Games: {this.miliSecondsToTimeString(this.props.game.players[this.props.game.currentPlayerIndex].statistics.avgTurnsDurationsAllGames)}</div></td>
-                            <td className="status-bar-td"><div id="single-card-count">0</div>Single Card Count: {this.props.game.players[this.props.game.currentPlayerIndex].statistics.singleCardCount}</td>
+                            <td className="status-bar-td"><div id="single-card-count">Single Card Count: {this.props.game.players[this.props.game.currentPlayerIndex].statistics.singleCardCount}</div></td>
                             <td className="status-bar-td" width="200px"><div id="message">{this.props.game.message}</div></td>
                         </tr>
                     </tbody>

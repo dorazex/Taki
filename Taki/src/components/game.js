@@ -27,8 +27,13 @@ export default class GameComp extends React.Component {
 		this.hideColorModal = this.hideColorModal.bind(this);
 		this.showEndModal = this.showEndModal.bind(this);
 		this.hideEndModal = this.hideEndModal.bind(this);
+		this.newGame = this.newGame.bind(this);
 	}
 
+	newGame(){
+		this.state.game.newGame();
+		this.hideEndModal()
+	}
 
 	componentDidMount() {
 		this.nextTurn();
@@ -52,8 +57,6 @@ export default class GameComp extends React.Component {
 	hideEndModal () {
 		this.setState({ showEndModal: false });
 	};
-
-
 
 	hideColorModal(color) {
 		const game = this.state.game;
@@ -97,11 +100,6 @@ export default class GameComp extends React.Component {
 		this.nextTurn();
 	}
 
-	//TODO sleep
-	// sleep(ms) {
-	// 	return new Promise(resolve => setTimeout(resolve, ms));
-	// }
-
 	nextTurn() {
 		const game = this.state.game;
 
@@ -132,7 +130,7 @@ export default class GameComp extends React.Component {
 					finishTurn={this.finishTurn}
 					pullCard={this.pullCard} />
 				<ChangeColorComp show={this.state.showColorModal} handleClose={this.hideColorModal} />
-				<EndGameStatisticsComp show={showEndModal} handleClose={this.hideEndModal}/>
+				<EndGameStatisticsComp show={showEndModal} handleClose={this.hideEndModal} game={game} newGame={this.newGame}/>
 			</div>);
 	}
 }

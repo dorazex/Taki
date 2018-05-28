@@ -179,7 +179,7 @@ img {
   margin: 0px
 }
 
-#end-ok-button,#end-new-game-button{
+#end-ok-button,#end-new-game-button,#close-end-game-button{
   background-color: chartreuse;
   font-family: Courier;
   cursor: pointer;
