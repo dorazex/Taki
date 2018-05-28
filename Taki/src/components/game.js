@@ -25,14 +25,9 @@ export default class GameComp extends React.Component {
 		this.hideColorModal = this.hideColorModal.bind(this);
 	}
 
+
 	componentDidMount() {
 		this.nextTurn();
-	}
-
-	componentDidUpdate() {
-		if(this.state.showColorModal == false) {
-			this.nextTurn();
-		}
 	}
 
 	componentWillUnmount() {
@@ -50,23 +45,28 @@ export default class GameComp extends React.Component {
 		const game = this.state.game;
 		game.currentColor = color;
 		game.cyclicIncrementCurrentPlayerIndex(false);
-
+		
 		this.setState({
 			game: this.state.game,
-			showColorModal: false
+			showColorModal: false,
+		}, () => {
+			this.nextTurn();
 		});
 	};
 
 	pullCard() {
 		const game = this.state.game;
-		game.pullCard();
+		const res = game.pullCard();
 		this.setState(this.state);
+		if (res == true)
+			this.nextTurn();
 	}
 
 	cardClicked(card, cardKey, playerKey) {
 		const game = this.state.game;
 		var res = game.play(card, cardKey, playerKey);
 		this.setState(this.state);
+		this.nextTurn();
 	}
 
 	colorChosen(card, cardKey, playerKey) {
@@ -80,6 +80,7 @@ export default class GameComp extends React.Component {
 		const game = this.state.game;
 		game.finishTurn();
 		this.setState(this.state);
+		this.nextTurn();
 	}
 
 	//TODO sleep
@@ -94,12 +95,15 @@ export default class GameComp extends React.Component {
 		var currentPlayer = game.players[playerIndex];
 
 		// now computers play their turns, updating the game view after each turn
-		if (currentPlayer.isComputerPlayer == true) {
+		while (currentPlayer.isComputerPlayer == true) {
 			game.computerPlay();  	// computer calculates the actual turn
 			this.setState(this.state);
+			playerIndex = game.currentPlayerIndex;
+			currentPlayer = game.players[playerIndex];
 		}
 	}
 
+	//handleClose={this.hideColorModal}
 	render() {
 		const { game } = this.props;
 

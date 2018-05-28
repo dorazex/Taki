@@ -43,6 +43,9 @@ export default class StatusBarComp extends React.Component {
     componentWillUnmount() {
         clearInterval(this.interval);
     }
+
+
+    // setInterval(render, 100);
 };
 
 
