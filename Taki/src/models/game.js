@@ -63,7 +63,7 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 			this.currentColor = this.openDeck.getTopCard().getColor();
 		} while (!this.openDeck.getTopCard().isValidStartCard())
 
-		this.prevUndoFrame =  new UndoFrame(this);
+		this.prevUndoFrame = new UndoFrame(this);
 	};
 
 	this.newGame = function () {
@@ -116,26 +116,20 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 	};
 
 
-	this.navigate = function() {
+	this.navigate = function () {
 		this.navigateMode = true;
 		this.undoCaretaker.pushUndoFrame(this.prevUndoFrame);
 		this.undoCaretaker.pushUndoFrame(new UndoFrame(this));
-		this.prevUndoFrame =  new UndoFrame(this);
+		this.prevUndoFrame = new UndoFrame(this);
 	}
 
-	//this.sleep = function(ms) {
-	//	return new Promise(resolve => setTimeout(resolve, ms));
-	//}
-
-	this.computerPlay =  function () {
-
-		//await this.sleep(2000);
+	this.computerPlay = function () {
 		// let the computer play calculate its turn and return the card to put
 		var res = this.players[this.currentPlayerIndex].computerPlay(this.openDeck.getTopCard(), this.currentColor, this.currentAction, this.plus2);
 
-		if (res.length == 0 && this.currentAction != "taki")  // computer has no valid cards to put
+		if (res.length == 0 && this.currentAction != "taki" && this.currentAction != "superTaki")  // computer has no valid cards to put
 			this.pullCard();
-		else if (res.length == 0 && this.currentAction == "taki")
+		else if (res.length == 0 && (this.currentAction == "taki" || this.currentAction == "superTaki"))
 			this.finishTurn();
 		else if (res.length == 0 && this.plus2 != 0)  // computer has no valid cards to put
 			this.pullCard();
@@ -156,25 +150,32 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 			return false;
 		}
 
+		if (this.currentAction == "superTaki") {
+			this.message = "Invalid choice";
+			return false;
+		}
+
 		var res = this.players[this.currentPlayerIndex].computerPlay(this.openDeck.getTopCard(), this.currentColor, this.currentAction, this.plus2);
 		if (res.length != 0) {
 			this.message = "Cannot pull - a valid card's in your hand";
 			return false;
 		}
 
-		this.players[this.currentPlayerIndex].addCards(this.deck.takeCards(1));
+		var num = this.plus2 == 0 ? 1 : this.plus2;
 
-		if (this.deck.getNumberOfCards() == 0) {
-			var topCard = this.openDeck.cards.pop();
-			utilities.shuffleArray(this.openDeck.cards);
-			this.deck.returnCards(this.openDeck.cards);
-			this.openDeck.putCard(topCard);
+		for (var i = 0; i < num; i++) {
+			this.players[this.currentPlayerIndex].addCards(this.deck.takeCards(1));
+
+			if (this.deck.getNumberOfCards() == 0) {
+				var topCard = this.openDeck.cards.pop();
+				utilities.shuffleArray(this.openDeck.cards);
+				this.deck.returnCards(this.openDeck.cards);
+				this.openDeck.putCard(topCard);
+			}
 		}
 
-		if (this.plus2 == 0)
-			this.cyclicIncrementCurrentPlayerIndex(false)
-		else this.plus2--;
-
+		this.plus2 = 0;
+		this.cyclicIncrementCurrentPlayerIndex(false)
 		return true;
 	}
 
@@ -195,7 +196,8 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 	}
 
 	this.moveCardToOpenDeck = function (card, cardIndex, playerIndex) {
-		this.currentColor = card.getColor();
+		if (card.action != "superTaki")
+			this.currentColor = card.getColor();
 		this.openDeck.putCard(this.players[playerIndex].cards[cardIndex])
 		this.players[playerIndex].cards.splice(cardIndex, 1);
 
@@ -228,7 +230,7 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 	this.play = function (card, cardIndex, playerIndex) {
 		this.message = "";
 
-		if (this.currentAction == "taki" && this.currentColor != card.getColor()) {
+		if ((this.currentAction == "taki" || this.currentAction == "superTaki") && this.currentColor != card.getColor()) {
 			this.message = "Invalid choice";
 			return false;
 		}
@@ -238,7 +240,7 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 			return false;
 		}
 
-		if (this.currentAction != "taki") {
+		if (this.currentAction != "taki" && this.currentAction != "superTaki") {
 
 			if (card.number != null) {
 				if (this.currentColor != card.getColor() && this.openDeck.getTopCard().number != card.number) {
@@ -253,6 +255,9 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 					return false;
 				}
 				this.currentAction = "taki";
+			}
+			else if (card.action == "superTaki") {
+				this.currentAction = "superTaki";
 			}
 			else if (card.action == "stop") {
 				if (this.currentColor != card.getColor() && this.openDeck.getTopCard().action != "stop") {

@@ -3,10 +3,8 @@ function MoveGenerator() {
 		var res = []
 
 		if(plus2 != 0) {
-			console.log(plus2)
 			for (var i = cards.length - 1; i >= 0; i -= 1) {
 				if (cards[i].action == "plus2") {
-				   console.log(cards[i].action)
 					res.push(i);
 					res.push(cards[i]);
 					return res;
@@ -16,6 +14,17 @@ function MoveGenerator() {
 		}
 
 		if (action == "taki") {
+			for (var i = cards.length - 1; i >= 0; i -= 1) {
+				if (cards[i].color == currentColor) {
+					res.push(i);
+					res.push(cards[i]);
+					return res;
+				}
+			}
+			return res;
+		}
+
+		if (action == "superTaki") {
 			for (var i = cards.length - 1; i >= 0; i -= 1) {
 				if (cards[i].color == currentColor) {
 					res.push(i);
@@ -53,6 +62,14 @@ function MoveGenerator() {
 			}
 		}
 
+
+		for (var i = cards.length - 1; i >= 0; i -= 1) {
+			if (cards[i].action == "superTaki") {
+				res.push(i);
+				res.push(cards[i]);
+				return res;
+			}
+		}
 
 		for (var i = cards.length - 1; i >= 0; i -= 1) {
 			if ((cards[i].action == "plus" && cards[i].color == currentColor)

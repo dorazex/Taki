@@ -42,9 +42,6 @@ function OpenDeck() {
 };
 
 export default function UndoFrame(game) {
-    
-   
-
     this.players = [];
 
     this.player1 = new Player(game.players[0].isComputerPlayer);
@@ -61,22 +58,15 @@ export default function UndoFrame(game) {
     this.player2.statistics.singleCardCount =  game.players[1].statistics.singleCardCount;
     this.players.push(this.player2);
 
-
     this.currentPlayerIndex = game.currentPlayerIndex;
     this.currentColor = game.currentColor;
     this.message = game.message;
     this.statistics = new GameStatistics(game.statistics.turnsCount, game.statistics.getGameDuration());
 
     this.deck = new Deck();
-    this.openDeck = new OpenDeck();
-    
+    this.openDeck = new OpenDeck();    
     this.deck.cards = game.deck.cards.slice();
     this.openDeck.cards = game.openDeck.cards.slice();
-
-    // console.log(this.player1Game.cards.slice());
-    // console.log(this.player2Game.cards.slice());
-    // console.log(this.player1.cards.slice());
-    // console.log(this.player2.cards.slice());
 };
 
 

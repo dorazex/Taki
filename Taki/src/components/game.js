@@ -44,13 +44,7 @@ export default class GameComp extends React.Component {
 	}
 
 	componentDidMount() {
-		console.log(this.state.game.openDeck.getTopCard());
-		console.log(this.state.game.navigateMode);
 		this.nextTurn();
-	}
-
-	componentWillUnmount() {
-		//TODO
 	}
 
 	showColorModal() {
@@ -115,14 +109,12 @@ export default class GameComp extends React.Component {
 		const game = this.state.game;
 		game.prev();
 		this.setState(this.state);
-		console.log(this.state.game.prevUndoFrame)
 	}
 
 	next() {
 		const game = this.state.game;
 		game.next();
 		this.setState(this.state);
-		console.log(this.state.game.prevUndoFrame)
 	}
 
 	nextTurn() {
@@ -145,11 +137,11 @@ export default class GameComp extends React.Component {
 	render() {
 		const { game } = this.props;
 		const winnerIndex = game.winnerIndex;
-		const showEndModal = winnerIndex != undefined ? true : this.state.showEndModal;
+		const showEndModal = (winnerIndex != undefined  && game.navigateMode == false) ? true : this.state.showEndModal;
 
 		return (
 			<div id={game.ended ? "main-div" : ""}>
-				<StatusBarComp game={game.navigateMode ? game.prevUndoFrame : game} newGame={this.newGame} navigateMode={game.navigateMode} className="status-bar" withdraw={this.showEndModal} />
+				<StatusBarComp game={game.navigateMode ? game.prevUndoFrame : game} newGame={this.newGame} withdraw={this.showEndModal} navigateMode={game.navigateMode} className="status-bar"  />
 				<BoardComp
 					game={game.navigateMode ? game.prevUndoFrame : game}
 					cardClicked={this.cardClicked}

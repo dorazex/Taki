@@ -13,7 +13,7 @@ const DecksComp = (props) => {
                 </div>
                 <div>
                     <button id="finish-turn" 
-                        style={{ visibility: (game.currentAction != undefined && game.currentAction == "taki") ? 'visible' : 'hidden' }} 
+                        style={{ visibility: (game.currentAction != undefined && (game.currentAction == "taki" ||  game.currentAction == "superTaki")) ? 'visible' : 'hidden' }} 
                         className="deck-finish-turn-button" 
                         onClick={finishTurn} />
                 </div>
