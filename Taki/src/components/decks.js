@@ -21,9 +21,9 @@ const DecksComp = (props) => {
         );
     } else {
         return (
-                <div id="open-deck">
-                        <img src={`cards/${game.openDeck.getTopCard().getFileName()}`}/>
-                </div>
+                 <div id="open-deck">
+                         <img src={`cards/${game.openDeck.getTopCard().getFileName()}`}/>
+                 </div>
         );
     }
 };

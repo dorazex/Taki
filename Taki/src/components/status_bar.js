@@ -3,17 +3,25 @@ import React from 'react';
 
 export default class StatusBarComp extends React.Component {
     render() {
-        const { game } = this.props;
+        const { game, navigateMode } = this.props;
         return (
             <div id="statistics">
                 <table className="status-bar">
                     <tbody>
                         <tr>
-                            <td className="status-bar-td">
-                                <button id="withdraw" onClick={this.props.withdraw}>
-                                    Withdraw!
+                            {navigateMode ? (
+                                <td className="status-bar-td">
+                                    <button id="new-game" onClick={this.props.newGame}>
+                                        New Game!
                                 </button>
-                            </td>
+                                </td>
+                            ) : (
+                                    <td className="status-bar-td">
+                                        <button id="withdraw" onClick={this.props.withdraw}>
+                                            Withdraw!
+                                </button>
+                                    </td>
+                                )}
                             <td className="status-bar-td"><div id="turn"></div>Turn of: {this.props.game.players[this.props.game.currentPlayerIndex].isComputerPlayer == true ? "Computer" : "Human"}</td>
                             <td className="status-bar-td"><div id="color">{this.props.game.currentColor}</div></td>
                             <td className="status-bar-td"><div id="turns-count">Turns Count: {this.props.game.statistics.turnsCount}</div></td>
@@ -28,7 +36,7 @@ export default class StatusBarComp extends React.Component {
             </div>
         );
     }
-    
+
     miliSecondsToTimeString(timeInMiliSeconds) {
         var timeInSeconds = Math.round(timeInMiliSeconds / 1000);
         var seconds = Math.floor(timeInSeconds % 60)

@@ -5,6 +5,8 @@ import Player from './player';
 import PlayerStatistics from './player_statistics';
 import * as constants from './constants'
 import * as utilities from './utilities'
+import UndoCaretaker from './UndoCaretaker';
+import UndoFrame from './UndoFrame';
 
 let Game = function (numRegularPlayers, numComputerPlayers) {
 	this.deck = undefined;
@@ -20,6 +22,9 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 	this.statistics = new GameStatistics();
 	this.ended = false;
 	this.winnerIndex = undefined;
+	this.undoCaretaker = new UndoCaretaker();
+	this.prevUndoFrame = null;
+	this.navigateMode = false;
 
 	this.addPlayer = function (isComputerPlayer) {
 		this.players.push(new Player(isComputerPlayer))
@@ -50,16 +55,18 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 		this.deck = new Deck();
 		this.deck.init();
 		this.openDeck = new OpenDeck();
+		this.undoCaretaker = new UndoCaretaker();
 		this.initPlayers();
 
 		do {
 			this.openDeck.putCard(this.deck.takeCards(1)[0])
 			this.currentColor = this.openDeck.getTopCard().getColor();
 		} while (!this.openDeck.getTopCard().isValidStartCard())
+
+		this.prevUndoFrame =  new UndoFrame(this);
 	};
 
 	this.newGame = function () {
-
 		this.deck = new Deck();
 		this.deck.init();
 		this.openDeck = new OpenDeck();
@@ -74,7 +81,9 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 		this.NUM_REGULAR_PLAYERS = this.numRegularPlayers;
 		this.NUM_COMPUTER_PLAYERS = this.numComputerPlayers;
 		this.ended = false;
+		this.navigateMode = false;
 		this.winnerIndex = undefined;
+		this.undoCaretaker = new UndoCaretaker();
 
 		for (var i = 0; i < this.players.length; i++) {
 			utilities.clearArray(this.players[i].cards);
@@ -88,11 +97,16 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 			this.openDeck.putCard(this.deck.takeCards(1)[0])
 			this.currentColor = this.openDeck.getTopCard().getColor();
 		} while (!this.openDeck.getTopCard().isValidStartCard())
+
+		this.prevUndoFrame = new UndoFrame(this);
 	}
 
 	this.cyclicIncrementCurrentPlayerIndex = function (stop) {
 		this.currentAction = undefined;
 		this.statistics.turnsCount++;
+
+		this.undoCaretaker.pushUndoFrame(this.prevUndoFrame);
+		this.prevUndoFrame = new UndoFrame(this);
 
 		this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
 		if (stop == true)
@@ -100,6 +114,14 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 
 		this.players[this.currentPlayerIndex].statistics.startTurn();
 	};
+
+
+	this.navigate = function() {
+		this.navigateMode = true;
+		this.undoCaretaker.pushUndoFrame(this.prevUndoFrame);
+		this.undoCaretaker.pushUndoFrame(new UndoFrame(this));
+		this.prevUndoFrame =  new UndoFrame(this);
+	}
 
 	//this.sleep = function(ms) {
 	//	return new Promise(resolve => setTimeout(resolve, ms));
@@ -260,25 +282,27 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 		this.moveCardToOpenDeck(card, cardIndex, playerIndex);
 		return true;
 	}
+
+	this.prev = function () {
+		var frame = this.undoCaretaker.popUndoFrame();
+		if (frame == null)
+			return; //nothing will happen if no undo frames exist
+
+		this.undoCaretaker.pushRedoFrame(frame);
+		this.prevUndoFrame = frame;
+	}
+
+	this.next = function () {
+		var frame = this.undoCaretaker.popRedoFrame();
+		if (frame == null)
+			return; //nothing will happen if no frames exist
+
+
+		this.undoCaretaker.pushUndoFrame(frame);
+		this.prevUndoFrame = frame;
+	}
 };
 
-////////////////////////////////////////////////////
 
-Game.prototype.updateOpenDeck = function () {
-	var openDeckDiv = document.getElementById("open-deck")
-	openDeckDiv.innerHTML = "<img src=\"cards/" + this.openDeck.getTopCard().getFileName() + "\"/>"
-}
-
-
-Game.prototype.updateDeckCount = function () {
-	var deckTextDiv = document.getElementById("deck-text")
-	deckTextDiv.innerHTML = this.deck.getNumberOfCards()
-}
-
-
-// Game.prototype.withdraw = function () {
-// 	endGame(this.getComputerPlayerIndex());
-// }
-////////////////////////////////////////////////////
 
 export default Game;

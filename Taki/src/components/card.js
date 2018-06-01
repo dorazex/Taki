@@ -18,13 +18,6 @@ export default class CardComp extends React.Component {
         }
     };
 
-    colorChosen(color){      
-        this.state.changeColor = false;
-        this.setState(this.state);
-        const { card, player } = this.props;
-        this.props.onColorChoosed(color, card, player);     
-    }
-
     render (){
         return(
             <div className="card-container" onClick={(e) => this.onClick(e)}>

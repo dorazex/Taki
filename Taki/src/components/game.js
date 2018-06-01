@@ -17,7 +17,7 @@ export default class GameComp extends React.Component {
 		this.state = {
 			game: props.game,
 			showColorModal: false,
-			showEndModal: false,
+			showEndModal: false
 		};
 
 		this.cardClicked = this.cardClicked.bind(this);
@@ -28,14 +28,24 @@ export default class GameComp extends React.Component {
 		this.showEndModal = this.showEndModal.bind(this);
 		this.hideEndModal = this.hideEndModal.bind(this);
 		this.newGame = this.newGame.bind(this);
+		this.navigate = this.navigate.bind(this);
+		this.prev = this.prev.bind(this);
+		this.next = this.next.bind(this);
 	}
 
-	newGame(){
+	newGame() {
 		this.state.game.newGame();
 		this.setState({ showEndModal: false });
 	}
 
+	navigate() {
+		this.state.game.navigate();
+		this.setState({ showEndModal: false });
+	}
+
 	componentDidMount() {
+		console.log(this.state.game.openDeck.getTopCard());
+		console.log(this.state.game.navigateMode);
 		this.nextTurn();
 	}
 
@@ -50,11 +60,11 @@ export default class GameComp extends React.Component {
 		});
 	};
 
-	showEndModal ()  {
-    	this.setState({ showEndModal: true });
-  	};
+	showEndModal() {
+		this.setState({ showEndModal: true });
+	};
 
-	hideEndModal () {
+	hideEndModal() {
 		this.state.game.ended = true;
 		this.setState({ showEndModal: false });
 	};
@@ -63,7 +73,7 @@ export default class GameComp extends React.Component {
 		const game = this.state.game;
 		game.currentColor = color;
 		game.cyclicIncrementCurrentPlayerIndex(false);
-		
+
 		this.setState({
 			game: this.state.game,
 			showColorModal: false,
@@ -101,6 +111,20 @@ export default class GameComp extends React.Component {
 		this.nextTurn();
 	}
 
+	prev() {
+		const game = this.state.game;
+		game.prev();
+		this.setState(this.state);
+		console.log(this.state.game.prevUndoFrame)
+	}
+
+	next() {
+		const game = this.state.game;
+		game.next();
+		this.setState(this.state);
+		console.log(this.state.game.prevUndoFrame)
+	}
+
 	nextTurn() {
 		const game = this.state.game;
 
@@ -116,7 +140,8 @@ export default class GameComp extends React.Component {
 		}
 	}
 
-	//handleClose={this.hideColorModal}
+
+
 	render() {
 		const { game } = this.props;
 		const winnerIndex = game.winnerIndex;
@@ -124,15 +149,23 @@ export default class GameComp extends React.Component {
 
 		return (
 			<div id={game.ended ? "main-div" : ""}>
-				<StatusBarComp game={game} className="status-bar" withdraw={this.showEndModal} />
+				<StatusBarComp game={game.navigateMode ? game.prevUndoFrame : game} newGame={this.newGame} navigateMode={game.navigateMode} className="status-bar" withdraw={this.showEndModal} />
 				<BoardComp
-					game={game}
+					game={game.navigateMode ? game.prevUndoFrame : game}
 					cardClicked={this.cardClicked}
 					colorChosen={this.colorChosen}
 					finishTurn={this.finishTurn}
 					pullCard={this.pullCard} />
+				{
+					game.navigateMode &&
+					<button onClick={this.prev}> prev </button>
+				}
+				{
+					game.navigateMode &&
+					<button onClick={this.next}> next </button>
+				}
 				<ChangeColorComp show={this.state.showColorModal} handleClose={this.hideColorModal} />
-				<EndGameStatisticsComp show={showEndModal} handleClose={this.hideEndModal} game={game} newGame={this.newGame}/>
-			</div>);
+				<EndGameStatisticsComp show={showEndModal} handleClose={this.hideEndModal} game={game} newGame={this.newGame} handleNavigate={this.navigate} />
+			</div >);
 	}
 }

@@ -4,20 +4,13 @@ import '../style.css';
 
 export default class PlayerComp extends React.Component {
     constructor(props) {
-        super(...props);
+        super(props);
 
-        this.state = {
-            player: props.player,
-            game: props.game,
-            playerKey: props.playerKey,
-            cardClicked: props.cardClicked,
-            colorChosen: props.colorChosen,
-        }
 
     }
 
     render (){
-        const { player, game, playerKey, cardClicked, colorChosen } = this.state;
+        const { player, game, playerKey, cardClicked, colorChosen } = this.props;
         const currentPlayer = game.players[game.currentPlayerIndex];
 
         return(

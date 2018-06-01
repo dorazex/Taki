@@ -54,16 +54,18 @@ function Game(numRegularPlayers, numComputerPlayers) {
 		} while (!this.openDeck.getTopCard().isValidStartCard())
 
 
-		prevUndoFrame = new UndoFrame(this.deck.getNumberOfCards(),
-			this.openDeck.getTopCard(),
-			this.currentColor,
-			this.players[0].isComputerPlayer == true ? "Computer" : "Human",
-			this.players[0].cards,
-			this.players[1].cards,
-			this.players[0].statistics,
-			0,
-			0
-		);
+		prevUndoFrame =  JSON.parse(JSON.stringify(this));
+
+		// prevUndoFrame = new UndoFrame(this.deck.getNumberOfCards(),
+		// 	this.openDeck.getTopCard(),
+		// 	this.currentColor,
+		// 	this.players[0].isComputerPlayer == true ? "Computer" : "Human",
+		// 	this.players[0].cards,
+		// 	this.players[1].cards,
+		// 	this.players[0].statistics,
+		// 	0,
+		// 	0
+		// );
 	};
 
 	this.newGame = function () {
@@ -91,16 +93,19 @@ function Game(numRegularPlayers, numComputerPlayers) {
 			this.currentColor = this.openDeck.getTopCard().getColor();
 		} while (!this.openDeck.getTopCard().isValidStartCard())
 
-		prevUndoFrame = new UndoFrame(this.deck.getNumberOfCards(),
-			this.openDeck.getTopCard(),
-			this.currentColor,
-			this.players[0].isComputerPlayer == true ? "Computer" : "Human",
-			this.players[0].cards,
-			this.players[1].cards,
-			this.players[0].statistics,
-			0,
-			0
-		);
+
+
+		prevUndoFrame =  JSON.parse(JSON.stringify(this));
+		// prevUndoFrame = new UndoFrame(this.deck.getNumberOfCards(),
+		// 	this.openDeck.getTopCard(),
+		// 	this.currentColor,
+		// 	this.players[0].isComputerPlayer == true ? "Computer" : "Human",
+		// 	this.players[0].cards,
+		// 	this.players[1].cards,
+		// 	this.players[0].statistics,
+		// 	0,
+		// 	0
+		// );
 	}
 
 	this.cyclicIncrementCurrentPlayerIndex = function (stop) {
@@ -109,16 +114,18 @@ function Game(numRegularPlayers, numComputerPlayers) {
 
 		this.undoCaretaker.pushUndoFrame(prevUndoFrame);
 
-		prevUndoFrame = new UndoFrame(this.deck.getNumberOfCards(),
-			this.openDeck.getTopCard(),
-			this.currentColor,
-			this.players[this.currentPlayerIndex].isComputerPlayer == true ? "Computer" : "Human",
-			this.players[0].cards,
-			this.players[1].cards,
-			this.players[this.currentPlayerIndex].statistics,
-			this.statistics.turnsCount,
-			this.statistics.getGameDuration()
-		);
+		prevUndoFrame =  JSON.parse(JSON.stringify(this));
+
+		// prevUndoFrame = new UndoFrame(this.deck.getNumberOfCards(),
+		// 	this.openDeck.getTopCard(),
+		// 	this.currentColor,
+		// 	this.players[this.currentPlayerIndex].isComputerPlayer == true ? "Computer" : "Human",
+		// 	this.players[0].cards,
+		// 	this.players[1].cards,
+		// 	this.players[this.currentPlayerIndex].statistics,
+		// 	this.statistics.turnsCount,
+		// 	this.statistics.getGameDuration()
+		// );
 
 		this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
 		if (stop == true)

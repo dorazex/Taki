@@ -3,7 +3,7 @@ import PlayerStatisticsRowComp from './player_statistics_row';
 
 export default class EndGameStatisticsComp extends React.Component {
     render(){
-        const {show, handleClose, game, newGame } = this.props;
+        const {show, handleClose, game, newGame, handleNavigate } = this.props;
         const showHideClassName = show ? "end-game-modal display-block" : "end-game-modal display-none";
 
         return (
@@ -42,6 +42,7 @@ export default class EndGameStatisticsComp extends React.Component {
                     <br/><br/>
                     <div  align="center">
                         <button id="end-new-game-button" onClick={newGame}>New Game</button>
+                        <button id="navigate-game-button" onClick={handleNavigate}>Navigate</button>
                         <button id="close-end-game-button" onClick={handleClose}>Close</button>
                     </div>
                 </div>
