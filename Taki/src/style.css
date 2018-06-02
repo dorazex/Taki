@@ -190,6 +190,17 @@ img {
   margin: 5px;
 }
 
+.navigation-button{
+  background-color: chartreuse;
+  font-family: Courier;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  height: 40px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
 
 .end-game-modal {
   z-index: 10000; /* Sit on top */
@@ -236,4 +247,8 @@ table#players-statistics-table td,table#players-statistics-table th {
 #main-div{
   pointer-events:none;
   opacity:0.6;
+}
+
+#navigation-line{
+  background: #002800;
 }

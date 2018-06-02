@@ -9,7 +9,7 @@ export default class EndGameStatisticsComp extends React.Component {
         return (
                 <div className={showHideClassName}>
                     <font id="end-game-modal-winner-title"></font>
-                    <br/><br/>
+                    <font>{`The winner is: ${game.winnerIndex}`}</font><br/><br/>
                     <table width="100%" height="100%" id="game-statistics-table">
                         <tbody>
                             <tr>
