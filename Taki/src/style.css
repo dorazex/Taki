@@ -92,6 +92,10 @@ img {
   opacity:0.6;
 }
 
+.disabled-computer-card {
+  pointer-events:none;
+}
+
 .currentplayerdiv {
   background-color:#007f00;
 }

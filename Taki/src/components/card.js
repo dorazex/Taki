@@ -24,8 +24,7 @@ export default class CardComp extends React.Component {
                         {
                             this.props.player.isComputerPlayer == false ?
                                 <img src={`cards/${this.props.card.getFileName()}`} style={{cursor: "pointer"}} /> :
-                                <img src={`cards/${this.props.card.getFileName()}`} /> 
-                                //<img src="cards/cover_0_0.png"/>
+                                <img src="cards/cover_0_0.png" className="disabled-computer-card"/>
                         }
             </div>
         )
