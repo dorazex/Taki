@@ -150,16 +150,13 @@ export default class GameComp extends React.Component {
 					colorChosen={this.colorChosen}
 					finishTurn={this.finishTurn}
 					pullCard={this.pullCard} />
-				<div align="center" id="navigation-line"><table width="40%"><tbody><tr><td padding="15px"><div align="center">
-				{
-					game.navigateMode &&
-					<button onClick={this.prev} className="navigation-button"> &#60;&#60; prev </button>
-				}</div></td><td padding="15px"><div align="center">
-				{
-					game.navigateMode &&
-					<button onClick={this.next} className="navigation-button"> next &#62;&#62; </button>
+				{game.navigateMode &&
+					<div align="center" id="navigation-line"><table width="40%"><tbody><tr><td padding="15px"><div align="center">
+						<button onClick={this.prev} className="navigation-button"> &#60;&#60; prev </button>
+					</div></td><td padding="15px"><div align="center">
+						<button onClick={this.next} className="navigation-button"> next &#62;&#62; </button>
+					</div></td></tr></tbody></table></div>
 				}
-				</div></td></tr></tbody></table></div>
 				<ChangeColorComp show={this.state.showColorModal} handleClose={this.hideColorModal} />
 				<EndGameStatisticsComp show={showEndModal} handleClose={this.hideEndModal} game={game} newGame={this.newGame} handleNavigate={this.navigate} />
 			</div >);
