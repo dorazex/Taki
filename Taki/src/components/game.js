@@ -78,10 +78,12 @@ export default class GameComp extends React.Component {
 
 	pullCard() {
 		const game = this.state.game;
-		const res = game.pullCard();
-		this.setState(this.state);
-		if (res == true)
-			this.nextTurn();
+		if (game.navigateMode==false){
+			const res = game.pullCard();
+			this.setState(this.state);
+			if (res == true)
+				this.nextTurn();
+		}
 	}
 
 	cardClicked(card, cardKey, playerKey) {

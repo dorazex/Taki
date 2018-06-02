@@ -10,11 +10,13 @@ export default class CardComp extends React.Component {
 
     onClick(event){
         console.log("card onClick")
-        if (this.props.card.action == "changeColor"){
-            this.props.colorChosen(this.props.card, this.props.cardKey, this.props.playerKey);
-        } else {
-           
-            this.props.cardClicked(this.props.card, this.props.cardKey, this.props.playerKey);
+        if (this.props.game.navigateMode==false){
+            if (this.props.card.action == "changeColor"){
+                this.props.colorChosen(this.props.card, this.props.cardKey, this.props.playerKey);
+            } else {
+               
+                this.props.cardClicked(this.props.card, this.props.cardKey, this.props.playerKey);
+            }
         }
     };
 
@@ -24,7 +26,7 @@ export default class CardComp extends React.Component {
                         {
                             this.props.player.isComputerPlayer == false ?
                                 <img src={`cards/${this.props.card.getFileName()}`} style={{cursor: "pointer"}} /> :
-                                <img src="cards/cover_0_0.png" className="disabled-computer-card"/>
+                                <img src="cards/cover_0_0.png" className="disabled-regular"/>
                         }
             </div>
         )

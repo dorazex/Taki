@@ -12,10 +12,21 @@ export default class PlayerComp extends React.Component {
     render (){
         const { player, game, playerKey, cardClicked, colorChosen } = this.props;
         const currentPlayer = game.players[game.currentPlayerIndex];
+        var mainClassName = "player-cards-flex-container";
+        var disabledClassName = "disabled-regular";
+        var currentPlayerClassName = "currentplayerdiv";
+        var finalClassName = mainClassName;
+        if (currentPlayer == player){
+            finalClassName += " " + currentPlayerClassName;
+        }
+        if (game.navigateMode){
+            finalClassName += " " + disabledClassName;
+        }
+        const className = finalClassName;
 
         return(
             <div id={`player-container-${playerKey}`}
-             className={currentPlayer == player ? "player-cards-flex-container currentplayerdiv" : "player-cards-flex-container" }>
+             className={className}>
                 {player.cards.map(
                         (card, i) => <CardComp
                          key={i}
