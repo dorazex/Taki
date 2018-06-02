@@ -24,6 +24,7 @@ Classes
 Assumptions
 ==============
 1.	The game is for 1 computer player, and 1 human player.
+2.	A game that ends in withdraw has no winner. Our logic is that the game is multiplayer and if someone withdraws - how would one decide the winner out of the rest of the remaining players? Although now the game is only for 2, we make this interpolation.
 
 Bonuses
 ==============
