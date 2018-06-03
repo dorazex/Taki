@@ -126,7 +126,7 @@ export default class GameComp extends React.Component {
 		var currentPlayer = game.players[playerIndex];
 
 		// now computers play their turns, updating the game view after each turn
-		while (currentPlayer.isComputerPlayer == true) {
+		while (currentPlayer.isComputerPlayer == true && game.navigateMode == false) {
 			game.computerPlay();  	// computer calculates the actual turn
 			this.setState(this.state);
 			playerIndex = game.currentPlayerIndex;

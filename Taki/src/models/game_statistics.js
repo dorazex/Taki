@@ -1,5 +1,5 @@
 function GameStatistics() {
-	this.turnsCount = 0;
+	this.turnsCount = 1;
 	this.startTime = new Date().getTime();
 
 	this.getGameDuration = function(){
