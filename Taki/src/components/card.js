@@ -5,6 +5,9 @@ import '../style.css';
 const CardComp = (props) => {
     const onClick = (event) => {
         console.log("card onClick")
+        if (props.game.players[props.playerKey].isComputerPlayer == true){
+            return
+        }
         if (props.game.navigateMode == false) {
             if (props.card.action == "changeColor") {
                 props.colorChosen(props.card, props.cardKey, props.playerKey);
