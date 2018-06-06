@@ -3,29 +3,28 @@ import DecksComp from './decks';
 import PlayerComp from './player';
 import '../style.css';
 
-export default class BoardComp extends React.Component{
-    render() {
-        const { game, cardClicked, colorChosen } = this.props;
+const BoardComp = (props) => {
+    return (
+        <div>
+            <div id="board" className="board-flex-container">
+                <DecksComp game={props.game} open={false} finishTurn={props.finishTurn} pullCard={props.pullCard} />
+                <DecksComp game={props.game} open={true} />
+            </div>
+            <div id="players">
+                {props.game.players.map(
+                    (player, i) => <PlayerComp
+                        key={i}
+                        playerKey={i}
+                        player={player}
+                        game={props.game}
+                        cardClicked={props.cardClicked}
+                        colorChosen={props.colorChosen}
+                    />)}
+            </div>
+        </div>
+    )
+};
 
-        return (
-                <div>
-                    <div id="board" className="board-flex-container">
-                        <DecksComp game={game} open={false} finishTurn={this.props.finishTurn} pullCard={this.props.pullCard}/>
-                        <DecksComp game={game} open={true} />
-                    </div>
-                    <div id="players">
-                        {game.players.map(
-                            (player, i) => <PlayerComp
-                             key={i} 
-                             playerKey={i} 
-                             player={player} 
-                             game={game}
-                             cardClicked={cardClicked}
-                             colorChosen={colorChosen}
-                             />)}
-                    </div>
-                </div>
-        )
-    };
-}
+export default BoardComp;
+
 

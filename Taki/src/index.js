@@ -12,8 +12,3 @@ ReactDOM.render(
     document.getElementById("root")
 );
 
-// ReactDOM.render(
-//     <BoardComp />,
-//     document.getElementById("root")
-// );
-

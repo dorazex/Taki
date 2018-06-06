@@ -1,23 +1,16 @@
 import React from 'react';
+import * as utilities from '../models/utilities';
 
-export default class PlayerStatisticsRowComp extends React.Component {
-    render(){
-        const { playerKey, game, player } = this.props;
+const PlayerStatisticsRowComp = (props) => {
+    const { playerKey, game, player } = props;
 
-        return (
-            <tr>
-                <th>{playerKey}</th>
-                <th>{this.miliSecondsToTimeString(game.players[playerKey].statistics.avgTurnsDurationsCurrentGame)}</th>
-                <th>{game.players[playerKey].statistics.singleCardCount}</th>
-            </tr>
-        )
-    }
-
-    miliSecondsToTimeString(timeInMiliSeconds) {
-        var timeInSeconds = Math.round(timeInMiliSeconds / 1000);
-        var seconds = Math.floor(timeInSeconds % 60)
-        var minutes = Math.floor(timeInSeconds / 60);
-        var hours = Math.floor(minutes / 60);
-        return hours + ":" + minutes + ":" + seconds
-    }
+    return (
+        <tr>
+            <th>{playerKey}</th>
+            <th>{utilities.miliSecondsToTimeString(game.players[playerKey].statistics.avgTurnsDurationsCurrentGame)}</th>
+            <th>{game.players[playerKey].statistics.singleCardCount}</th>
+        </tr>
+    )
 };
+
+export default PlayerStatisticsRowComp;

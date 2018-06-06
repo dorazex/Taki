@@ -5,8 +5,8 @@ import Player from './player';
 import PlayerStatistics from './player_statistics';
 import * as constants from './constants'
 import * as utilities from './utilities'
-import UndoCaretaker from './UndoCaretaker';
-import UndoFrame from './UndoFrame';
+import UndoCaretaker from './undo_caretaker';
+import UndoFrame from './undo_frame';
 
 let Game = function (numRegularPlayers, numComputerPlayers) {
 	this.deck = undefined;
@@ -63,7 +63,7 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 			this.currentColor = this.openDeck.getTopCard().getColor();
 		} while (!this.openDeck.getTopCard().isValidStartCard())
 
-		this.prevUndoFrame = new UndoFrame(this);
+		this.undoCaretaker.pushUndoFrame(new UndoFrame(this));
 	};
 
 	this.newGame = function () {
@@ -76,7 +76,7 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 		this.plus2 = 0;
 		this.message = undefined;
 		this.statistics = new GameStatistics();
-		this.statistics.turnsCount = 0;
+		this.statistics.turnsCount = 1;
 		this.statistics.startTime = new Date().getTime();
 		this.NUM_REGULAR_PLAYERS = this.numRegularPlayers;
 		this.NUM_COMPUTER_PLAYERS = this.numComputerPlayers;
@@ -98,15 +98,12 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 			this.currentColor = this.openDeck.getTopCard().getColor();
 		} while (!this.openDeck.getTopCard().isValidStartCard())
 
-		this.prevUndoFrame = new UndoFrame(this);
+			this.undoCaretaker.pushUndoFrame(new UndoFrame(this));
 	}
 
 	this.cyclicIncrementCurrentPlayerIndex = function (stop) {
 		this.currentAction = undefined;
 		this.statistics.turnsCount++;
-
-		this.undoCaretaker.pushUndoFrame(this.prevUndoFrame);
-		this.prevUndoFrame = new UndoFrame(this);
 
 		this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
 		if (stop == true)
@@ -118,7 +115,6 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 
 	this.navigate = function () {
 		this.navigateMode = true;
-		this.undoCaretaker.pushUndoFrame(this.prevUndoFrame);
 		this.undoCaretaker.pushUndoFrame(new UndoFrame(this));
 		this.prevUndoFrame = new UndoFrame(this);
 	}
@@ -176,6 +172,9 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 
 		this.plus2 = 0;
 		this.cyclicIncrementCurrentPlayerIndex(false)
+
+		this.undoCaretaker.pushUndoFrame(new UndoFrame(this));
+
 		return true;
 	}
 
@@ -207,12 +206,14 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 		if (this.players[playerIndex].cards.length == 0 && this.openDeck.getTopCard().action != "plus") {
 			this.winnerIndex = playerIndex;
 		}
+
+		this.undoCaretaker.pushUndoFrame(new UndoFrame(this));
 	}
 
 	this.changeColor = function (card, cardIndex, playerIndex) {
 		this.message = "";
 
-		if (this.currentAction == "taki") {
+		if (this.currentAction == "taki"  || this.currentAction == "superTaki") {
 			this.message = "not valid";
 			return false;
 		}

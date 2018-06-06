@@ -8,19 +8,6 @@ export function shuffleArray(array) {
 	return array;
 }
 
-export function isChildExistById(parentId, childId) {
-	var isExist = false;
-	parentDiv = document.getElementById(parentId)
-	childDiv = document.getElementById(childId)
-	if (parentDiv == null || childDiv == null) { return false; }
-	parentDiv.childNodes.forEach(function (node) {
-		if (node.id == childId) {
-			isExist = true;
-		}
-	})
-	return isExist;
-};
-
 export function miliSecondsToTimeString(timeInMiliSeconds) {
 	var timeInSeconds = Math.round(timeInMiliSeconds / 1000);
 	var seconds = Math.floor(timeInSeconds % 60)

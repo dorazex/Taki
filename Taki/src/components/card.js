@@ -1,34 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ChangeColorComp from './change_color';
 import '../style.css';
 
-export default class CardComp extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    onClick(event){
+const CardComp = (props) => {
+    const onClick = (event) => {
         console.log("card onClick")
-        if (this.props.game.navigateMode==false){
-            if (this.props.card.action == "changeColor"){
-                this.props.colorChosen(this.props.card, this.props.cardKey, this.props.playerKey);
+        if (props.game.navigateMode == false) {
+            if (props.card.action == "changeColor") {
+                props.colorChosen(props.card, props.cardKey, props.playerKey);
             } else {
-               
-                this.props.cardClicked(this.props.card, this.props.cardKey, this.props.playerKey);
+
+                props.cardClicked(props.card, props.cardKey, props.playerKey);
             }
         }
     };
 
-    render (){
-        return(
-            <div className="card-container" onClick={(e) => this.onClick(e)}>
-                        {
-                            this.props.player.isComputerPlayer == false ?
-                                <img src={`cards/${this.props.card.getFileName()}`} style={{cursor: "pointer"}} /> :
-                                <img src="cards/cover_0_0.png" className="disabled-regular"/>
-                        }
-            </div>
-        )
-    }
-}
+    return (
+        <div className="card-container" onClick={(e) => onClick(e)}>
+            {
+                props.player.isComputerPlayer == false ?
+                    <img src={`cards/${props.card.getFileName()}`} style={{ cursor: "pointer" }} /> :
+                    <img src="cards/cover_0_0.png" className="disabled-regular" />
+            }
+        </div>
+    )
+};
+
+export default CardComp;

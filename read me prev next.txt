@@ -1,0 +1,7 @@
+classes:
+
+UndoCaretaker - this is the caretaker part of the memento design pattern of undo and redo
+
+UndoFrame - this is the memento part of the memento design pattern for undo and redo, holds the state before the undo or redo
+
+
