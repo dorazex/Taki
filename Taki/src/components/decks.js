@@ -6,7 +6,7 @@ const DecksComp = (props) => {
         return (
             <div className={game.navigateMode ? "deck-container disabled-regular" : "deck-container"}>
                 <div id="deck" onClick={pullCard}>
-                    <img src="cards/cover_0_0.png" styles="cursor: pointer;" />
+                    <img src="../src/cards/cover_0_0.png" styles="cursor: pointer;" />
                 </div>
                 <div id="deck-text" className="deck-text">
                     {game.deck.getNumberOfCards()}
@@ -22,7 +22,7 @@ const DecksComp = (props) => {
     } else {
         return (
                  <div id="open-deck">
-                         <img src={`cards/${game.openDeck.getTopCard().getFileName()}`}/>
+                         <img src={`../src/cards/${game.openDeck.getTopCard().getFileName()}`}/>
                  </div>
         );
     }

@@ -115,7 +115,6 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 
 	this.navigate = function () {
 		this.navigateMode = true;
-		this.undoCaretaker.pushUndoFrame(new UndoFrame(this));
 		this.prevUndoFrame = new UndoFrame(this);
 	}
 

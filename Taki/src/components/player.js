@@ -10,7 +10,7 @@ export default class PlayerComp extends React.Component {
     }
 
     render (){
-        const { player, game, playerKey, cardClicked, colorChosen } = this.props;
+        const { player, game, playerKey, cardClicked, colorChosen, navigateMode } = this.props;
         const currentPlayer = game.players[game.currentPlayerIndex];
         var mainClassName = "player-cards-flex-container";
         var disabledClassName = "disabled-regular";
@@ -37,6 +37,7 @@ export default class PlayerComp extends React.Component {
                          playerKey={playerKey}
                          cardClicked={cardClicked}
                          colorChosen={colorChosen}
+                         navigateMode = {navigateMode}
                          />)}
             </div>
         )

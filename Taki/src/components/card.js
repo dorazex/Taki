@@ -4,9 +4,8 @@ import '../style.css';
 
 const CardComp = (props) => {
     const onClick = (event) => {
-        console.log("card onClick")
         if (props.game.players[props.playerKey].isComputerPlayer == true){
-            return
+            return;
         }
         if (props.game.navigateMode == false) {
             if (props.card.action == "changeColor") {
@@ -22,8 +21,8 @@ const CardComp = (props) => {
         <div className="card-container" onClick={(e) => onClick(e)}>
             {
                 props.player.isComputerPlayer == false ?
-                    <img src={`cards/${props.card.getFileName()}`} style={{ cursor: "pointer" }} /> :
-                    <img src="cards/cover_0_0.png" className="disabled-regular" />
+                    <img src={`../src/cards/${props.card.getFileName()}`} style={{ cursor: "pointer" }} /> :
+                    <img src={props.navigateMode ? `../src/cards/${props.card.getFileName()}` : "../src/cards/cover_0_0.png"} className="disabled-regular" />
             }
         </div>
     )

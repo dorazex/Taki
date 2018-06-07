@@ -82,7 +82,7 @@ img {
     font-size: 3.5vw;
     font-family: Courier;
     cursor: pointer;
-    background-image: url("images/done.png");
+    background-image: url("./images/done.png");
     background-size: 100%;
     background-repeat:no-repeat;
 }
@@ -133,7 +133,7 @@ img {
   padding: 0;
   width: 200px;
   height: 200px;
-  background-image: url("images/Taki_Color_Chooser.png");
+  background-image: url("./images/Taki_Color_Chooser.png");
   background-size: cover;
   cursor: pointer;
 }

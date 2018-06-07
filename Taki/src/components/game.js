@@ -28,6 +28,7 @@ export default class GameComp extends React.Component {
 		this.showEndModal = this.showEndModal.bind(this);
 		this.hideEndModal = this.hideEndModal.bind(this);
 		this.newGame = this.newGame.bind(this);
+		this.withdraw = this.withdraw.bind(this);
 		this.navigate = this.navigate.bind(this);
 		this.prev = this.prev.bind(this);
 		this.next = this.next.bind(this);
@@ -53,6 +54,11 @@ export default class GameComp extends React.Component {
 			showColorModal: true,
 		});
 	};
+
+	withdraw() {
+		this.state.game.winnerIndex = 0;
+		this.showEndModal();
+	}
 
 	showEndModal() {
 		this.setState({ showEndModal: true });
@@ -143,9 +149,10 @@ export default class GameComp extends React.Component {
 
 		return (
 			<div id={game.ended ? "main-div" : ""}>
-				<StatusBarComp game={game.navigateMode ? game.prevUndoFrame : game} newGame={this.newGame} withdraw={this.showEndModal} navigateMode={game.navigateMode} className="status-bar"  />
+				<StatusBarComp game={game.navigateMode ? game.prevUndoFrame : game} newGame={this.newGame} withdraw={this.withdraw} navigateMode={game.navigateMode} className="status-bar"  />
 				<BoardComp
 					game={game.navigateMode ? game.prevUndoFrame : game}
+					navigateMode={game.navigateMode}
 					cardClicked={this.cardClicked}
 					colorChosen={this.colorChosen}
 					finishTurn={this.finishTurn}

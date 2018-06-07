@@ -1,3 +1,8 @@
+Participants
+==============
+Dor Azouri      204034300 dorazouri@gmail.com
+Moran Mahabi 307994491 moran.mahabi@gmail.com
+
 General
 ==============
 Our design model separates model methods from UI methods.
@@ -38,17 +43,7 @@ Components
 Assumptions
 ==============
 1.	The game is for 1 computer player, and 1 human player.
-2.	A game that ends in withdraw has no winner. Our logic is that the game is multiplayer and if someone withdraws - how would one decide the winner out of the rest of the remaining players? Although now the game is only for 2, we make this interpolation.
-
-Bonuses
-==============
-1.	"+" Card
-2.	New Game at the end of a game
-
 
 Remarks
 ==============
 *	We chose to help the user understand the possible cards he can click, by changing the mouse pointer to look clickable.
-*	start_page.html is an extension of the exercise requirements. It is a simple form that allows to start a game with any given
-	number of human and computer players. The exercise requires only one human player and one computer player, so this file is
-	not used in this exercise. Might be used in future.
