@@ -1,11 +1,13 @@
-function GameStatistics() {
-	this.turnsCount = 1;
-	this.startTime = new Date().getTime();
+class GameStatistics {
+	constructor() {
+		this.turnsCount = 1;
+		this.startTime = new Date().getTime();
+	}
 
-	this.getGameDuration = function(){
+	getGameDuration() {
 		var currentTime = new Date().getTime();
 		return (currentTime - this.startTime);
 	}
 }
 
-export default GameStatistics;
+module.exports = GameStatistics;

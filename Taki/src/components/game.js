@@ -84,7 +84,7 @@ export default class GameComp extends React.Component {
 
 	pullCard() {
 		const game = this.state.game;
-		if (game.navigateMode==false){
+		if (game.navigateMode == false) {
 			const res = game.pullCard();
 			this.setState(this.state);
 			if (res == true)
@@ -145,11 +145,11 @@ export default class GameComp extends React.Component {
 	render() {
 		const { game } = this.props;
 		const winnerIndex = game.winnerIndex;
-		const showEndModal = (winnerIndex != undefined  && game.navigateMode == false) ? true : this.state.showEndModal;
+		const showEndModal = (winnerIndex != undefined && game.navigateMode == false) ? true : this.state.showEndModal;
 
 		return (
 			<div id={game.ended ? "main-div" : ""}>
-				<StatusBarComp game={game.navigateMode ? game.prevUndoFrame : game} newGame={this.newGame} withdraw={this.withdraw} navigateMode={game.navigateMode} className="status-bar"  />
+				<StatusBarComp game={game.navigateMode ? game.prevUndoFrame : game} newGame={this.newGame} withdraw={this.withdraw} navigateMode={game.navigateMode} className="status-bar" />
 				<BoardComp
 					game={game.navigateMode ? game.prevUndoFrame : game}
 					navigateMode={game.navigateMode}

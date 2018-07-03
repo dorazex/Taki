@@ -1,36 +1,42 @@
-import GameStatistics from './game_statistics';
-import Deck from './deck';
-import OpenDeck from './open_deck';
-import Player from './player';
-import PlayerStatistics from './player_statistics';
-import * as constants from './constants'
-import * as utilities from './utilities'
-import UndoCaretaker from './undo_caretaker';
-import UndoFrame from './undo_frame';
+const constants = require('./constants');
+const utilities = require('./utilities');
 
-let Game = function (numRegularPlayers, numComputerPlayers) {
-	this.deck = undefined;
-	this.openDeck = undefined;
-	this.players = [];
-	this.currentPlayerIndex = 0;
-	this.currentColor = undefined;
-	this.currentAction = undefined;
-	this.plus2 = 0;
-	this.message = undefined;
-	this.NUM_REGULAR_PLAYERS = numRegularPlayers;
-	this.NUM_COMPUTER_PLAYERS = numComputerPlayers;
-	this.statistics = new GameStatistics();
-	this.ended = false;
-	this.winnerIndex = undefined;
-	this.undoCaretaker = new UndoCaretaker();
-	this.prevUndoFrame = null;
-	this.navigateMode = false;
+class Game {
+	constructor(numRegularPlayers, numComputerPlayers) {
+		this.deck = undefined;
+		this.openDeck = undefined;
+		this.players = [];
+		this.currentPlayerIndex = 0;
+		this.currentColor = undefined;
+		this.currentAction = undefined;
+		this.plus2 = 0;
+		this.message = undefined;
+		this.NUM_REGULAR_PLAYERS = numRegularPlayers;
+		this.NUM_COMPUTER_PLAYERS = numComputerPlayers;
+		this.statistics = new (require('./game_statistics.js'))();
+		this.ended = false;
+		this.winnerIndex = undefined;
+		this.roomInfo = new (require('./RoomInfo.js'))();
+	}
 
-	this.addPlayer = function (isComputerPlayer) {
-		this.players.push(new Player(isComputerPlayer))
-	};
+	setOrganizer(organizer) {
+		this.roomInfo.setOrganizer(organizer);
+	}
 
-	this.initPlayers = function () {
+	setGameTitle(gameTitle) {
+		this.roomInfo.setGameTitle(gameTitle);
+	}
+
+	setTotalPlayers(totalPlayers) {
+		this.roomInfo.setTotalPlayers(totalPlayers);
+	}
+
+
+	addPlayer(isComputerPlayer) {
+		this.players.push(new (require('./player.js'))());
+	}
+
+	initPlayers() {
 		for (var i = 0; i < this.NUM_REGULAR_PLAYERS; i++) {
 			this.addPlayer(false);
 		};
@@ -43,47 +49,42 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 		for (var i = 0; i < this.players.length; i++) {
 			this.players[i].addCards(this.deck.takeCards(constants.NUM_INITIAL_CARDS));
 		}
-	};
+	}
 
-	this.getComputerPlayerIndex = function () {
+	getComputerPlayerIndex() {
 		for (var i = 0; i < this.players.length; i++) {
 			if (this.players[i].isComputerPlayer) return i;
 		}
 	}
 
-	this.init = function () {
-		this.deck = new Deck();
+	init() {
+		this.deck = new (require('./deck.js'))();
 		this.deck.init();
-		this.openDeck = new OpenDeck();
-		this.undoCaretaker = new UndoCaretaker();
+		this.openDeck = new (require('./open_deck.js'))();
 		this.initPlayers();
 
 		do {
 			this.openDeck.putCard(this.deck.takeCards(1)[0])
 			this.currentColor = this.openDeck.getTopCard().getColor();
 		} while (!this.openDeck.getTopCard().isValidStartCard())
+	}
 
-		this.undoCaretaker.pushUndoFrame(new UndoFrame(this));
-	};
-
-	this.newGame = function () {
-		this.deck = new Deck();
+	newGame() {
+		this.deck = new (require('./deck.js'))();
 		this.deck.init();
-		this.openDeck = new OpenDeck();
+		this.openDeck = new (require('./open_deck.js'))();
 		this.currentPlayerIndex = 0;
 		this.currentColor = undefined;
 		this.currentAction = undefined;
 		this.plus2 = 0;
 		this.message = undefined;
-		this.statistics = new GameStatistics();
+		this.statistics = new (require('./game_statistics.js'))();
 		this.statistics.turnsCount = 1;
 		this.statistics.startTime = new Date().getTime();
 		this.NUM_REGULAR_PLAYERS = this.numRegularPlayers;
 		this.NUM_COMPUTER_PLAYERS = this.numComputerPlayers;
 		this.ended = false;
-		this.navigateMode = false;
 		this.winnerIndex = undefined;
-		this.undoCaretaker = new UndoCaretaker();
 
 		for (var i = 0; i < this.players.length; i++) {
 			utilities.clearArray(this.players[i].cards);
@@ -97,11 +98,9 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 			this.openDeck.putCard(this.deck.takeCards(1)[0])
 			this.currentColor = this.openDeck.getTopCard().getColor();
 		} while (!this.openDeck.getTopCard().isValidStartCard())
-
-			this.undoCaretaker.pushUndoFrame(new UndoFrame(this));
 	}
 
-	this.cyclicIncrementCurrentPlayerIndex = function (stop) {
+	cyclicIncrementCurrentPlayerIndex(stop) {
 		this.currentAction = undefined;
 		this.statistics.turnsCount++;
 
@@ -110,15 +109,9 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 			this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
 
 		this.players[this.currentPlayerIndex].statistics.startTurn();
-	};
-
-
-	this.navigate = function () {
-		this.navigateMode = true;
-		this.prevUndoFrame = new UndoFrame(this);
 	}
 
-	this.computerPlay = function () {
+	computerPlay() {
 		// let the computer play calculate its turn and return the card to put
 		var res = this.players[this.currentPlayerIndex].computerPlay(this.openDeck.getTopCard(), this.currentColor, this.currentAction, this.plus2);
 
@@ -139,7 +132,7 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 		}
 	}
 
-	this.pullCard = function () {
+	pullCard() {
 		if (this.currentAction == "taki") {
 			this.message = "Invalid choice";
 			return false;
@@ -170,14 +163,12 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 		}
 
 		this.plus2 = 0;
-		this.cyclicIncrementCurrentPlayerIndex(false)
-
-		this.undoCaretaker.pushUndoFrame(new UndoFrame(this));
+		this.cyclicIncrementCurrentPlayerIndex(false);
 
 		return true;
 	}
 
-	this.finishTurn = function () {
+	finishTurn() {
 		this.currentAction = undefined;
 
 		if (this.openDeck.getTopCard().action == "plus")
@@ -193,7 +184,7 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 
 	}
 
-	this.moveCardToOpenDeck = function (card, cardIndex, playerIndex) {
+	moveCardToOpenDeck(card, cardIndex, playerIndex) {
 		if (card.action != "superTaki")
 			this.currentColor = card.getColor();
 		this.openDeck.putCard(this.players[playerIndex].cards[cardIndex])
@@ -205,14 +196,12 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 		if (this.players[playerIndex].cards.length == 0 && this.openDeck.getTopCard().action != "plus") {
 			this.winnerIndex = playerIndex;
 		}
-
-		this.undoCaretaker.pushUndoFrame(new UndoFrame(this));
 	}
 
-	this.changeColor = function (card, cardIndex, playerIndex) {
+	changeColor(card, cardIndex, playerIndex) {
 		this.message = "";
 
-		if (this.currentAction == "taki"  || this.currentAction == "superTaki") {
+		if (this.currentAction == "taki" || this.currentAction == "superTaki") {
 			this.message = "not valid";
 			return false;
 		}
@@ -227,7 +216,7 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 	}
 
 
-	this.play = function (card, cardIndex, playerIndex) {
+	play(card, cardIndex, playerIndex) {
 		this.message = "";
 
 		if ((this.currentAction == "taki" || this.currentAction == "superTaki") && this.currentColor != card.getColor()) {
@@ -287,27 +276,8 @@ let Game = function (numRegularPlayers, numComputerPlayers) {
 		this.moveCardToOpenDeck(card, cardIndex, playerIndex);
 		return true;
 	}
-
-	this.prev = function () {
-		var frame = this.undoCaretaker.popUndoFrame();
-		if (frame == null)
-			return; //nothing will happen if no undo frames exist
-
-		this.undoCaretaker.pushRedoFrame(frame);
-		this.prevUndoFrame = frame;
-	}
-
-	this.next = function () {
-		var frame = this.undoCaretaker.popRedoFrame();
-		if (frame == null)
-			return; //nothing will happen if no frames exist
-
-
-		this.undoCaretaker.pushUndoFrame(frame);
-		this.prevUndoFrame = frame;
-	}
-};
+}
 
 
 
-export default Game;
+module.exports = Game;
