@@ -4,6 +4,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const rooms = require('./models/rooms');
 const userManagement = require('./models/userManagement');
+const gameServer = require('./models/gameServer');
 const app = express();
 
 app.use(session({ secret: 'keyboard cat', cookie: {maxAge:269999999999}}));
@@ -24,6 +25,7 @@ app.use(express.static(path.resolve(__dirname, "..", "public")));
 
 app.use('/rooms', rooms);
 app.use('/users', userManagement);
+app.use('/game', gameServer);
 
 
 app.listen(3000, console.log('Example app listening on port 3000!'));

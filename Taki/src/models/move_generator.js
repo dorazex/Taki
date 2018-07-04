@@ -1,8 +1,10 @@
-function MoveGenerator() {
-	this.play = function (cards, topCard, currentColor, action, plus2) {
+class MoveGenerator {
+	constructor() { }
+
+	play(cards, topCard, currentColor, action, plus2) {
 		var res = []
 
-		if(plus2 != 0) {
+		if (plus2 != 0) {
 			for (var i = cards.length - 1; i >= 0; i -= 1) {
 				if (cards[i].action == "plus2") {
 					res.push(i);
@@ -111,4 +113,4 @@ function MoveGenerator() {
 	}
 }
 
-export default MoveGenerator;
+module.exports = MoveGenerator;

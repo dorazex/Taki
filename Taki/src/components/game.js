@@ -15,9 +15,10 @@ export default class GameComp extends React.Component {
 		super(props);
 
 		this.state = {
-			game: props.game,
+			//game: props.game,
 			showColorModal: false,
-			showEndModal: false
+			showEndModal: false,
+			playerList: []
 		};
 
 		this.cardClicked = this.cardClicked.bind(this);
@@ -29,24 +30,70 @@ export default class GameComp extends React.Component {
 		this.hideEndModal = this.hideEndModal.bind(this);
 		this.newGame = this.newGame.bind(this);
 		this.withdraw = this.withdraw.bind(this);
-		this.navigate = this.navigate.bind(this);
-		this.prev = this.prev.bind(this);
-		this.next = this.next.bind(this);
+		//this.checkIfGameStarted = this.checkIfGameStarted.bind(this);
+		//this.updateDetails = this.updateDetails.bind(this);
+		this.updatePlayerList = this.updatePlayerList.bind(this);
+		this.updatePlayerListInterval = setInterval(this.updatePlayerList, 1000);
+		//this.checkGameStartInterval = setInterval(this.checkIfGameStarted, 1000);
 	}
+
+
+	updatePlayerList() {
+		fetch('/game/playerList', {
+			method: 'GET',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		})
+			.then((response) => {
+				if (response.status === 200) {
+					return response.json();
+				}
+			})
+			.then((res) => {
+				console.log("hereeee");
+				this.setState(() => ({ playerList: res.players }));
+			});
+	}
+
+	// checkIfGameStarted() {
+	// 	fetch('/game/checkGameStart', {
+	// 		method: 'GET',
+	// 		headers: {
+	// 			'Accept': 'application/json',
+	// 			'Content-Type': 'application/json'
+	// 		},
+	// 		credentials: 'include'
+	// 	})
+	// 		.then((response) => {
+	// 			if (response.status === 200) {
+	// 				return response.json();
+	// 			}
+	// 		})
+	// 		.then((res) => {
+	// 			this.setState(() => ({ playersList: res.players }));
+	// 			if (res.gameRunning == true) {
+	// 				showMessage("Nonogram", "Game started");
+	// 				$("#sidePanel *").removeClass('disabled').prop('disabled', false);
+	// 				blinkTitleWithMessage("Game started");
+	// 				clearInterval(checkGameStartInterval);
+	// 				this.updateDetailsInterval = setInterval(this.updateDetails, 1000); // relevant to player, not spectator
+	// 			}
+	// 		});
+	// }
+
+
 
 	newGame() {
 		this.state.game.newGame();
 		this.setState({ showEndModal: false });
 	}
 
-	navigate() {
-		this.state.game.navigate();
-		this.setState({ showEndModal: false });
-	}
-
-	componentDidMount() {
-		this.nextTurn();
-	}
+	//componentDidMount() {
+	//	this.nextTurn();
+	//}
 
 	showColorModal() {
 		this.setState({
@@ -84,12 +131,10 @@ export default class GameComp extends React.Component {
 
 	pullCard() {
 		const game = this.state.game;
-		if (game.navigateMode == false) {
-			const res = game.pullCard();
-			this.setState(this.state);
-			if (res == true)
-				this.nextTurn();
-		}
+		const res = game.pullCard();
+		this.setState(this.state);
+		if (res == true)
+			this.nextTurn();
 	}
 
 	cardClicked(card, cardKey, playerKey) {
@@ -113,18 +158,6 @@ export default class GameComp extends React.Component {
 		this.nextTurn();
 	}
 
-	prev() {
-		const game = this.state.game;
-		game.prev();
-		this.setState(this.state);
-	}
-
-	next() {
-		const game = this.state.game;
-		game.next();
-		this.setState(this.state);
-	}
-
 	nextTurn() {
 		const game = this.state.game;
 
@@ -132,7 +165,7 @@ export default class GameComp extends React.Component {
 		var currentPlayer = game.players[playerIndex];
 
 		// now computers play their turns, updating the game view after each turn
-		while (currentPlayer.isComputerPlayer == true && game.navigateMode == false) {
+		while (currentPlayer.isComputerPlayer == true) {
 			game.computerPlay();  	// computer calculates the actual turn
 			this.setState(this.state);
 			playerIndex = game.currentPlayerIndex;
@@ -143,29 +176,44 @@ export default class GameComp extends React.Component {
 
 
 	render() {
-		const { game } = this.props;
-		const winnerIndex = game.winnerIndex;
-		const showEndModal = (winnerIndex != undefined && game.navigateMode == false) ? true : this.state.showEndModal;
+		//	const { game } = this.props;
+		//	const winnerIndex = game.winnerIndex;
+		//	const showEndModal = winnerIndex != undefined ? true : this.state.showEndModal;
 
 		return (
-			<div id={game.ended ? "main-div" : ""}>
-				<StatusBarComp game={game.navigateMode ? game.prevUndoFrame : game} newGame={this.newGame} withdraw={this.withdraw} navigateMode={game.navigateMode} className="status-bar" />
-				<BoardComp
-					game={game.navigateMode ? game.prevUndoFrame : game}
-					navigateMode={game.navigateMode}
-					cardClicked={this.cardClicked}
-					colorChosen={this.colorChosen}
-					finishTurn={this.finishTurn}
-					pullCard={this.pullCard} />
-				{game.navigateMode &&
-					<div align="center" id="navigation-line"><table width="40%"><tbody><tr><td padding="15px"><div align="center">
-						<button onClick={this.prev} className="navigation-button"> &#60;&#60; prev </button>
-					</div></td><td padding="15px"><div align="center">
-						<button onClick={this.next} className="navigation-button"> next &#62;&#62; </button>
-					</div></td></tr></tbody></table></div>
-				}
-				<ChangeColorComp show={this.state.showColorModal} handleClose={this.hideColorModal} />
-				<EndGameStatisticsComp show={showEndModal} handleClose={this.hideEndModal} game={game} newGame={this.newGame} handleNavigate={this.navigate} />
-			</div >);
+			<div>
+				<StatusBarComp withdraw={this.withdraw} className="status-bar" />
+				<div className="players-wrpper">
+					<h2>Players</h2>
+					<table className="table table-striped">
+						<thead>
+							<tr>
+								<th>Name</th>
+							</tr>
+						</thead>
+						<tbody id="userslist">
+							{
+								this.state.playerList.map((name, index) => {
+									return (
+										<tr key={index}>
+											<td key={index}>
+												{name}
+											</td>
+										</tr>
+									)
+								})
+							}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		)
+
+		// <div id={game.ended ? "main-div" : ""}>
+		// 
+		// 	<BoardComp game={game} cardClicked={this.cardClicked} colorChosen={this.colorChosen} finishTurn={this.finishTurn} pullCard={this.pullCard} />
+		// 	<ChangeColorComp show={this.state.showColorModal} handleClose={this.hideColorModal} />
+		// 	<EndGameStatisticsComp show={showEndModal} handleClose={this.hideEndModal} game={game} newGame={this.newGame} />
+		// </div >);
 	}
 }

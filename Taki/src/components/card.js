@@ -4,16 +4,14 @@ import '../style.css';
 
 const CardComp = (props) => {
     const onClick = (event) => {
-        if (props.game.players[props.playerKey].isComputerPlayer == true){
+        if (props.game.players[props.playerKey].isComputerPlayer == true) {
             return;
         }
-        if (props.game.navigateMode == false) {
-            if (props.card.action == "changeColor") {
-                props.colorChosen(props.card, props.cardKey, props.playerKey);
-            } else {
 
-                props.cardClicked(props.card, props.cardKey, props.playerKey);
-            }
+        if (props.card.action == "changeColor") {
+            props.colorChosen(props.card, props.cardKey, props.playerKey);
+        } else {
+            props.cardClicked(props.card, props.cardKey, props.playerKey);
         }
     };
 
@@ -22,7 +20,7 @@ const CardComp = (props) => {
             {
                 props.player.isComputerPlayer == false ?
                     <img src={`../src/cards/${props.card.getFileName()}`} style={{ cursor: "pointer" }} /> :
-                    <img src={props.navigateMode ? `../src/cards/${props.card.getFileName()}` : "../src/cards/cover_0_0.png"} className="disabled-regular" />
+                    <img src="../src/cards/cover_0_0.png" className="disabled-regular" />
             }
         </div>
     )

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import LoginModal from './login-modal.js';
 import RoomsContainer from './roomsContainer.js';
 import CreateRoomModal from './createRoomModal.js';
+import GameComp from './game.js';
 
 export default class BaseContainer extends React.Component {
     constructor(args) {
@@ -11,11 +12,11 @@ export default class BaseContainer extends React.Component {
             show: 'login',  //login, rooms, game
             selectedRoom: undefined,
             showCreateRoomModal: false,
+            errMessage: "",
             currentUser: {
                 name: ''
             }
         };
-
 
         this.createRoomHandler = this.createRoomHandler.bind(this);
         this.enterRoomHandler = this.enterRoomHandler.bind(this);
@@ -23,8 +24,6 @@ export default class BaseContainer extends React.Component {
         this.handleLoginError = this.handleLoginError.bind(this);
         this.hideCreateRoomModal = this.hideCreateRoomModal.bind(this);
         this.handleSelectedRoom = this.handleSelectedRoom.bind(this);
-
-
         //this.logoutHandler= this.logoutHandler.bind(this);
 
         this.getUserName();
@@ -36,13 +35,15 @@ export default class BaseContainer extends React.Component {
         }
         else if (this.state.show == 'rooms')
             return this.renderRooms();
+        else if (this.state.show == 'game') {
+            return (<GameComp />);
+        }
     }
 
     handleSelectedRoom(roomIdentifier) {
         this.setState({ selectedRoom: roomIdentifier });
-       
-    }
 
+    }
 
     handleSuccessedLogin() {
         this.setState(() => ({ showLogin: 'rooms' }), this.getUserName);
@@ -53,10 +54,27 @@ export default class BaseContainer extends React.Component {
         this.setState(() => { showLogin: true });
     }
 
-
     enterRoomHandler() {
-        
-
+        if (this.state.selectedRoom != undefined) {
+            fetch('/rooms/enterRoom', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ roomid: this.state.selectedRoom }),
+                credentials: 'include'
+            })
+                .then((response) => {
+                    if (response.status === 200) {
+                        this.setState(() => ({ show: 'game' }));
+                    } else if (response.status === 403) {
+                        response.json().then((res) => {
+                            console.log(res.message)
+                        })
+                    }
+                })
+        }
     }
 
     hideCreateRoomModal(e) {
@@ -72,17 +90,18 @@ export default class BaseContainer extends React.Component {
             },
             body: JSON.stringify({
                 gameTitle: gameTitle,
-                totalPlayers: totalPlayers,
-                organizer: this.state.currentUser.name
+                totalPlayers: totalPlayers
             }),
             credentials: 'include'
         })
             .then((response) => {
-                if (!response.ok) {
-                    throw response;
+                if (response.status === 403) {
+                    return response.json();
                 }
             })
-            .catch(err => { throw err });
+            .then((res) => {
+                console.log(res.message)
+            });
 
         this.setState({ showCreateRoomModal: false });
     };
@@ -100,16 +119,30 @@ export default class BaseContainer extends React.Component {
                     <button className="createroom btn" onClick={this.createRoomHandler}>Create Room</button>
                     <button className="enterroom btn" onClick={this.enterRoomHandler}>Enter Room</button>
                 </div>
-                <RoomsContainer selectedRoomHandler={this.handleSelectedRoom} selected = {this.state.selectedRoom}/>
+                <RoomsContainer selectedRoomHandler={this.handleSelectedRoom} selected={this.state.selectedRoom} />
                 <CreateRoomModal show={this.state.showCreateRoomModal} handleClose={this.hideCreateRoomModal} />
+                {this.renderErrorMessage()}
             </div>
         )
     }
 
+
+    renderErrorMessage() {
+        if (this.state.errMessage) {
+            return (
+                <div className="alert alert-danger alert-dismissible fade in">
+                    <a href="#" className="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    {this.state.errMessage}
+                </div>
+            );
+        }
+        return null;
+    }
+
+
     getUserName() {
         this.fetchUserInfo()
             .then(userInfo => {
-                console.log("hereww " + userInfo)
                 this.setState(() => ({ currentUser: userInfo, show: 'rooms' }));
             })
             .catch(err => {
@@ -120,6 +153,7 @@ export default class BaseContainer extends React.Component {
                 }
             });
     }
+
 
     fetchUserInfo() {
         return fetch('/users', { method: 'GET', credentials: 'include' })

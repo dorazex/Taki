@@ -1,22 +1,19 @@
-function OpenDeck() {
-    ////////// private properties
-    this.cards = [];
+class OpenDeck {
+    constructor() {
+        this.cards = [];
+    }
 
-    ////////// private methods
-
-    ////////// public methods
-
-    this.putCard = function(card){
+    putCard(card) {
         this.cards.push(card)
-    };
+    }
 
-    this.getTopCard = function(){
+    getTopCard() {
         return this.cards[this.cards.length - 1]
-    };
+    }
 
-    this.getNumberOfCards = function(){
+    getNumberOfCards() {
         return cards.length;
-    };
-};
+    }
+}
 
-export default OpenDeck;
+module.exports = OpenDeck;

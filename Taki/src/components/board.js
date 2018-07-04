@@ -19,7 +19,6 @@ const BoardComp = (props) => {
                         game={props.game}
                         cardClicked={props.cardClicked}
                         colorChosen={props.colorChosen}
-                        navigateMode={props.navigateMode}
                     />)}
             </div>
         </div>

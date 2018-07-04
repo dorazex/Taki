@@ -4,7 +4,7 @@ const DecksComp = (props) => {
     const {game, open, finishTurn, pullCard} = props;
     if (open == false){
         return (
-            <div className={game.navigateMode ? "deck-container disabled-regular" : "deck-container"}>
+            <div className={"deck-container"}>
                 <div id="deck" onClick={pullCard}>
                     <img src="../src/cards/cover_0_0.png" styles="cursor: pointer;" />
                 </div>

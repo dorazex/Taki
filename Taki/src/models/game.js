@@ -17,6 +17,77 @@ class Game {
 		this.ended = false;
 		this.winnerIndex = undefined;
 		this.roomInfo = new (require('./RoomInfo.js'))();
+		this.gameRunning = false;
+		this.gameOver = undefined;
+	}
+
+	avgTurnsDurationsCurrentGame(username) {
+		for (var i = 0; i < this.players.length; i++) {
+			if (this.players[i].name == username) {
+				return this.players[i].statistics.avgTurnsDurationsCurrentGame;
+			}
+		}
+	}
+
+	singleCardCount(username) {
+		for (var i = 0; i < this.players.length; i++) {
+			if (this.players[i].name == username) {
+				return this.players[i].statistics.singleCardCount;
+			}
+		}
+	}
+
+	turnOf() {
+		return this.players[this.currentPlayerIndex].name;
+	}
+
+	getGameRunning() {
+		return this.gameRunning;
+	}
+
+	checkUniqueUser(name) {
+		for (var i = 0; i < this.players.length; i++) {
+			if (this.players[i].name == name) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	makePlayersList() {
+		var res = [];
+		for (var i = 0; i < this.players.length; i++) {
+			res.push(this.players[i].name);
+		}
+		return res;
+	}
+
+	removePlayer(username) {
+		if (!gameRunningProperty) {
+			for (var i = this.players.length - 1; i >= 0; i--) {
+				if (this.players[i].name == username) {
+					this.deck.returnCards(this.players[i].cards);
+					this.players.splice(i, 1);
+				}
+			}
+		}
+	}
+
+	addPlayer(username) {
+		if (this.roomInfo.getOnlinePlayers() < this.roomInfo.getTotalPlayers() && this.gameRunning == false) {
+			this.roomInfo.increaseOnlinePlayers();
+			var player = new (require('./player.js'))(username);
+			player.addCards(this.deck.takeCards(constants.NUM_INITIAL_CARDS));
+			this.players.push(player);
+			if (this.roomInfo.getOnlinePlayers() == this.roomInfo.getTotalPlayers()) {
+				this.gameRunning = true;
+				this.gameOver = false;
+			}
+			return true;
+		}
+
+		return false;
 	}
 
 	setOrganizer(organizer) {
@@ -31,26 +102,6 @@ class Game {
 		this.roomInfo.setTotalPlayers(totalPlayers);
 	}
 
-
-	addPlayer(isComputerPlayer) {
-		this.players.push(new (require('./player.js'))());
-	}
-
-	initPlayers() {
-		for (var i = 0; i < this.NUM_REGULAR_PLAYERS; i++) {
-			this.addPlayer(false);
-		};
-		for (var i = 0; i < this.NUM_COMPUTER_PLAYERS; i++) {
-			this.addPlayer(true);
-		};
-
-		this.players = utilities.shuffleArray(this.players);
-
-		for (var i = 0; i < this.players.length; i++) {
-			this.players[i].addCards(this.deck.takeCards(constants.NUM_INITIAL_CARDS));
-		}
-	}
-
 	getComputerPlayerIndex() {
 		for (var i = 0; i < this.players.length; i++) {
 			if (this.players[i].isComputerPlayer) return i;
@@ -61,7 +112,6 @@ class Game {
 		this.deck = new (require('./deck.js'))();
 		this.deck.init();
 		this.openDeck = new (require('./open_deck.js'))();
-		this.initPlayers();
 
 		do {
 			this.openDeck.putCard(this.deck.takeCards(1)[0])
@@ -277,7 +327,6 @@ class Game {
 		return true;
 	}
 }
-
 
 
 module.exports = Game;

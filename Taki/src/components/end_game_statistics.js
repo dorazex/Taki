@@ -3,7 +3,7 @@ import PlayerStatisticsRowComp from './player_statistics_row';
 import * as utilities from '../models/utilities';
 
 const EndGameStatisticsComp = (props) => {
-    const { show, handleClose, game, newGame, handleNavigate } = props;
+    const { show, handleClose, game, newGame } = props;
     const showHideClassName = show ? "end-game-modal display-block" : "end-game-modal display-none";
 
     return (
@@ -42,7 +42,6 @@ const EndGameStatisticsComp = (props) => {
             <br /><br />
             <div align="center">
                 <button id="end-new-game-button" onClick={newGame}>New Game</button>
-                <button id="navigate-game-button" onClick={handleNavigate}>Navigate</button>
                 <button id="close-end-game-button" onClick={handleClose}>Close</button>
             </div>
         </div>

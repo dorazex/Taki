@@ -44,7 +44,7 @@ class RoomInfo {
     }
 
     getOnlinePlayers() {
-        return onlinePlayers;
+        return this.onlinePlayers;
     }
 
     setOnlinePlayers(onlinePlayers) {
@@ -56,7 +56,7 @@ class RoomInfo {
     }
 
     decreaseOnlinePlayers() {
-        onlinePlayers--;
+        this.onlinePlayers--;
     }
 }
 

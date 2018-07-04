@@ -1,20 +1,20 @@
-import PlayerStatistics from './player_statistics';
-import MoveGenerator from './move_generator';
+class Player {
+    constructor(name) {
+        this.cards = [];
+        this.name = name;
+        //this.isComputerPlayer = isComputerPlayer;
+        this.statistics = new (require('./player_statistics.js'))();
+        this.moveGenerator = new (require('./move_generator.js'))();
+    }
 
-function Player(isComputerPlayer) {
-    this.cards = [];
-    this.isComputerPlayer = isComputerPlayer;
-    this.statistics = new PlayerStatistics();
-    this.moveGenerator = new MoveGenerator();
-
-    this.addCards = function (cards) {
+    addCards(cards) {
         this.cards = this.cards.concat(cards);
-    };
+    }
 
-    this.computerPlay = function (topCard, currentColor, action, plus2) {
+    computerPlay(topCard, currentColor, action, plus2) {
         var res = this.moveGenerator.play(this.cards, topCard, currentColor, action, plus2);
         return res;
     }
-};
+}
 
-export default Player;
+module.exports = Player;
