@@ -7,8 +7,8 @@ import Players from './players.js';
 const RoomsContainer = (props) => {
     return (
         <div className="row">
-            <Players className="col-md-3" />
-            <Rooms className="col-md-9" selectedRoomHandler={props.selectedRoomHandler} selected={props.selected} />
+            <Players className="col-md-3"  style="display: inline-block;" />
+            <Rooms className="col-md-9" style="float: left;" selectedRoomHandler={props.selectedRoomHandler} selected={props.selected} />
         </div>
     )
 

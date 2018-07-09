@@ -1,7 +1,7 @@
 class GameStatistics {
 	constructor() {
 		this.turnsCount = 1;
-		this.startTime = new Date().getTime();
+		this.startTime = 0;
 	}
 
 	getGameDuration() {

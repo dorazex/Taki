@@ -279,3 +279,11 @@ table#players-statistics-table td,table#players-statistics-table th {
 #navigation-line{
   background: #002800;
 }
+
+.table-info,.table-info>td,.table-info>th
+
+{
+	
+  background-color:#bee5eb
+
+}

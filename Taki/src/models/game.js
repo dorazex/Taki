@@ -21,6 +21,10 @@ class Game {
 		this.gameOver = undefined;
 	}
 
+
+	getCurrentPlayerName() {
+		return this.players[this.currentPlayerIndex].name;
+	}
 	avgTurnsDurationsCurrentGame(username) {
 		for (var i = 0; i < this.players.length; i++) {
 			if (this.players[i].name == username) {
@@ -55,14 +59,6 @@ class Game {
 		return true;
 	}
 
-	makePlayersList() {
-		var res = [];
-		for (var i = 0; i < this.players.length; i++) {
-			res.push(this.players[i].name);
-		}
-		return res;
-	}
-
 	removePlayer(username) {
 		if (!gameRunningProperty) {
 			for (var i = this.players.length - 1; i >= 0; i--) {
@@ -81,6 +77,7 @@ class Game {
 			player.addCards(this.deck.takeCards(constants.NUM_INITIAL_CARDS));
 			this.players.push(player);
 			if (this.roomInfo.getOnlinePlayers() == this.roomInfo.getTotalPlayers()) {
+				this.statistics.startTime = new Date().getTime();
 				this.gameRunning = true;
 				this.gameOver = false;
 			}

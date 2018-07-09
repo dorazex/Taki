@@ -15,10 +15,8 @@ export default class GameComp extends React.Component {
 		super(props);
 
 		this.state = {
-			//game: props.game,
 			showColorModal: false,
 			showEndModal: false,
-			playerList: []
 		};
 
 		this.cardClicked = this.cardClicked.bind(this);
@@ -31,32 +29,14 @@ export default class GameComp extends React.Component {
 		this.newGame = this.newGame.bind(this);
 		this.withdraw = this.withdraw.bind(this);
 		//this.checkIfGameStarted = this.checkIfGameStarted.bind(this);
-		//this.updateDetails = this.updateDetails.bind(this);
-		this.updatePlayerList = this.updatePlayerList.bind(this);
-		this.updatePlayerListInterval = setInterval(this.updatePlayerList, 1000);
+	
+	
+	
 		//this.checkGameStartInterval = setInterval(this.checkIfGameStarted, 1000);
 	}
 
 
-	updatePlayerList() {
-		fetch('/game/playerList', {
-			method: 'GET',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			},
-			credentials: 'include'
-		})
-			.then((response) => {
-				if (response.status === 200) {
-					return response.json();
-				}
-			})
-			.then((res) => {
-				console.log("hereeee");
-				this.setState(() => ({ playerList: res.players }));
-			});
-	}
+	
 
 	// checkIfGameStarted() {
 	// 	fetch('/game/checkGameStart', {
@@ -183,35 +163,13 @@ export default class GameComp extends React.Component {
 		return (
 			<div>
 				<StatusBarComp withdraw={this.withdraw} className="status-bar" />
-				<div className="players-wrpper">
-					<h2>Players</h2>
-					<table className="table table-striped">
-						<thead>
-							<tr>
-								<th>Name</th>
-							</tr>
-						</thead>
-						<tbody id="userslist">
-							{
-								this.state.playerList.map((name, index) => {
-									return (
-										<tr key={index}>
-											<td key={index}>
-												{name}
-											</td>
-										</tr>
-									)
-								})
-							}
-						</tbody>
-					</table>
-				</div>
+				<BoardComp username={this.props.username} cardClicked={this.cardClicked} colorChosen={this.colorChosen} finishTurn={this.finishTurn} pullCard={this.pullCard} />
 			</div>
 		)
 
 		// <div id={game.ended ? "main-div" : ""}>
 		// 
-		// 	<BoardComp game={game} cardClicked={this.cardClicked} colorChosen={this.colorChosen} finishTurn={this.finishTurn} pullCard={this.pullCard} />
+		
 		// 	<ChangeColorComp show={this.state.showColorModal} handleClose={this.hideColorModal} />
 		// 	<EndGameStatisticsComp show={showEndModal} handleClose={this.hideEndModal} game={game} newGame={this.newGame} />
 		// </div >);

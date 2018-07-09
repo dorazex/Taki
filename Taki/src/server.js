@@ -7,7 +7,7 @@ const userManagement = require('./models/userManagement');
 const gameServer = require('./models/gameServer');
 const app = express();
 
-app.use(session({ secret: 'keyboard cat', cookie: {maxAge:269999999999}}));
+app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 269999999999 } }));
 app.use(bodyParser.text());
 
 app.use(bodyParser.json({ type: 'application/json' }))
@@ -15,6 +15,8 @@ app.use(bodyParser.json({ type: 'application/json' }))
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+
+//app.use(express.static('public'));
 
 app.use(express.static(path.resolve(__dirname, "..", "public")));
 
@@ -26,6 +28,5 @@ app.use(express.static(path.resolve(__dirname, "..", "public")));
 app.use('/rooms', rooms);
 app.use('/users', userManagement);
 app.use('/game', gameServer);
-
 
 app.listen(3000, console.log('Example app listening on port 3000!'));

@@ -36,7 +36,7 @@ export default class BaseContainer extends React.Component {
         else if (this.state.show == 'rooms')
             return this.renderRooms();
         else if (this.state.show == 'game') {
-            return (<GameComp />);
+            return (<GameComp username={this.state.currentUser.name}/>);
         }
     }
 
