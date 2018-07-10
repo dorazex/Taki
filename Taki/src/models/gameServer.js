@@ -10,10 +10,47 @@ gameServer.use(bodyParser.json());
 
 gameServer.use(bodyParser.urlencoded({ extended: true }));
 
-gameServer.get('/currentPlayerName', (req, res) => {
+gameServer.post('/finishTurn', (req, res) => {
     var roomid = req.cookies.roomid;
     var gameManager = roomsManager.getGames().get(roomid.toString());
-    res.json(gameManager.getCurrentPlayerName());
+    gameManager.finishTurn();
+    res.sendStatus(200);
+});
+
+
+gameServer.post('/pullCard', (req, res) => {
+    var username = req.cookies.organizer;
+    var roomid = req.cookies.roomid;
+    var gameManager = roomsManager.getGames().get(roomid.toString());
+    var currentPlayerName = gameManager.getCurrentPlayerName();
+    if (username == currentPlayerName)
+        gameManager.pullCard();
+    res.sendStatus(200);
+});
+
+gameServer.post('/changeColor', (req, res) => {
+    var roomid = req.cookies.roomid;
+    var gameManager = roomsManager.getGames().get(roomid.toString());
+    gameManager.currentColor = req.body.color;
+    gameManager.cyclicIncrementCurrentPlayerIndex(false);
+    res.sendStatus(200);
+});
+
+gameServer.post('/colorChosen', (req, res) => {
+    var roomid = req.cookies.roomid;
+    var gameManager = roomsManager.getGames().get(roomid.toString());
+    var result = gameManager.changeColor(req.body.card, req.body.cardKey, req.body.playerKey);
+    if (result == true)
+        res.sendStatus(200);
+    else res.sendStatus(403);
+});
+
+
+gameServer.post('/cardClicked', (req, res) => {
+    var roomid = req.cookies.roomid;
+    var gameManager = roomsManager.getGames().get(roomid.toString());
+    gameManager.play(req.body.card, req.body.cardKey, req.body.playerKey);
+    res.sendStatus(200);
 });
 
 gameServer.get('/boardInfo', (req, res) => {
@@ -24,6 +61,7 @@ gameServer.get('/boardInfo', (req, res) => {
         players: gameManager.players,
         numberOfCards: gameManager.deck.getNumberOfCards(),
         currentAction: gameManager.currentAction,
+        currentPlayerName: gameManager.getCurrentPlayerName(),
         topCard: gameManager.openDeck.getTopCard()
     });
 });

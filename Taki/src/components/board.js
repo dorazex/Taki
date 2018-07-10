@@ -12,6 +12,7 @@ export default class BoardComp extends React.Component {
                 players: [],
                 numberOfCards: undefined,
                 currentAction: undefined,
+                currentPlayerName: undefined,
                 topCard: {
                     number: null,
                     color: null,
@@ -37,7 +38,7 @@ export default class BoardComp extends React.Component {
         return (
             <div>
                 <div id="board" className="board-flex-container">
-                    <DecksComp open={false} numberOfCards={this.state.board.numberOfCards} currentAction={this.state.board.currentAction} finishTurn={this.props.finishTurn} pullCard={this.props.pullCard} />
+                    <DecksComp open={false} username={this.props.username} currentPlayerName={this.state.board.currentPlayerName} numberOfCards={this.state.board.numberOfCards} currentAction={this.state.board.currentAction} finishTurn={this.props.finishTurn} pullCard={this.props.pullCard} />
                     <DecksComp open={true} topCard={this.state.board.topCard} />
                 </div>
                 <div id="players">
@@ -48,6 +49,7 @@ export default class BoardComp extends React.Component {
                             player={player}
                             cardClicked={this.props.cardClicked}
                             colorChosen={this.props.colorChosen}
+                            currentPlayerName={this.state.board.currentPlayerName}
                             username={this.props.username}
                         />)}
                 </div>

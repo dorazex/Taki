@@ -37,14 +37,14 @@ export default class DecksComp extends React.Component {
             return (
                 <div className={"deck-container"}>
                     <div id="deck" onClick={this.props.pullCard}>
-                        <img src={coverCardImage} styles="cursor: pointer;" />
+                        <img src={coverCardImage}  style={this.props.username == this.props.currentPlayerName ? { cursor: "pointer" } : {}} />
                     </div>
                     <div id="deck-text" className="deck-text">
                         {this.props.numberOfCards}
                     </div>
                     <div>
                         <button id="finish-turn"
-                            style={{ visibility: (this.props.currentAction != undefined && (this.props.currentAction == "taki" || this.props.currentAction == "superTaki")) ? 'visible' : 'hidden' }}
+                            style={{ visibility: ((this.props.username == this.props.currentPlayerName) && (this.props.currentAction != undefined) && (this.props.currentAction == "taki" || this.props.currentAction == "superTaki")) ? 'visible' : 'hidden' }}
                             className="deck-finish-turn-button"
                             onClick={this.props.finishTurn} />
                     </div>

@@ -111,7 +111,7 @@ class Game {
 
 		do {
 			this.openDeck.putCard(this.deck.takeCards(1)[0])
-			this.currentColor = this.openDeck.getTopCard().getColor();
+			this.currentColor = this.openDeck.getTopCard().color;
 		} while (!this.openDeck.getTopCard().isValidStartCard())
 	}
 
@@ -142,7 +142,7 @@ class Game {
 
 		do {
 			this.openDeck.putCard(this.deck.takeCards(1)[0])
-			this.currentColor = this.openDeck.getTopCard().getColor();
+			this.currentColor = this.openDeck.getTopCard().color;
 		} while (!this.openDeck.getTopCard().isValidStartCard())
 	}
 
@@ -232,7 +232,7 @@ class Game {
 
 	moveCardToOpenDeck(card, cardIndex, playerIndex) {
 		if (card.action != "superTaki")
-			this.currentColor = card.getColor();
+			this.currentColor = card.color;
 		this.openDeck.putCard(this.players[playerIndex].cards[cardIndex])
 		this.players[playerIndex].cards.splice(cardIndex, 1);
 
@@ -265,7 +265,7 @@ class Game {
 	play(card, cardIndex, playerIndex) {
 		this.message = "";
 
-		if ((this.currentAction == "taki" || this.currentAction == "superTaki") && this.currentColor != card.getColor()) {
+		if ((this.currentAction == "taki" || this.currentAction == "superTaki") && this.currentColor != card.color) {
 			this.message = "Invalid choice";
 			return false;
 		}
@@ -278,14 +278,14 @@ class Game {
 		if (this.currentAction != "taki" && this.currentAction != "superTaki") {
 
 			if (card.number != null) {
-				if (this.currentColor != card.getColor() && this.openDeck.getTopCard().number != card.number) {
+				if (this.currentColor != card.color && this.openDeck.getTopCard().number != card.number) {
 					this.message = "Invalid choice";
 					return false;
 				}
 				this.cyclicIncrementCurrentPlayerIndex(false)
 			}
 			else if (card.action == "taki") {
-				if (this.currentColor != card.getColor() && this.openDeck.getTopCard().action != "taki") {
+				if (this.currentColor != card.color && this.openDeck.getTopCard().action != "taki") {
 					this.message = "Invalid choice";
 					return false;
 				}
@@ -295,21 +295,21 @@ class Game {
 				this.currentAction = "superTaki";
 			}
 			else if (card.action == "stop") {
-				if (this.currentColor != card.getColor() && this.openDeck.getTopCard().action != "stop") {
+				if (this.currentColor != card.color && this.openDeck.getTopCard().action != "stop") {
 					this.message = "Invalid choice";
 					return false;
 				}
 				this.cyclicIncrementCurrentPlayerIndex(true)
 			}
 			else if (card.action == "plus") {
-				if (this.currentColor != card.getColor() && this.openDeck.getTopCard().action != "plus") {
+				if (this.currentColor != card.color && this.openDeck.getTopCard().action != "plus") {
 					this.message = "Invalid choice";
 					return false;
 				}
 				this.message = "another turn";
 			}
 			else if (card.action == "plus2") {
-				if (this.currentColor != card.getColor() && this.openDeck.getTopCard().action != "plus2") {
+				if (this.currentColor != card.color && this.openDeck.getTopCard().action != "plus2") {
 					this.message = "Invalid choice";
 					return false;
 				}

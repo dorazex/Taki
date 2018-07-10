@@ -19,6 +19,7 @@ export default class StatusBarComp extends React.Component {
 
         this.getStatusGame = this.getStatusGame.bind(this);
     }
+    
 
     componentDidMount() {
         this.getStatusGame();

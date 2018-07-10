@@ -5,10 +5,6 @@ class Card {
 		this.color = color;    // null if card is not colored
 	}
 
-	getColor() {
-		return this.color;
-	}
-
 	getFileName() {
 		var text = "";
 		if (null != this.action) {
