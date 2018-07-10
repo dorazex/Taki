@@ -6,6 +6,7 @@ import StatusBarComp from './status_bar';
 import ChangeColorComp from './change_color';
 import EndGameStatisticsComp from './end_game_statistics';
 import GameFactory from '../models/game_factory';
+import DecksComp from './decks';
 
 import '../style.css';
 
@@ -29,14 +30,14 @@ export default class GameComp extends React.Component {
 		this.newGame = this.newGame.bind(this);
 		this.withdraw = this.withdraw.bind(this);
 		//this.checkIfGameStarted = this.checkIfGameStarted.bind(this);
-	
-	
-	
+
+
+
 		//this.checkGameStartInterval = setInterval(this.checkIfGameStarted, 1000);
 	}
 
 
-	
+
 
 	// checkIfGameStarted() {
 	// 	fetch('/game/checkGameStart', {
@@ -169,7 +170,7 @@ export default class GameComp extends React.Component {
 
 		// <div id={game.ended ? "main-div" : ""}>
 		// 
-		
+
 		// 	<ChangeColorComp show={this.state.showColorModal} handleClose={this.hideColorModal} />
 		// 	<EndGameStatisticsComp show={showEndModal} handleClose={this.hideEndModal} game={game} newGame={this.newGame} />
 		// </div >);

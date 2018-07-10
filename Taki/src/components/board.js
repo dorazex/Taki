@@ -8,27 +8,40 @@ export default class BoardComp extends React.Component {
         super(...args);
 
         this.state = {
-            players: [],
+            board: {
+                players: [],
+                numberOfCards: undefined,
+                currentAction: undefined,
+                topCard: {
+                    number: null,
+                    color: null,
+                    action: 'superTaki',
+                }
+            },
         };
 
-        this.getPlayersContent = this.getPlayersContent.bind(this);
+        this.getBoardContent = this.getBoardContent.bind(this);
     }
 
     componentDidMount() {
-        this.getPlayersContent();
+        this.getBoardContent();
     }
 
-    // <DecksComp open={false} finishTurn={this.props.finishTurn} pullCard={this.props.pullCard} />
-    // <DecksComp open={true} />
+    componentWillUnmount() {
+        if (this.timeoutId) {
+            clearTimeout(this.timeoutId);
+        }
+    }
 
     render() {
         return (
             <div>
                 <div id="board" className="board-flex-container">
-                 
+                    <DecksComp open={false} numberOfCards={this.state.board.numberOfCards} currentAction={this.state.board.currentAction} finishTurn={this.props.finishTurn} pullCard={this.props.pullCard} />
+                    <DecksComp open={true} topCard={this.state.board.topCard} />
                 </div>
                 <div id="players">
-                    {this.state.players.map(
+                    {this.state.board.players.map(
                         (player, i) => <PlayerComp
                             key={i}
                             playerKey={i}
@@ -42,17 +55,19 @@ export default class BoardComp extends React.Component {
         )
     }
 
-    getPlayersContent() {
-        return fetch('/game/players', { method: 'GET', credentials: 'include' })
+
+
+    getBoardContent() {
+        return fetch('/game/boardInfo', { method: 'GET', credentials: 'include' })
             .then((response) => {
                 if (!response.ok) {
                     throw response;
                 }
-                this.timeoutId = setTimeout(this.getPlayersContent, 200);
+                this.timeoutId = setTimeout(this.getBoardContent, 200);
                 return response.json();
             })
-            .then(players => {
-                this.setState(() => ({ players }));
+            .then(boardInfo => {
+                this.setState(() => ({ board: boardInfo }));
             })
             .catch(err => { throw err });
     }

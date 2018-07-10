@@ -21,7 +21,6 @@ class Game {
 		this.gameOver = undefined;
 	}
 
-
 	getCurrentPlayerName() {
 		return this.players[this.currentPlayerIndex].name;
 	}

@@ -16,10 +16,16 @@ gameServer.get('/currentPlayerName', (req, res) => {
     res.json(gameManager.getCurrentPlayerName());
 });
 
-gameServer.get('/players', (req, res) => {
+gameServer.get('/boardInfo', (req, res) => {
     var roomid = req.cookies.roomid;
     var gameManager = roomsManager.getGames().get(roomid.toString());
-    res.json(gameManager.players);
+
+    res.json({
+        players: gameManager.players,
+        numberOfCards: gameManager.deck.getNumberOfCards(),
+        currentAction: gameManager.currentAction,
+        topCard: gameManager.openDeck.getTopCard()
+    });
 });
 
 gameServer.get('/checkGameStart', (req, res) => {
