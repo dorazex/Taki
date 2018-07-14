@@ -287,3 +287,55 @@ table#players-statistics-table td,table#players-statistics-table th {
   background-color:#bee5eb
 
 }
+
+.username-label{
+  font-family: Courier;
+  font-style: bold;
+  font-size: 3vw;
+  width: 30%;
+  margin-left: auto;
+  margin-right: auto;
+  color: white;
+}
+.username-input{
+  font-family: Courier;
+  font-style: bold;
+  font-size: 2.5vw;
+  width: 50%;
+  background-color:#001f00;
+  margin-left: auto;
+  margin-right: auto;
+  color: white;
+  padding-left: 0.2vw;
+  padding-top: 0.2vh;
+  padding-bottom: 0.2vh;
+}
+.submit-btn{
+  font-family: Courier;
+  font-style: bold;
+  font-size: 3vw;
+  background-color: chartreuse;
+  cursor: pointer;
+  width: 100%;
+  padding:1%;
+}
+
+.taki-logo{
+  display: block;
+  max-width:100%;
+  min-width:80%;
+  max-height:100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.login-page-wrapper{
+  border-radius: 10px;
+  background-color:#001f00;
+  width: 20%;
+  padding:2%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5%;
+  margin-bottom: auto;
+}

@@ -5,7 +5,7 @@ import BoardComp from './board';
 import StatusBarComp from './status_bar';
 import ChangeColorComp from './change_color';
 import EndGameStatisticsComp from './end_game_statistics';
-import GameFactory from '../models/game_factory';
+// import GameFactory from './models/game_factory';
 import DecksComp from './decks';
 
 import '../style.css';

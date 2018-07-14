@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import takiImage from '../images/superTaki.jpg';
+import takiImage from '../images/superTaki.png';
 
 export default class LoginModal extends React.Component {
     constructor(args) {
@@ -17,9 +17,13 @@ export default class LoginModal extends React.Component {
         return (
             <div className="login-page-wrapper">
                 <img className="taki-logo" src={takiImage} />
+                <br/>
+                <br/>
                 <form onSubmit={this.handleLogin}>
-                    <label className="username-label" htmlFor="userName"> name: </label>
-                    <input className="username-input" name="userName"/>                        
+                    <label className="username-label" htmlFor="userName">name:</label>
+                    <input className="username-input" name="userName"/>
+                    <br/>
+                    <br/>
                     <input className="submit-btn btn" type="submit" value="Login"/>
                 </form>
                 {this.renderErrorMessage()}
