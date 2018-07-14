@@ -114,10 +114,24 @@ export default class BaseContainer extends React.Component {
         return (
             <div className="rooms-container">
                 <div className="user-info-area">
-                    Hello {this.state.currentUser.name}
-                    <button className="logout btn" onClick={this.logoutHandler}>Logout</button>
-                    <button className="createroom btn" onClick={this.createRoomHandler}>Create Room</button>
-                    <button className="enterroom btn" onClick={this.enterRoomHandler}>Enter Room</button>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td className="user-info-area-td">
+                                    Hello {this.state.currentUser.name}
+                                </td>
+                                <td className="user-info-area-td">
+                                    <button className="createroom" onClick={this.createRoomHandler}>Create Room</button>
+                                </td>
+                                <td className="user-info-area-td-last">
+                                    <button className="enterroom" onClick={this.enterRoomHandler}>Enter Room</button>
+                                </td>
+                                <td className="user-info-area-td">
+                                    <button className="logout" onClick={this.logoutHandler}>Logout</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <RoomsContainer selectedRoomHandler={this.handleSelectedRoom} selected={this.state.selectedRoom} />
                 <CreateRoomModal show={this.state.showCreateRoomModal} handleClose={this.hideCreateRoomModal} />
