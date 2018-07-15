@@ -176,7 +176,7 @@ img {
 }
 
 
-#withdraw,#new-game,.create-game-btn,.create-room-close-button{
+#withdraw,#new-game{
   background-color: chartreuse;
   font-family: Courier;
   cursor: pointer;
@@ -487,4 +487,10 @@ table#players-statistics-table td,table#players-statistics-table th {
 .create-room-modal-message-div{
   font-family: Courier;
   font-size: 100%;
+}
+
+
+
+.notification{
+  background-color: red;
 }
