@@ -13,6 +13,8 @@ export default class BaseContainer extends React.Component {
             selectedRoom: undefined,
             showCreateRoomModal: false,
             errMessage: "",
+            createErrMessage: "",
+            cancelled: false,
             currentUser: {
                 name: ''
             }
@@ -24,6 +26,7 @@ export default class BaseContainer extends React.Component {
         this.handleLoginError = this.handleLoginError.bind(this);
         this.hideCreateRoomModal = this.hideCreateRoomModal.bind(this);
         this.handleSelectedRoom = this.handleSelectedRoom.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
         //this.logoutHandler= this.logoutHandler.bind(this);
 
         this.getUserName();
@@ -83,6 +86,11 @@ export default class BaseContainer extends React.Component {
         const gameTitle = e.target.elements.gameName.value;
         const totalPlayers = e.target.elements.totalPlayers.value;
 
+        if (this.state.cancelled){
+            this.setState({showCreateRoomModal:false, cancelled: false });
+            return;
+        }
+
         fetch('/rooms/createGame', {
             method: 'POST',
             headers: {
@@ -102,6 +110,7 @@ export default class BaseContainer extends React.Component {
             })
             .then((res) => {
                 console.log(res.message)
+                this.setState({ createErrMessage: res.message, showCreateRoomModal: true });
             });
 
         this.setState({ showCreateRoomModal: false });
@@ -109,6 +118,9 @@ export default class BaseContainer extends React.Component {
 
     createRoomHandler() {
         this.setState({ showCreateRoomModal: true });
+    };
+    handleCancel() {
+        this.setState({ cancelled: true });
     };
 
     renderRooms() {
@@ -135,7 +147,7 @@ export default class BaseContainer extends React.Component {
                     </table>
                 </div>
                 <RoomsContainer selectedRoomHandler={this.handleSelectedRoom} selected={this.state.selectedRoom} />
-                <CreateRoomModal show={this.state.showCreateRoomModal} handleClose={this.hideCreateRoomModal} />
+                <CreateRoomModal show={this.state.showCreateRoomModal} handleClose={this.hideCreateRoomModal} errMessage={this.state.createErrMessage} handleCancel={this.handleCancel} cancelled={this.state.cancelled}/>
                 {this.renderErrorMessage()}
             </div>
         )
