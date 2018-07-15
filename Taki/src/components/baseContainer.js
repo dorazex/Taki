@@ -123,10 +123,10 @@ export default class BaseContainer extends React.Component {
                                 <td className="user-info-area-td">
                                     <button className="createroom" onClick={this.createRoomHandler}>Create Room</button>
                                 </td>
-                                <td className="user-info-area-td-last">
+                                <td className="user-info-area-td">
                                     <button className="enterroom" onClick={this.enterRoomHandler}>Enter Room</button>
                                 </td>
-                                <td className="user-info-area-td">
+                                <td className="user-info-area-td-last">
                                     <button className="logout" onClick={this.logoutHandler}>Logout</button>
                                 </td>
                             </tr>

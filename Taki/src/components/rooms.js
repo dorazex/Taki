@@ -24,9 +24,10 @@ export default class Rooms extends React.Component {
 
     render() {
         return (
-            <div className="rooms-wrpper">
-                <h2>Rooms</h2>
-                <table className="table">
+            <div className="rooms-wrapper">
+                <label className="table-top-label">Rooms</label>
+                <br/><br/>
+                <table className="rooms-table">
                     <thead>
                         <tr>
                             <th>Title</th>

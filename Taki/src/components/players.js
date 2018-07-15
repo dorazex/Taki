@@ -26,9 +26,10 @@ export default class Players extends React.Component {
 
     render() {
         return (
-            <div className="players-wrpper">
-                <h2>Players</h2>
-                <table className="table table-striped">
+            <div className="players-wrapper">
+                <label className="table-top-label">Players</label>
+                <br/><br/>
+                <table className="players-table">
                     <thead>
                         <tr>
                             <th>Name</th>

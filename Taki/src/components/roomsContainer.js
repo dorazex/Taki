@@ -6,9 +6,9 @@ import Players from './players.js';
 
 const RoomsContainer = (props) => {
     return (
-        <div className="row">
-            <Players className="players-view"  style="display: inline-block;" />
-            <Rooms className="rooms-view" style="float: left;" selectedRoomHandler={props.selectedRoomHandler} selected={props.selected} />
+        <div className="players-rooms-row">
+            <Players className="players-view"/>
+            <Rooms className="rooms-view" selectedRoomHandler={props.selectedRoomHandler} selected={props.selected} />
         </div>
     )
 
