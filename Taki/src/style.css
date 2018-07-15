@@ -108,6 +108,10 @@ img {
   display: none;
 }
 
+.display-flex {
+  display: flex;
+}
+
 
 
 
@@ -172,7 +176,7 @@ img {
 }
 
 
-#withdraw,#new-game{
+#withdraw,#new-game,.create-game-btn,.create-room-close-button{
   background-color: chartreuse;
   font-family: Courier;
   cursor: pointer;
@@ -180,6 +184,18 @@ img {
   width: 100%;
   height: 100%;
   padding:0px;
+  margin: 0px
+}
+
+.create-game-btn,.create-room-close-button{
+  background-color: chartreuse;
+  font-family: Courier;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding-top:4px;
+  padding-bottom:4px;
   margin: 0px
 }
 
@@ -205,28 +221,19 @@ img {
   margin-right: 20px;
 }
 
-.create-room-modal-content {
-  font-family: Courier;
-  position: relative;
-  margin: auto;
-  /*padding: 20px;*/
-  width: stretch;
-  height: stretch;
-}
-
 .create-room-modal {
   z-index: 10000; /* Sit on top */
   overflow: auto; /* Enable scroll if needed */
-  background-color: #7ba858;
+  background-color: #37bf3d;
   align-self: center;
-  padding:30px;
+  padding:2%;
   position: fixed;
   top: 25%;
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 25px;
   border: 4px solid #555528;
-
+  width:30%;
 }
 
 .end-game-modal {
@@ -460,4 +467,24 @@ table#players-statistics-table td,table#players-statistics-table th {
   font-family: Courier;
   font-size: 3vw;
   padding:6px;
+}
+
+
+
+
+
+.create-room-form-label{
+  font-family: Courier;
+  font-style: bold;
+  color: black;
+}
+
+.create-room-modal-name-div{
+  min-width:100%;
+  max-width:100%;
+}
+
+.create-room-modal-message-div{
+  font-family: Courier;
+  font-size: 100%;
 }

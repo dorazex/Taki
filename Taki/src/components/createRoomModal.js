@@ -7,11 +7,36 @@ const CreateRoomModal = (props) => {
 
     return (
         <div className={showHideClassName}>
-            <div>
+            <div className="create-room-form-div">
                 <form onSubmit={props.handleClose}>
-                    <input className="gamename-input" name="gameName" />
-                    <input className="totalPlayers-input" name="totalPlayers" />
-                    <input className="create-game-btn btn" type="submit" value="Create Game" />
+                    <div className="create-room-modal-name-div">
+                        <label className="create-room-form-label">Room Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input className="gamename-input" name="gameName" />
+                        <br/><br/>
+                    </div>
+                    <div className="create-room-modal-players-div">
+                        <label className="create-room-form-label">Total Players:&nbsp;</label>
+                        <input className="totalPlayers-input" name="totalPlayers" />
+                        <br/><br/>
+                    </div>
+                    <div className="create-room-modal-buttons-div">
+                        <table width="100%">
+                            <tbody>
+                                <tr>
+                                    <td width="50%" padding="2%">
+                                        <input className="create-game-btn btn" type="submit" value="Create Room" />
+                                    </td>
+                                    <td width="50%" padding="2%">
+                                        <button className="create-room-close-button">Close</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br/>
+                    <div className="create-room-modal-message-div">
+                        Message: message should appear here
+                    </div>
                 </form>
             </div>
         </div>
