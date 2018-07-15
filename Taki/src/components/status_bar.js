@@ -23,21 +23,16 @@ export default class StatusBarComp extends React.Component {
 
     componentDidMount() {
         this.getStatusGame();
-        console.log("GAME STARTED? -- componentDidMount")
     }
 
     componentWillUnmount() {
-        console.log("GAME STARTED? -- componentWillUnmount")
         if (this.timeoutId) {
-            console.log("GAME STARTED? -- componentWillUnmount inside if")
             clearTimeout(this.timeoutId);
         }
     }
 
     render() {
-        console.log("GAME STARTED? -- render")
         var gameDuration = this.state.status.gameDuration;
-        console.log(gameDuration)
         if (gameDuration > 0 && gameDuration < 1000){
             return (
                 <div id="statistics">

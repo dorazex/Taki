@@ -494,3 +494,9 @@ table#players-statistics-table td,table#players-statistics-table th {
 .notification{
   background-color: red;
 }
+
+.base-container-err-message{
+  font-family: Courier;
+  font-size: 100%;
+  color: #e6ffe6;
+}

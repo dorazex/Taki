@@ -71,6 +71,8 @@ export default class BaseContainer extends React.Component {
                     } else if (response.status === 403) {
                         response.json().then((res) => {
                             console.log(res.message)
+                            // this.state.errMessage = res.message;
+                            this.setState({ errMessage: res.message });
                         })
                     }
                 })
@@ -142,14 +144,16 @@ export default class BaseContainer extends React.Component {
 
 
     renderErrorMessage() {
+        console.log("renderErrorMessage")
         if (this.state.errMessage) {
+            console.log("renderErrorMessage - inside if")
             return (
-                <div className="alert alert-danger alert-dismissible fade in">
-                    <a href="#" className="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <div className="base-container-err-message">
                     {this.state.errMessage}
                 </div>
             );
         }
+        console.log("renderErrorMessage - outside if")
         return null;
     }
 
