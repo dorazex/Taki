@@ -26,6 +26,7 @@ export default class LoginModal extends React.Component {
                     <br/>
                     <input className="submit-btn btn" type="submit" value="Login"/>
                 </form>
+                <br/>
                 {this.renderErrorMessage()}
             </div>
         );
