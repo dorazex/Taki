@@ -102,13 +102,6 @@ export default class BaseContainer extends React.Component {
         const gameTitle = e.target.elements.gameName.value;
         const totalPlayers = e.target.elements.totalPlayers.value;
 
-        console.log("hereeee")
-
-        // if (this.state.cancelled) {
-        //     this.setState({ showCreateRoomModal: false, cancelled: false });
-        //     return;
-        // }
-
         fetch('/rooms/createGame', {
             method: 'POST',
             headers: {
@@ -138,12 +131,8 @@ export default class BaseContainer extends React.Component {
     createRoomHandler() {
         this.setState({ showCreateRoomModal: true });
     };
-    // handleCancel() {
-    //     this.setState({ cancelled: true });
-    // };
 
     handleCancel() {
-        console.log('cancellll')
         this.setState({ createErrMessage: '', showCreateRoomModal: false });
     };
 
@@ -160,11 +149,11 @@ export default class BaseContainer extends React.Component {
                                 <td className="user-info-area-td">
                                     <button className="createroom" onClick={this.createRoomHandler}>Create Room</button>
                                 </td>
-                                <td>
-                                    {this.renderErrorMessage()}
-                                </td>
                                 <td className="user-info-area-td">
                                     <button className="enterroom" onClick={this.enterRoomHandler}>Enter Room</button>
+                                </td>
+                                <td>
+                                    {this.renderErrorMessage()}
                                 </td>
                                 <td className="user-info-area-td-last">
                                     <button className="logout" onClick={this.logoutHandler}>Logout</button>
