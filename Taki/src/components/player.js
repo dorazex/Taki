@@ -8,7 +8,7 @@ export default class PlayerComp extends React.Component {
     }
 
     render() {
-        const { player, playerKey, cardClicked, colorChosen, username } = this.props;
+        const { player, playerKey, cardClicked, colorChosen, username, gameRunning } = this.props;
         const currentPlayer = this.props.currentPlayerName;
         var mainClassName = "player-cards-flex-container";
         var disabledClassName = "disabled-regular";
@@ -20,20 +20,24 @@ export default class PlayerComp extends React.Component {
         const className = finalClassName;
 
         return (
-            <div id={`player-container-${playerKey}`} className={className}>
-                <div> {player.name}</div>
-                {player.cards.map(
-                    (card, i) => <CardComp
-                        key={i}
-                        cardKey={i}
-                        card={card}
-                        player={player}
-                        playerKey={playerKey}
-                        username={username}
-                        currentPlayerName={currentPlayer}
-                        cardClicked={cardClicked}
-                        colorChosen={colorChosen}
-                    />)}
+            <div>
+                {player.win == false &&
+                    <div id={`player-container-${playerKey}`} className={className}>
+                        <div> {player.name}</div>
+                        {player.cards.map(
+                            (card, i) => <CardComp
+                                key={i}
+                                cardKey={i}
+                                card={card}
+                                player={player}
+                                playerKey={playerKey}
+                                username={username}
+                                currentPlayerName={currentPlayer}
+                                cardClicked={cardClicked}
+                                colorChosen={colorChosen}
+                                gameRunning={gameRunning}
+                            />)}
+                    </div>}
             </div>
         )
     }

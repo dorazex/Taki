@@ -2,13 +2,14 @@ import React from 'react';
 import * as utilities from '../models/utilities';
 
 const PlayerStatisticsRowComp = (props) => {
-    const { playerKey, game, player } = props;
+    const { playerKey, player } = props;
 
     return (
         <tr>
-            <th>{playerKey}</th>
-            <th>{utilities.miliSecondsToTimeString(game.players[playerKey].statistics.avgTurnsDurationsCurrentGame)}</th>
-            <th>{game.players[playerKey].statistics.singleCardCount}</th>
+            <th>{playerKey + 1}</th>
+            <th> {player.name} </th>
+            <th>{utilities.miliSecondsToTimeString(player.statistics.avgTurnsDurationsCurrentGame)}</th>
+            <th>{player.statistics.singleCardCount}</th>
         </tr>
     )
 };

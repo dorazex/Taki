@@ -25,66 +25,49 @@ export default class GameComp extends React.Component {
 		this.finishTurn = this.finishTurn.bind(this);
 		this.pullCard = this.pullCard.bind(this);
 		this.hideColorModal = this.hideColorModal.bind(this);
-		this.showEndModal = this.showEndModal.bind(this);
 		this.hideEndModal = this.hideEndModal.bind(this);
-		this.newGame = this.newGame.bind(this);
 		this.withdraw = this.withdraw.bind(this);
-		//this.checkIfGameStarted = this.checkIfGameStarted.bind(this);
-
-
-
-		//this.checkGameStartInterval = setInterval(this.checkIfGameStarted, 1000);
+		this.finishGame = this.finishGame.bind(this);
 	}
 
-
-
-
-	// checkIfGameStarted() {
-	// 	fetch('/game/checkGameStart', {
-	// 		method: 'GET',
-	// 		headers: {
-	// 			'Accept': 'application/json',
-	// 			'Content-Type': 'application/json'
-	// 		},
-	// 		credentials: 'include'
-	// 	})
-	// 		.then((response) => {
-	// 			if (response.status === 200) {
-	// 				return response.json();
-	// 			}
-	// 		})
-	// 		.then((res) => {
-	// 			this.setState(() => ({ playersList: res.players }));
-	// 			if (res.gameRunning == true) {
-	// 				showMessage("Nonogram", "Game started");
-	// 				$("#sidePanel *").removeClass('disabled').prop('disabled', false);
-	// 				blinkTitleWithMessage("Game started");
-	// 				clearInterval(checkGameStartInterval);
-	// 				this.updateDetailsInterval = setInterval(this.updateDetails, 1000); // relevant to player, not spectator
-	// 			}
-	// 		});
-	// }
-
-
-	newGame() {
-		this.state.game.newGame();
-		this.setState({ showEndModal: false });
+	componentDidMount() {
+		this.finishGame();
 	}
 
-	withdraw() {
-		this.state.game.winnerIndex = 0;
-		this.showEndModal();
+	componentWillUnmount() {
+		if (this.timeoutId) {
+			clearTimeout(this.timeoutId);
+		}
 	}
 
-	showEndModal() {
-		this.setState({ showEndModal: true });
-	};
+	finishGame() {
+		return fetch('/game/finishGame', { method: 'GET', credentials: 'include' })
+			.then((response) => {
+				if (!response.ok) {
+					throw response;
+				}
+				this.timeoutId = setTimeout(this.finishGame, 200);
+				return response.json();
+			})
+			.then(res => {
+				if (res.finishGame == true) {
+					this.setState(() => ({ showEndModal: true, winners: res.winners, gameStatistics: res.gameStatistics }));
+				}
+			})
+			.catch(err => { throw err });
+	}
 
 	hideEndModal() {
-		this.state.game.ended = true;
-		this.setState({ showEndModal: false });
+		this.setState({
+			showEndModal: false
+		}, () => {
+			this.props.userWithdraw();
+		});
 	};
 
+	withdraw() {
+		this.props.userWithdraw();
+	}
 
 	finishTurn() {
 		fetch('/game/finishTurn', {
@@ -171,22 +154,13 @@ export default class GameComp extends React.Component {
 	}
 
 	render() {
-		//	const winnerIndex = game.winnerIndex;
-		//	const showEndModal = winnerIndex != undefined ? true : this.state.showEndModal;
-
 		return (
 			<div>
 				<StatusBarComp withdraw={this.withdraw} className="status-bar" />
 				<BoardComp username={this.props.username} cardClicked={this.cardClicked} colorChosen={this.colorChosen} finishTurn={this.finishTurn} pullCard={this.pullCard} />
 				<ChangeColorComp show={this.state.showColorModal} handleClose={this.hideColorModal} />
+				<EndGameStatisticsComp show={this.state.showEndModal} handleClose={this.hideEndModal} winners={this.state.winners} gameStatistics={this.state.gameStatistics} />
 			</div>
 		)
-
-		// <div id={game.ended ? "main-div" : ""}>
-		// 
-
-
-		// 	<EndGameStatisticsComp show={showEndModal} handleClose={this.hideEndModal} game={game} newGame={this.newGame} />
-		// </div >);
 	}
 }

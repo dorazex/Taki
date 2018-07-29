@@ -31,7 +31,7 @@ const CardComp = (props) => {
 	}
 
 	const onClick = (event) => {
-		if (props.currentPlayerName != props.username)
+		if (props.currentPlayerName != props.username || !props.gameRunning)
 			return;
 
 		if (props.card.action == "changeColor") {
@@ -45,7 +45,7 @@ const CardComp = (props) => {
 		<div className="card-container">
 			{
 				props.username == props.player.name ?
-					<img src={require(`../cards/${getFileName(props.card.number, props.card.color, props.card.action)}`)} style={props.username == props.currentPlayerName ? { cursor: "pointer" } : {}} onClick={(e) => onClick(e)} /> :
+					<img src={require(`../cards/${getFileName(props.card.number, props.card.color, props.card.action)}`)} style={(props.username == props.currentPlayerName) && (props.gameRunning) ? { cursor: "pointer" } : {}} onClick={(e) => onClick(e)} /> :
 					<img src={coverCardImage} className="disabled-regular" />
 			}
 		</div>

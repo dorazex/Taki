@@ -9,6 +9,7 @@ export default class BoardComp extends React.Component {
 
         this.state = {
             board: {
+                gameRunning: false,
                 players: [],
                 numberOfCards: undefined,
                 currentAction: undefined,
@@ -32,13 +33,15 @@ export default class BoardComp extends React.Component {
         if (this.timeoutId) {
             clearTimeout(this.timeoutId);
         }
+
+        this.isCancelled = true;
     }
 
     render() {
         return (
             <div>
                 <div id="board" className="board-flex-container">
-                    <DecksComp open={false} username={this.props.username} currentPlayerName={this.state.board.currentPlayerName} numberOfCards={this.state.board.numberOfCards} currentAction={this.state.board.currentAction} finishTurn={this.props.finishTurn} pullCard={this.props.pullCard} />
+                    <DecksComp open={false} gameRunning={this.state.board.gameRunning} username={this.props.username} currentPlayerName={this.state.board.currentPlayerName} numberOfCards={this.state.board.numberOfCards} currentAction={this.state.board.currentAction} finishTurn={this.props.finishTurn} pullCard={this.props.pullCard} />
                     <DecksComp open={true} topCard={this.state.board.topCard} />
                 </div>
                 <div id="players">
@@ -51,6 +54,7 @@ export default class BoardComp extends React.Component {
                             colorChosen={this.props.colorChosen}
                             currentPlayerName={this.state.board.currentPlayerName}
                             username={this.props.username}
+                            gameRunning={this.state.board.gameRunning}
                         />)}
                 </div>
             </div>
@@ -69,7 +73,9 @@ export default class BoardComp extends React.Component {
                 return response.json();
             })
             .then(boardInfo => {
-                this.setState(() => ({ board: boardInfo }));
+                if (!this.isCancelled) {
+                    this.setState(() => ({ board: boardInfo }));
+                }
             })
             .catch(err => { throw err });
     }

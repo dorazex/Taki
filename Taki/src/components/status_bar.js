@@ -19,7 +19,7 @@ export default class StatusBarComp extends React.Component {
 
         this.getStatusGame = this.getStatusGame.bind(this);
     }
-    
+
 
     componentDidMount() {
         this.getStatusGame();
@@ -33,7 +33,7 @@ export default class StatusBarComp extends React.Component {
 
     render() {
         var gameDuration = this.state.status.gameDuration;
-        if (gameDuration > 0 && gameDuration < 1000){
+        if (gameDuration > 0 && gameDuration < 1000) {
             return (
                 <div id="statistics">
                     <table className="status-bar notification">
@@ -46,7 +46,7 @@ export default class StatusBarComp extends React.Component {
                         </tbody>
                     </table>
                 </div>
-                )
+            )
         }
 
         return (
@@ -54,11 +54,13 @@ export default class StatusBarComp extends React.Component {
                 <table className="status-bar">
                     <tbody>
                         <tr>
-                            <td className="status-bar-td">
-                                <button id="withdraw" onClick={this.props.withdraw}>
-                                    Withdraw!
+                            {this.state.status.gameRunning == false &&
+                                <td className="status-bar-td">
+                                    <button id="withdraw" onClick={this.props.withdraw}>
+                                        Withdraw!
                                 </button>
-                            </td>
+                                </td>
+                            }
                             <td className="status-bar-td"><div id="turn"></div>Turn of: {this.state.status.turnOf}</td>
                             <td className="status-bar-td"><div id="color">{this.state.status.currentColor}</div></td>
                             <td className="status-bar-td"><div id="turns-count">Turns Count: {this.state.status.turnsCount}</div></td>
@@ -72,7 +74,6 @@ export default class StatusBarComp extends React.Component {
             </div>
         );
     }
-
 
     getStatusGame() {
         return fetch('/game/statusGame', { method: 'GET', credentials: 'include' })

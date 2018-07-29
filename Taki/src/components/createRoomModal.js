@@ -2,7 +2,9 @@ import React from 'react';
 
 const CreateRoomModal = (props) => {
 
-    const showHideClassName = (props.show && !props.cancelled) ? "create-room-modal display-block" : "create-room-modal display-none";
+// && !props.cancelled
+
+    const showHideClassName = (props.show) ? "create-room-modal display-block" : "create-room-modal display-none";
     const createErrMessage = props.errMessage;
   
 
@@ -28,7 +30,7 @@ const CreateRoomModal = (props) => {
                                         <input className="create-game-btn btn" type="submit" value="Create Room" />
                                     </td>
                                     <td width="50%" padding="2%">
-                                        <button className="create-room-close-button" onClick={props.handleCancel}>Close</button>
+                                        <button className="create-room-close-button" type="button" onClick={props.handleCancel}>Close</button>
                                     </td>
                                 </tr>
                             </tbody>

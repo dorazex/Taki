@@ -1,8 +1,6 @@
 import React from 'react';
 import coverCardImage from '../cards/cover_0_0.png';
 
-
-
 export default class DecksComp extends React.Component {
     getFileName(number, color, action) {
         var text = "";
@@ -37,7 +35,7 @@ export default class DecksComp extends React.Component {
             return (
                 <div className={"deck-container"}>
                     <div id="deck" onClick={this.props.pullCard}>
-                        <img src={coverCardImage}  style={this.props.username == this.props.currentPlayerName ? { cursor: "pointer" } : {}} />
+                        <img src={coverCardImage}  style={(this.props.username == this.props.currentPlayerName) && (this.props.gameRunning) ? { cursor: "pointer" } : {}} />
                     </div>
                     <div id="deck-text" className="deck-text">
                         {this.props.numberOfCards}

@@ -27,6 +27,7 @@ export default class BaseContainer extends React.Component {
         this.hideCreateRoomModal = this.hideCreateRoomModal.bind(this);
         this.handleSelectedRoom = this.handleSelectedRoom.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
+        this.handleWithdraw = this.handleWithdraw.bind(this);
         //this.logoutHandler= this.logoutHandler.bind(this);
 
         this.getUserName();
@@ -39,13 +40,29 @@ export default class BaseContainer extends React.Component {
         else if (this.state.show == 'rooms')
             return this.renderRooms();
         else if (this.state.show == 'game') {
-            return (<GameComp username={this.state.currentUser.name}/>);
+            return (<GameComp username={this.state.currentUser.name} userWithdraw={this.handleWithdraw} />);
         }
     }
 
     handleSelectedRoom(roomIdentifier) {
         this.setState({ selectedRoom: roomIdentifier });
+    }
 
+
+    handleWithdraw() {
+        fetch('/game/withdraw', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        })
+            .then((response) => {
+                if (response.status === 200) {
+                    this.setState(() => ({ show: 'rooms' }));
+                }
+            })
     }
 
     handleSuccessedLogin() {
@@ -73,7 +90,6 @@ export default class BaseContainer extends React.Component {
                         this.setState(() => ({ show: 'game' }));
                     } else if (response.status === 403) {
                         response.json().then((res) => {
-                            console.log(res.message)
                             this.setState({ errMessage: res.message });
                         })
                     }
@@ -86,10 +102,12 @@ export default class BaseContainer extends React.Component {
         const gameTitle = e.target.elements.gameName.value;
         const totalPlayers = e.target.elements.totalPlayers.value;
 
-        if (this.state.cancelled){
-            this.setState({showCreateRoomModal:false, cancelled: false });
-            return;
-        }
+        console.log("hereeee")
+
+        // if (this.state.cancelled) {
+        //     this.setState({ showCreateRoomModal: false, cancelled: false });
+        //     return;
+        // }
 
         fetch('/rooms/createGame', {
             method: 'POST',
@@ -104,23 +122,29 @@ export default class BaseContainer extends React.Component {
             credentials: 'include'
         })
             .then((response) => {
-                if (response.status === 403) {
+                if (response.status === 403 || response.status === 200) {
                     return response.json();
                 }
             })
             .then((res) => {
-                console.log(res.message)
-                this.setState({ createErrMessage: res.message, showCreateRoomModal: true });
+                if (res.message) {
+                    this.setState({ createErrMessage: res.message, showCreateRoomModal: true });
+                } else {
+                    this.setState({ createErrMessage: '', showCreateRoomModal: false });
+                }
             });
-
-        this.setState({ showCreateRoomModal: false });
     };
 
     createRoomHandler() {
         this.setState({ showCreateRoomModal: true });
     };
+    // handleCancel() {
+    //     this.setState({ cancelled: true });
+    // };
+
     handleCancel() {
-        this.setState({ cancelled: true });
+        console.log('cancellll')
+        this.setState({ createErrMessage: '', showCreateRoomModal: false });
     };
 
     renderRooms() {
@@ -136,6 +160,9 @@ export default class BaseContainer extends React.Component {
                                 <td className="user-info-area-td">
                                     <button className="createroom" onClick={this.createRoomHandler}>Create Room</button>
                                 </td>
+                                <td>
+                                    {this.renderErrorMessage()}
+                                </td>
                                 <td className="user-info-area-td">
                                     <button className="enterroom" onClick={this.enterRoomHandler}>Enter Room</button>
                                 </td>
@@ -147,13 +174,13 @@ export default class BaseContainer extends React.Component {
                     </table>
                 </div>
                 <RoomsContainer selectedRoomHandler={this.handleSelectedRoom} selected={this.state.selectedRoom} />
-                <CreateRoomModal show={this.state.showCreateRoomModal} handleClose={this.hideCreateRoomModal} errMessage={this.state.createErrMessage} handleCancel={this.handleCancel} cancelled={this.state.cancelled}/>
-                {this.renderErrorMessage()}
+                <CreateRoomModal show={this.state.showCreateRoomModal} handleClose={this.hideCreateRoomModal} errMessage={this.state.createErrMessage} handleCancel={this.handleCancel} />
             </div>
         )
     }
 
 
+    //  cancelled={this.state.cancelled}
     renderErrorMessage() {
         if (this.state.errMessage) {
             return (

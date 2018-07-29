@@ -14,10 +14,6 @@ export default class Players extends React.Component {
         this.getPlayersContent();
     }
 
-    // componentDidMount() {
-    //     this.getPlayersContent();
-    // }
-
     componentWillUnmount() {
         if (this.timeoutId) {
             clearTimeout(this.timeoutId);

@@ -7,14 +7,13 @@ const userManagement = require('./models/userManagement');
 const gameServer = require('./models/gameServer');
 const app = express();
 
-app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 269999999999 } }));
+app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 269999999999 }, resave: true, saveUninitialized: true }));
+
 app.use(bodyParser.text());
 
 app.use(bodyParser.json({ type: 'application/json' }))
 
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //app.use(express.static('public'));
 

@@ -11,15 +11,33 @@ class Game {
 		this.currentAction = undefined;
 		this.plus2 = 0;
 		this.message = undefined;
-		this.NUM_REGULAR_PLAYERS = numRegularPlayers;
-		this.NUM_COMPUTER_PLAYERS = numComputerPlayers;
 		this.statistics = new (require('./game_statistics.js'))();
-		this.ended = false;
-		this.winnerIndex = undefined;
 		this.roomInfo = new (require('./RoomInfo.js'))();
 		this.gameRunning = false;
-		this.gameOver = undefined;
+		this.winners = [];
+		this.numOfUsersWithdraw = 0;
+		this.finishGame = false;
 	}
+
+	newGame() {
+		this.deck = undefined;
+		this.openDeck = undefined;
+		this.players = [];
+		this.currentPlayerIndex = 0;
+		this.currentColor = undefined;
+		this.currentAction = undefined;
+		this.plus2 = 0;
+		this.message = undefined;
+		this.statistics = new (require('./game_statistics.js'))();
+		this.gameRunning = false;
+		this.winners = [];
+		this.numOfUsersWithdraw = 0;
+		this.finishGame = false;
+		this.roomInfo.onlinePlayers = 0;
+		this.roomInfo.startGame = false;
+        this.init();		
+	}
+
 
 	getCurrentPlayerName() {
 		return this.players[this.currentPlayerIndex].name;
@@ -59,13 +77,27 @@ class Game {
 	}
 
 	removePlayer(username) {
-		if (!gameRunningProperty) {
+		if (!this.gameRunning) {
 			for (var i = this.players.length - 1; i >= 0; i--) {
 				if (this.players[i].name == username) {
 					this.deck.returnCards(this.players[i].cards);
 					this.players.splice(i, 1);
 				}
 			}
+		}
+	}
+
+	withdraw(username) {
+		this.roomInfo.decreaseOnlinePlayers();
+		this.removePlayer(username);
+		if (this.gameRunning) {
+			this.numOfUsersWithdraw++;
+		}
+
+		if(this.numOfUsersWithdraw == this.roomInfo.getTotalPlayers()) {
+			this.finishGame = true;
+			this.gameRunning = false;
+			this.newGame();
 		}
 	}
 
@@ -77,8 +109,10 @@ class Game {
 			this.players.push(player);
 			if (this.roomInfo.getOnlinePlayers() == this.roomInfo.getTotalPlayers()) {
 				this.statistics.startTime = new Date().getTime();
+				this.players[this.currentPlayerIndex].statistics.startTurn();
 				this.gameRunning = true;
-				this.gameOver = false;
+				this.finishGame = false;
+				this.roomInfo.startGame = true;
 			}
 			return true;
 		}
@@ -115,44 +149,21 @@ class Game {
 		} while (!this.openDeck.getTopCard().isValidStartCard())
 	}
 
-	newGame() {
-		this.deck = new (require('./deck.js'))();
-		this.deck.init();
-		this.openDeck = new (require('./open_deck.js'))();
-		this.currentPlayerIndex = 0;
-		this.currentColor = undefined;
-		this.currentAction = undefined;
-		this.plus2 = 0;
-		this.message = undefined;
-		this.statistics = new (require('./game_statistics.js'))();
-		this.statistics.turnsCount = 1;
-		this.statistics.startTime = new Date().getTime();
-		this.NUM_REGULAR_PLAYERS = this.numRegularPlayers;
-		this.NUM_COMPUTER_PLAYERS = this.numComputerPlayers;
-		this.ended = false;
-		this.winnerIndex = undefined;
-
-		for (var i = 0; i < this.players.length; i++) {
-			utilities.clearArray(this.players[i].cards);
-			this.players[i].addCards(this.deck.takeCards(constants.NUM_INITIAL_CARDS));
-			this.players[i].statistics.singleCardCount = 0;
-			this.players[i].statistics.numOfTurnsCurrentGame = 0;
-			this.players[i].statistics.avgTurnsDurationsCurrentGame = 0;
-		}
-
-		do {
-			this.openDeck.putCard(this.deck.takeCards(1)[0])
-			this.currentColor = this.openDeck.getTopCard().color;
-		} while (!this.openDeck.getTopCard().isValidStartCard())
-	}
-
 	cyclicIncrementCurrentPlayerIndex(stop) {
 		this.currentAction = undefined;
 		this.statistics.turnsCount++;
 
 		this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
-		if (stop == true)
+		while (this.players[this.currentPlayerIndex].win == true) {
 			this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
+		}
+
+		if (stop == true) {
+			this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
+			while (this.players[this.currentPlayerIndex].win == true) {
+				this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
+			}
+		}
 
 		this.players[this.currentPlayerIndex].statistics.startTurn();
 	}
@@ -240,7 +251,16 @@ class Game {
 		this.players[playerIndex].statistics.endTurn(cardsCountAfterTurn);
 
 		if (this.players[playerIndex].cards.length == 0 && this.openDeck.getTopCard().action != "plus") {
-			this.winnerIndex = playerIndex;
+			this.players[playerIndex].win = true;
+			this.winners.push(this.players[playerIndex]);
+			if(this.winners.length + 1 == this.roomInfo.getTotalPlayers()) {
+				for(var i = 0; i < this.players.length; i++) {
+					if(this.players[i].win == false) {
+						this.winners.push(this.players[i]);
+					}
+				}
+				this.finishGame = true;
+			}
 		}
 	}
 

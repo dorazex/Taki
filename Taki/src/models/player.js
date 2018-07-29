@@ -1,6 +1,7 @@
 class Player {
     constructor(name) {
         this.cards = [];
+        this.win = false;
         this.name = name;
         //this.isComputerPlayer = isComputerPlayer;
         this.statistics = new (require('./player_statistics.js'))();

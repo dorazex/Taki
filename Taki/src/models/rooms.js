@@ -31,6 +31,7 @@ rooms.post('/createGame', (req, res) => {
 	game.setGameTitle(req.body.gameTitle);
 	game.setTotalPlayers(req.body.totalPlayers);
 	roomsManager.addGame(game);
+	res.status(200).json({});
 });
 
 
@@ -42,8 +43,6 @@ rooms.get('/roomList', (req, res) => {
 	res.json(roomsManager.getRoomList());
 });
 
-
-//TODO: user can play in one room
 rooms.post('/enterRoom', (req, res) => {
 	var roomid = req.body.roomid;
 	var gameManager = roomsManager.getGames().get(roomid.toString());
