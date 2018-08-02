@@ -28,7 +28,7 @@ export default class BaseContainer extends React.Component {
         this.handleSelectedRoom = this.handleSelectedRoom.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
         this.handleWithdraw = this.handleWithdraw.bind(this);
-        //this.logoutHandler= this.logoutHandler.bind(this);
+        this.logoutHandler= this.logoutHandler.bind(this);
 
         this.getUserName();
     }
@@ -101,6 +101,7 @@ export default class BaseContainer extends React.Component {
         e.preventDefault();
         const gameTitle = e.target.elements.gameName.value;
         const totalPlayers = e.target.elements.totalPlayers.value;
+        const withComputer = e.target.elements.computer.checked;
 
         fetch('/rooms/createGame', {
             method: 'POST',
@@ -110,7 +111,8 @@ export default class BaseContainer extends React.Component {
             },
             body: JSON.stringify({
                 gameTitle: gameTitle,
-                totalPlayers: totalPlayers
+                totalPlayers: totalPlayers,
+                withComputer: withComputer
             }),
             credentials: 'include'
         })
@@ -168,8 +170,6 @@ export default class BaseContainer extends React.Component {
         )
     }
 
-
-    //  cancelled={this.state.cancelled}
     renderErrorMessage() {
         if (this.state.errMessage) {
             return (
@@ -180,7 +180,6 @@ export default class BaseContainer extends React.Component {
         }
         return null;
     }
-
 
     getUserName() {
         this.fetchUserInfo()
@@ -207,13 +206,16 @@ export default class BaseContainer extends React.Component {
             });
     }
 
-    // logoutHandler() {
-    //     fetch('/rooms/logout', {method: 'GET', credentials: 'include'})
-    //     .then(response => {
-    //         if (!response.ok) {
-    //             console.log(`failed to logout user ${this.state.currentUser.name} `, response);                
-    //         }
-    //         this.setState(()=>({currentUser: {name:''}, showLogin: true}));
-    //     })
-    // }
+    logoutHandler() {
+        fetch('/users/logout', { method: 'GET', credentials: 'include' })
+            .then((response) => {
+                if (response.status === 200) {
+                    this.setState(() => ({ currentUser: { name: '' }, show: 'login' }));
+                } else if (response.status === 403) {
+                    response.json().then((res) => {
+                        this.setState({ errMessage: res.message });
+                    })
+                }
+            })
+    }
 }

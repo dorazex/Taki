@@ -2,7 +2,7 @@ const constants = require('./constants');
 const utilities = require('./utilities');
 
 class Game {
-	constructor(numRegularPlayers, numComputerPlayers) {
+	constructor(numRegularPlayers, numComputerPlayers, withComputer) {
 		this.deck = undefined;
 		this.openDeck = undefined;
 		this.players = [];
@@ -17,6 +17,7 @@ class Game {
 		this.winners = [];
 		this.numOfUsersWithdraw = 0;
 		this.finishGame = false;
+		this.withComputer = withComputer;
 	}
 
 	newGame() {
@@ -35,9 +36,21 @@ class Game {
 		this.finishGame = false;
 		this.roomInfo.onlinePlayers = 0;
 		this.roomInfo.startGame = false;
-        this.init();		
+		this.init();
+		if (this.withComputer == true) {
+			this.addPlayer('Computer')
+		}
 	}
 
+	nextTurn() {
+		var playerIndex = this.currentPlayerIndex;
+		var currentPlayer = this.players[playerIndex];
+	
+		// now computers play their turns, updating the game view after each turn
+		if (currentPlayer.isComputerPlayer == true && this.gameRunning && !this.finishGame) {
+			this.computerPlay();  	// computer calculates the actual turn 
+		}
+	}
 
 	getCurrentPlayerName() {
 		return this.players[this.currentPlayerIndex].name;
@@ -93,8 +106,13 @@ class Game {
 		if (this.gameRunning) {
 			this.numOfUsersWithdraw++;
 		}
-
-		if(this.numOfUsersWithdraw == this.roomInfo.getTotalPlayers()) {
+		if((this.withComputer) && (this.numOfUsersWithdraw + 1 == this.roomInfo.getTotalPlayers())) {
+			this.removePlayer('Computer');
+			this.finishGame = true;
+			this.gameRunning = false;
+			this.newGame();
+		} 
+		else if (this.numOfUsersWithdraw == this.roomInfo.getTotalPlayers()) {
 			this.finishGame = true;
 			this.gameRunning = false;
 			this.newGame();
@@ -104,9 +122,14 @@ class Game {
 	addPlayer(username) {
 		if (this.roomInfo.getOnlinePlayers() < this.roomInfo.getTotalPlayers() && this.gameRunning == false) {
 			this.roomInfo.increaseOnlinePlayers();
-			var player = new (require('./player.js'))(username);
+			var isComputerPlayer = username === 'Computer' ? true : false;
+			var player = new (require('./player.js'))(username, isComputerPlayer);
 			player.addCards(this.deck.takeCards(constants.NUM_INITIAL_CARDS));
-			this.players.push(player);
+			if (this.withComputer && this.players.length > 0) {
+				this.players.splice(this.players.length - 1, 0, player);
+			} else {
+				this.players.push(player);
+			}
 			if (this.roomInfo.getOnlinePlayers() == this.roomInfo.getTotalPlayers()) {
 				this.statistics.startTime = new Date().getTime();
 				this.players[this.currentPlayerIndex].statistics.startTurn();
@@ -253,9 +276,9 @@ class Game {
 		if (this.players[playerIndex].cards.length == 0 && this.openDeck.getTopCard().action != "plus") {
 			this.players[playerIndex].win = true;
 			this.winners.push(this.players[playerIndex]);
-			if(this.winners.length + 1 == this.roomInfo.getTotalPlayers()) {
-				for(var i = 0; i < this.players.length; i++) {
-					if(this.players[i].win == false) {
+			if (this.winners.length + 1 == this.roomInfo.getTotalPlayers()) {
+				for (var i = 0; i < this.players.length; i++) {
+					if (this.players[i].win == false) {
 						this.winners.push(this.players[i]);
 					}
 				}

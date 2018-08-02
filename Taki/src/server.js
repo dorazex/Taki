@@ -15,14 +15,7 @@ app.use(bodyParser.json({ type: 'application/json' }))
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//app.use(express.static('public'));
-
 app.use(express.static(path.resolve(__dirname, "..", "public")));
-
-// app.get('/',auth.userAuthentication, (req, res, next) => {		
-// 	console.log('root', req.session.id);	
-// 	next();
-// })
 
 app.use('/rooms', rooms);
 app.use('/users', userManagement);

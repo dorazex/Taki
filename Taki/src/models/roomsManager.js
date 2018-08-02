@@ -30,12 +30,16 @@ function addGame(game) {
 
 
 function removePlayer(organizer) {
+    if(checkUniqueUser(organizer) == false)
+      return false;
+
     for (var i = onlinePlayers.length - 1; i >= 0; i--) {
         if (onlinePlayers[i].name == organizer) {
-            array.splice(i, 1);
-            return;
+            onlinePlayers.splice(i, 1);
         }
     }
+
+    return true;
 }
 
 

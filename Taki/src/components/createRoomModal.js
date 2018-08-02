@@ -2,11 +2,11 @@ import React from 'react';
 
 const CreateRoomModal = (props) => {
 
-// && !props.cancelled
+    // && !props.cancelled
 
     const showHideClassName = (props.show) ? "create-room-modal display-block" : "create-room-modal display-none";
     const createErrMessage = props.errMessage;
-  
+
 
     return (
         <div className={showHideClassName}>
@@ -15,12 +15,13 @@ const CreateRoomModal = (props) => {
                     <div className="create-room-modal-name-div">
                         <label className="create-room-form-label">Room Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                         <input className="gamename-input" name="gameName" />
-                        <br/><br/>
+                        <br /><br />
                     </div>
                     <div className="create-room-modal-players-div">
                         <label className="create-room-form-label">Total Players:&nbsp;</label>
                         <input className="totalPlayers-input" name="totalPlayers" />
-                        <br/><br/>
+                        <input id="computer" name="computer" type="checkbox" />
+                        <br /><br />
                     </div>
                     <div className="create-room-modal-buttons-div">
                         <table width="100%">
@@ -36,7 +37,7 @@ const CreateRoomModal = (props) => {
                             </tbody>
                         </table>
                     </div>
-                    <br/>
+                    <br />
                     <div className="create-room-modal-message-div">
                         {createErrMessage}
                     </div>

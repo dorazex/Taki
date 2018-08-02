@@ -1,9 +1,9 @@
 class Player {
-    constructor(name) {
+    constructor(name, isComputerPlayer) {
         this.cards = [];
         this.win = false;
         this.name = name;
-        //this.isComputerPlayer = isComputerPlayer;
+        this.isComputerPlayer = isComputerPlayer;
         this.statistics = new (require('./player_statistics.js'))();
         this.moveGenerator = new (require('./move_generator.js'))();
     }

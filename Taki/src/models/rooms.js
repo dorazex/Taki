@@ -25,11 +25,14 @@ rooms.post('/createGame', (req, res) => {
 		return;
 	}
 
-	var game = new (require('./game.js'))(req.body.totalPlayers, 0);
+	var game = new (require('./game.js'))(req.body.totalPlayers, 0, req.body.withComputer);
 	game.init();
 	game.setOrganizer(req.cookies.organizer);
 	game.setGameTitle(req.body.gameTitle);
 	game.setTotalPlayers(req.body.totalPlayers);
+	if (req.body.withComputer == true) {
+		game.addPlayer('Computer')
+	}
 	roomsManager.addGame(game);
 	res.status(200).json({});
 });
@@ -71,13 +74,5 @@ rooms.post('/enterRoom', (req, res) => {
 		}
 	}
 });
-
-rooms.get('/logout', (req, res) => {
-	var username = req.query.organizer;
-	roomsManager.removePlayer(username);
-	req.session.destroy();
-	res.sendStatus(200);
-});
-
 
 module.exports = rooms;

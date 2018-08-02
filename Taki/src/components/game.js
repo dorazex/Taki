@@ -28,16 +28,32 @@ export default class GameComp extends React.Component {
 		this.hideEndModal = this.hideEndModal.bind(this);
 		this.withdraw = this.withdraw.bind(this);
 		this.finishGame = this.finishGame.bind(this);
+		this.nextTurn = this.nextTurn.bind(this);
 	}
 
 	componentDidMount() {
+		this.nextTurn();
 		this.finishGame();
 	}
 
 	componentWillUnmount() {
-		if (this.timeoutId) {
-			clearTimeout(this.timeoutId);
+		if (this.timeoutId1) {
+			clearTimeout(this.timeoutId1);
 		}
+		if (this.timeoutId2) {
+			clearTimeout(this.timeoutId1);
+		}
+	}
+	
+	nextTurn() {
+		return fetch('/game/nextTurn', { method: 'GET', credentials: 'include' })
+			.then((response) => {
+				if (!response.ok) {
+					throw response;
+				}
+				this.timeoutId1 = setTimeout(this.nextTurn, 200);
+				this.setState(this.state);
+			})
 	}
 
 	finishGame() {
@@ -46,7 +62,7 @@ export default class GameComp extends React.Component {
 				if (!response.ok) {
 					throw response;
 				}
-				this.timeoutId = setTimeout(this.finishGame, 200);
+				this.timeoutId2 = setTimeout(this.finishGame, 200);
 				return response.json();
 			})
 			.then(res => {
