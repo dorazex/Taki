@@ -41,7 +41,7 @@ export default class GameComp extends React.Component {
 			clearTimeout(this.timeoutId1);
 		}
 		if (this.timeoutId2) {
-			clearTimeout(this.timeoutId1);
+			clearTimeout(this.timeoutId2);
 		}
 	}
 	

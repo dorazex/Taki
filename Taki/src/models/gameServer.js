@@ -24,7 +24,7 @@ gameServer.get('/finishGame', (req, res) => {
 gameServer.get('/nextTurn', (req, res) => {
     var roomid = req.cookies.roomid;
     var gameManager = roomsManager.getGames().get(roomid.toString());
-    var username = req.cookies.organizer;
+    gameManager.nextTurn();
     res.sendStatus(200);
 });
 
