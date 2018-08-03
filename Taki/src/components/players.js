@@ -18,13 +18,15 @@ export default class Players extends React.Component {
         if (this.timeoutId) {
             clearTimeout(this.timeoutId);
         }
+
+        this.isCancelled = true;
     }
 
     render() {
         return (
             <div className="players-wrapper">
                 <label className="table-top-label">Players</label>
-                <br/><br/>
+                <br /><br />
                 <table className="players-table">
                     <thead>
                         <tr>
@@ -59,7 +61,9 @@ export default class Players extends React.Component {
                 return response.json();
             })
             .then(content => {
-                this.setState(() => ({ content }));
+                if (!this.isCancelled) {
+                    this.setState(() => ({ content }));
+                }
             })
             .catch(err => { throw err });
     }

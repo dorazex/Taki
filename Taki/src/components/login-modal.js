@@ -36,7 +36,7 @@ export default class LoginModal extends React.Component {
                 return response.json();
             })
             .then(userAlreadyOnlineInfo => {
-                if (userAlreadyOnlineInfo.alreadyOnline == true) {
+                if (userAlreadyOnlineInfo.alreadyOnline == true && !this.isCancelled) {
                     this.setState(() => ({ errMessage: "" }));
                     if (this.timeoutId) {
                         clearTimeout(this.timeoutId);

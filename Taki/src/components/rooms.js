@@ -20,13 +20,15 @@ export default class Rooms extends React.Component {
         if (this.timeoutId) {
             clearTimeout(this.timeoutId);
         }
+
+        this.isCancelled = true;
     }
 
     render() {
         return (
             <div className="rooms-wrapper">
                 <label className="table-top-label">Rooms</label>
-                <br/><br/>
+                <br /><br />
                 <table className="rooms-table">
                     <thead>
                         <tr>
@@ -68,7 +70,9 @@ export default class Rooms extends React.Component {
                 return response.json();
             })
             .then(content => {
-                this.setState(() => ({ content }));
+                if (!this.isCancelled) {
+                    this.setState(() => ({ content }));
+                }
             })
             .catch(err => { throw err });
     }
