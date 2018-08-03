@@ -106,6 +106,7 @@ gameServer.get('/statusGame', (req, res) => {
     var gameManager = roomsManager.getGames().get(roomid.toString());
     var gameRunning = gameManager.getGameRunning();
     var turnOf = gameManager.turnOf();
+    var isWin = gameManager.isWin(username)
 
     res.json({
         finishGame: gameManager.finishGame,
@@ -116,7 +117,8 @@ gameServer.get('/statusGame', (req, res) => {
         gameDuration: gameRunning ? gameManager.statistics.getGameDuration(gameManager.finishGame) : 0,
         avgTurnsDurationsCurrentGame: gameManager.avgTurnsDurationsCurrentGame(username),
         singleCardCount: gameManager.singleCardCount(username),
-        message: turnOf == username ? gameManager.message : ''
+        message: turnOf == username ? gameManager.message : '',
+        isWin : isWin
     });
 });
 

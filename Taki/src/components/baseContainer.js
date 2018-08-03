@@ -22,13 +22,14 @@ export default class BaseContainer extends React.Component {
 
         this.createRoomHandler = this.createRoomHandler.bind(this);
         this.enterRoomHandler = this.enterRoomHandler.bind(this);
+        this.deleteRoomHandler = this.deleteRoomHandler.bind(this);
         this.handleSuccessedLogin = this.handleSuccessedLogin.bind(this);
         this.handleLoginError = this.handleLoginError.bind(this);
         this.hideCreateRoomModal = this.hideCreateRoomModal.bind(this);
         this.handleSelectedRoom = this.handleSelectedRoom.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
         this.handleWithdraw = this.handleWithdraw.bind(this);
-        this.logoutHandler= this.logoutHandler.bind(this);
+        this.logoutHandler = this.logoutHandler.bind(this);
 
         this.getUserName();
     }
@@ -72,6 +73,27 @@ export default class BaseContainer extends React.Component {
     handleLoginError() {
         console.error('login failed')
         this.setState(() => { showLogin: true });
+    }
+
+    deleteRoomHandler() {
+        if (this.state.selectedRoom != undefined) {
+            fetch('/rooms/deleteRoom', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ roomid: this.state.selectedRoom }),
+                credentials: 'include'
+            })
+                .then((response) => {
+                    if (response.status === 403) {
+                        response.json().then((res) => {
+                            this.setState({ errMessage: res.message });
+                        })
+                    }
+                })
+        }
     }
 
     enterRoomHandler() {
@@ -153,6 +175,9 @@ export default class BaseContainer extends React.Component {
                                 </td>
                                 <td className="user-info-area-td">
                                     <button className="enterroom" onClick={this.enterRoomHandler}>Enter Room</button>
+                                </td>
+                                <td className="user-info-area-td">
+                                    <button className="deleterroom" onClick={this.deleteRoomHandler}>Delete Room</button>
                                 </td>
                                 <td>
                                     {this.renderErrorMessage()}

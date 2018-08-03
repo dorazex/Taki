@@ -46,6 +46,32 @@ rooms.get('/roomList', (req, res) => {
 	res.json(roomsManager.getRoomList());
 });
 
+rooms.post('/deleteRoom', (req, res) => {
+	var roomid = req.body.roomid;
+	var gameManager = roomsManager.getGames().get(roomid.toString());
+	var username = req.cookies.organizer;
+
+	if(!gameManager || gameManager == undefined) {
+		res.sendStatus(200);
+	}
+
+	if (gameManager.getOrganizer() != username) {
+		res.status(403).json({ message: "Only the game's owner can remove it." });
+		return;
+	}
+	else {
+		if (gameManager.startGame == true || (gameManager.players.length != 0 && gameManager.withComputer == false) ||
+			(gameManager.players.length > 1 && gameManager.withComputer == true)) {
+			res.status(403).json({ message: "The game cannot be removed while it have players." });
+			return;
+		}
+		else {
+			roomsManager.removeGame(roomid);
+			res.sendStatus(200);
+		}
+	}
+});
+
 rooms.post('/enterRoom', (req, res) => {
 	var roomid = req.body.roomid;
 	var gameManager = roomsManager.getGames().get(roomid.toString());

@@ -31,6 +31,14 @@ function addUserToAuthList(req, res, next) {
 	}
 }
 
+function userAlreadyOnline(req) {
+	if (userList[req.session.id] !== undefined)
+		return true;
+
+	return false;
+}
+
+
 function removeUserFromAuthList(req, res, next) {	
 	if (userList[req.session.id] === undefined) {
 		res.status(403).send('user does not exist');
@@ -44,4 +52,4 @@ function getUserInfo(id) {
     return {name: userList[id]};
 }
 
-module.exports = {userAuthentication, addUserToAuthList, removeUserFromAuthList, getUserInfo}
+module.exports = {userAuthentication, addUserToAuthList, removeUserFromAuthList, getUserInfo, userAlreadyOnline}

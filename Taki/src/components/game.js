@@ -44,7 +44,7 @@ export default class GameComp extends React.Component {
 			clearTimeout(this.timeoutId2);
 		}
 	}
-	
+
 	nextTurn() {
 		return fetch('/game/nextTurn', { method: 'GET', credentials: 'include' })
 			.then((response) => {
@@ -82,101 +82,109 @@ export default class GameComp extends React.Component {
 	};
 
 	withdraw() {
+		if (this.timeoutId1) {
+			clearTimeout(this.timeoutId1);
+		}
+
+		if (this.timeoutId2) {
+			clearTimeout(this.timeoutId2);
+		}
+
 		this.props.userWithdraw();
 	}
 
-	finishTurn() {
-		fetch('/game/finishTurn', {
-			method: 'POST',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			},
-			credentials: 'include'
+finishTurn() {
+	fetch('/game/finishTurn', {
+		method: 'POST',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		},
+		credentials: 'include'
+	})
+		.then((response) => {
+			if (response.status === 200) {
+				this.setState(this.state);
+			}
 		})
-			.then((response) => {
-				if (response.status === 200) {
-					this.setState(this.state);
-				}
-			})
-	}
+}
 
-	pullCard() {
-		fetch('/game/pullCard', {
-			method: 'POST',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			},
-			credentials: 'include'
+pullCard() {
+	fetch('/game/pullCard', {
+		method: 'POST',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		},
+		credentials: 'include'
+	})
+		.then((response) => {
+			if (response.status === 200) {
+				this.setState(this.state);
+			}
 		})
-			.then((response) => {
-				if (response.status === 200) {
-					this.setState(this.state);
-				}
-			})
-	}
+}
 
 
-	cardClicked(card, cardKey, playerKey) {
-		fetch('/game/cardClicked', {
-			method: 'POST',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ card: card, cardKey: cardKey, playerKey: playerKey }),
-			credentials: 'include'
+cardClicked(card, cardKey, playerKey) {
+	fetch('/game/cardClicked', {
+		method: 'POST',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ card: card, cardKey: cardKey, playerKey: playerKey }),
+		credentials: 'include'
+	})
+		.then((response) => {
+			if (response.status === 200) {
+				this.setState(this.state);
+			}
 		})
-			.then((response) => {
-				if (response.status === 200) {
-					this.setState(this.state);
-				}
-			})
-	}
+}
 
-	colorChosen(card, cardKey, playerKey) {
-		fetch('/game/colorChosen', {
-			method: 'POST',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ card: card, cardKey: cardKey, playerKey: playerKey }),
-			credentials: 'include'
+colorChosen(card, cardKey, playerKey) {
+	fetch('/game/colorChosen', {
+		method: 'POST',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ card: card, cardKey: cardKey, playerKey: playerKey }),
+		credentials: 'include'
+	})
+		.then((response) => {
+			if (response.status === 200) {
+				this.setState({ showColorModal: true });
+			}
 		})
-			.then((response) => {
-				if (response.status === 200) {
-					this.setState({ showColorModal: true });
-				}
-			})
-	}
+}
 
-	hideColorModal(color) {
-		fetch('/game/changeColor', {
-			method: 'POST',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ color: color }),
-			credentials: 'include'
+hideColorModal(color) {
+	fetch('/game/changeColor', {
+		method: 'POST',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ color: color }),
+		credentials: 'include'
+	})
+		.then((response) => {
+			if (response.status === 200) {
+				this.setState({ showColorModal: false });
+			}
 		})
-			.then((response) => {
-				if (response.status === 200) {
-					this.setState({ showColorModal: false });
-				}
-			})
-	}
+}
 
-	render() {
-		return (
-			<div>
-				<StatusBarComp withdraw={this.withdraw} className="status-bar" />
-				<BoardComp username={this.props.username} cardClicked={this.cardClicked} colorChosen={this.colorChosen} finishTurn={this.finishTurn} pullCard={this.pullCard} />
-				<ChangeColorComp show={this.state.showColorModal} handleClose={this.hideColorModal} />
-				<EndGameStatisticsComp show={this.state.showEndModal} handleClose={this.hideEndModal} winners={this.state.winners} gameStatistics={this.state.gameStatistics} />
-			</div>
-		)
-	}
+render() {
+	return (
+		<div>
+			<StatusBarComp withdraw={this.withdraw} className="status-bar" />
+			<BoardComp username={this.props.username} cardClicked={this.cardClicked} colorChosen={this.colorChosen} finishTurn={this.finishTurn} pullCard={this.pullCard} />
+			<ChangeColorComp show={this.state.showColorModal} handleClose={this.hideColorModal} />
+			<EndGameStatisticsComp show={this.state.showEndModal} handleClose={this.hideEndModal} winners={this.state.winners} gameStatistics={this.state.gameStatistics} />
+		</div>
+	)
+}
 }

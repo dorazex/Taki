@@ -11,7 +11,6 @@ const RoomsContainer = (props) => {
             <Rooms className="rooms-view" selectedRoomHandler={props.selectedRoomHandler} selected={props.selected} />
         </div>
     )
-
 };
 
 export default RoomsContainer;

@@ -13,7 +13,8 @@ export default class StatusBarComp extends React.Component {
                 gameDuration: 0,
                 avgTurnsDurationsCurrentGame: 0,
                 singleCardCount: undefined,
-                message: undefined
+                message: undefined,
+                isWin: false
             }
         };
 
@@ -54,7 +55,7 @@ export default class StatusBarComp extends React.Component {
                 <table className="status-bar">
                     <tbody>
                         <tr>
-                            {this.state.status.gameRunning == false &&
+                            {(this.state.status.gameRunning == false || this.state.status.isWin == true) &&
                                 <td className="status-bar-td">
                                     <button id="withdraw" onClick={this.props.withdraw}>
                                         Withdraw!

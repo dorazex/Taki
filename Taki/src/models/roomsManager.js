@@ -21,6 +21,15 @@ function isPlayerExists(name) {
     return fasle;
 }
 
+function removeGame(roomid) {
+    games.delete(roomid.toString());
+    for (var i = roomList.length - 1; i >= 0; i--) {
+        if (roomList[i].roomIdentifier == roomid) {
+            roomList.splice(i, 1);
+        }
+    }
+}
+
 function addGame(game) {
     count++;
     games.set(count.toString(), game);
@@ -30,8 +39,8 @@ function addGame(game) {
 
 
 function removePlayer(organizer) {
-    if(checkUniqueUser(organizer) == false)
-      return false;
+    if (checkUniqueUser(organizer) == false)
+        return false;
 
     for (var i = onlinePlayers.length - 1; i >= 0; i--) {
         if (onlinePlayers[i].name == organizer) {
@@ -54,4 +63,4 @@ function getPlayerList() { return onlinePlayers; }
 
 function getRoomList() { return roomList; }
 
-module.exports = { isPlayerExists, addGame, removePlayer, addPlayer, getGames, getPlayerList, getRoomList, checkUniqueUser }
+module.exports = { removeGame, isPlayerExists, addGame, removePlayer, addPlayer, getGames, getPlayerList, getRoomList, checkUniqueUser }

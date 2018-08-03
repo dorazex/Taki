@@ -89,8 +89,16 @@ class Game {
 		return true;
 	}
 
+	isWin(username) {
+		for (var i = this.players.length - 1; i >= 0; i--) {
+			if (this.players[i].name == username) {
+				return this.players[i].win;
+			}
+		}
+	}
+
 	removePlayer(username) {
-		if (!this.gameRunning) {
+		if (!this.gameRunning || this.isWin(username)) {
 			for (var i = this.players.length - 1; i >= 0; i--) {
 				if (this.players[i].name == username) {
 					this.deck.returnCards(this.players[i].cards);
@@ -145,6 +153,10 @@ class Game {
 
 	setOrganizer(organizer) {
 		this.roomInfo.setOrganizer(organizer);
+	}
+
+	getOrganizer() {
+		return this.roomInfo.organizer;
 	}
 
 	setGameTitle(gameTitle) {

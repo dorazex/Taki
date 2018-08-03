@@ -20,6 +20,11 @@ userManagement.post('/addUser', auth.addUserToAuthList, (req, res) => {
 	res.sendStatus(200);
 });
 
+userManagement.get('/checkUserAlreadyOnline', (req, res) => {
+	var result = auth.userAlreadyOnline(req);
+	res.status(200).json({ alreadyOnline: result });
+});
+
 userManagement.get('/logout', [
 	(req, res, next) => {
 		var username = req.cookies.organizer;
