@@ -53,6 +53,7 @@ rooms.post('/deleteRoom', (req, res) => {
 
 	if(!gameManager || gameManager == undefined) {
 		res.sendStatus(200);
+		return;
 	}
 
 	if (gameManager.getOrganizer() != username) {
@@ -68,6 +69,7 @@ rooms.post('/deleteRoom', (req, res) => {
 		else {
 			roomsManager.removeGame(roomid);
 			res.sendStatus(200);
+			return;
 		}
 	}
 });
