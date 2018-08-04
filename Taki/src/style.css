@@ -379,7 +379,7 @@ table#players-statistics-table td,table#players-statistics-table th {
   color: #fff;
   padding-top: 5px;
   padding-bottom: 5px;
-  padding-left: 50vw;
+  /*padding-left: 50vw;*/
   /*transition: all 0.3s ease-out;*/
 }
 
@@ -495,8 +495,16 @@ table#players-statistics-table td,table#players-statistics-table th {
   background-color: red;
 }
 
-.login-error-message,.base-container-err-message{
+.login-error-message{
   font-family: Courier;
   font-size: 100%;
   color: #e6ffe6;
+}
+
+.base-container-err-message{
+  font-family: Courier;
+  font-size: 90%;
+  color: #ff5656;
+  font-weight: bold;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }

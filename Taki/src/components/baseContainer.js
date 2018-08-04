@@ -179,11 +179,11 @@ export default class BaseContainer extends React.Component {
                                 <td className="user-info-area-td">
                                     <button className="deleteroom" onClick={this.deleteRoomHandler}>Delete Room</button>
                                 </td>
-                                <td>
-                                    {this.renderErrorMessage()}
+                                <td className="user-info-area-td">
+                                    <button className="logout" onClick={this.logoutHandler}>Logout</button>
                                 </td>
                                 <td className="user-info-area-td-last">
-                                    <button className="logout" onClick={this.logoutHandler}>Logout</button>
+                                    {this.renderErrorMessage()}
                                 </td>
                             </tr>
                         </tbody>

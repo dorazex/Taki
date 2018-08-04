@@ -30,7 +30,7 @@ userManagement.get('/logout', [
 		var username = req.cookies.organizer;
 		var result = roomsManager.removePlayer(username);
 		if (result == false) {
-			res.status(403).json({ message: "You're playing." });
+			res.status(403).json({ message: "Cannot log out while playing." });
 		}
 		next();
 	},
