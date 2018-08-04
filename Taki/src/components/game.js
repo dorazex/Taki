@@ -5,7 +5,6 @@ import BoardComp from './board';
 import StatusBarComp from './status_bar';
 import ChangeColorComp from './change_color';
 import EndGameStatisticsComp from './end_game_statistics';
-// import GameFactory from './models/game_factory';
 import DecksComp from './decks';
 
 import '../style.css';
@@ -43,6 +42,8 @@ export default class GameComp extends React.Component {
 		if (this.timeoutId2) {
 			clearTimeout(this.timeoutId2);
 		}
+
+		this.isCancelled = true;
 	}
 
 	nextTurn() {
@@ -52,7 +53,9 @@ export default class GameComp extends React.Component {
 					throw response;
 				}
 				this.timeoutId1 = setTimeout(this.nextTurn, 200);
-				this.setState(this.state);
+				if (!this.isCancelled) {
+					this.setState(this.state);
+				}
 			})
 	}
 
@@ -66,7 +69,7 @@ export default class GameComp extends React.Component {
 				return response.json();
 			})
 			.then(res => {
-				if (res.finishGame == true) {
+				if (res.finishGame == true && !this.isCancelled) {
 					this.setState(() => ({ showEndModal: true, winners: res.winners, gameStatistics: res.gameStatistics }));
 				}
 			})

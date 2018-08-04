@@ -46,6 +46,9 @@ class Game {
 		var playerIndex = this.currentPlayerIndex;
 		var currentPlayer = this.players[playerIndex];
 
+		if(!currentPlayer || currentPlayer == undefined)
+			return;
+
 		// now computers play their turns, updating the game view after each turn
 		if (currentPlayer.isComputerPlayer == true && this.gameRunning && !this.finishGame) {
 			this.computerPlay();  	// computer calculates the actual turn 
@@ -53,8 +56,11 @@ class Game {
 	}
 
 	getCurrentPlayerName() {
-		return this.players[this.currentPlayerIndex].name;
+		if (this.players[this.currentPlayerIndex])
+			return this.players[this.currentPlayerIndex].name;
+		else return '';
 	}
+
 	avgTurnsDurationsCurrentGame(username) {
 		for (var i = 0; i < this.players.length; i++) {
 			if (this.players[i].name == username) {
