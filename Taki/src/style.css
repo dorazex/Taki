@@ -384,7 +384,7 @@ table#players-statistics-table td,table#players-statistics-table th {
 }
 
 
-.enterroom,.createroom{
+.enterroom,.createroom,.deleteroom{
   background-color: chartreuse;
   font-family: Courier;
   cursor: pointer;

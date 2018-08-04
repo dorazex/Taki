@@ -177,7 +177,7 @@ export default class BaseContainer extends React.Component {
                                     <button className="enterroom" onClick={this.enterRoomHandler}>Enter Room</button>
                                 </td>
                                 <td className="user-info-area-td">
-                                    <button className="deleterroom" onClick={this.deleteRoomHandler}>Delete Room</button>
+                                    <button className="deleteroom" onClick={this.deleteRoomHandler}>Delete Room</button>
                                 </td>
                                 <td>
                                     {this.renderErrorMessage()}
