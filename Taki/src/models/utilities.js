@@ -22,8 +22,13 @@ function clearArray(array) {
 	}
 }
 
+function isNumber(n) {
+	return !isNaN(parseFloat(n)) && !isNaN(n - 0)
+}
+
 module.exports = {
 	shuffleArray: shuffleArray,
 	miliSecondsToTimeString: miliSecondsToTimeString,
-	clearArray: clearArray
+	clearArray: clearArray,
+	isNumber: isNumber
 }

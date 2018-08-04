@@ -3,6 +3,7 @@ const roomsManager = require('./roomsManager');
 const rooms = express.Router();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const utilities = require('./utilities');
 
 rooms.use(cookieParser());
 
@@ -18,6 +19,11 @@ rooms.post('/createGame', (req, res) => {
 			res.status(403).json({ message: "Game title already exist" });
 			return;
 		}
+	}
+
+	if (!utilities.isNumber(req.body.totalPlayers)) {
+		res.status(403).json({ message: "Total players value must be an integer" });
+		return;
 	}
 
 	if (req.body.totalPlayers < 2 || req.body.totalPlayers > 4) {
