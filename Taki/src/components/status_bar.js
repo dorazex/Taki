@@ -30,6 +30,8 @@ export default class StatusBarComp extends React.Component {
         if (this.timeoutId) {
             clearTimeout(this.timeoutId);
         }
+
+        this.isCancelled = true;
     }
 
     render() {
@@ -86,7 +88,9 @@ export default class StatusBarComp extends React.Component {
                 return response.json();
             })
             .then(statusInfo => {
-                this.setState(() => ({ status: statusInfo }));
+                if (!this.isCancelled) {
+                    this.setState(() => ({ status: statusInfo }));
+                }
             })
             .catch(err => { throw err });
     }

@@ -31,6 +31,7 @@ userManagement.get('/logout', [
 		var result = roomsManager.removePlayer(username);
 		if (result == false) {
 			res.status(403).json({ message: "Cannot log out while playing." });
+			return;
 		}
 		next();
 	},

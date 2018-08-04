@@ -57,7 +57,7 @@ rooms.post('/deleteRoom', (req, res) => {
 	var gameManager = roomsManager.getGames().get(roomid.toString());
 	var username = req.cookies.organizer;
 
-	if(!gameManager || gameManager == undefined) {
+	if (!gameManager || gameManager == undefined) {
 		res.sendStatus(200);
 		return;
 	}
@@ -84,6 +84,11 @@ rooms.post('/enterRoom', (req, res) => {
 	var roomid = req.body.roomid;
 	var gameManager = roomsManager.getGames().get(roomid.toString());
 	var username = req.cookies.organizer;
+
+	if (!gameManager || gameManager == undefined) {
+		res.status(403).json({ message: "Not selected room." });
+		return;
+	}
 
 	if (roomsManager.checkUniqueUser(username) == false) {
 		//user already exist, so can't register them, just let them go to their game

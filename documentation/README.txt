@@ -3,6 +3,10 @@ Participants
 Dor Azouri      204034300 dorazouri@gmail.com
 Moran Mahabi 307994491 moran.mahabi@gmail.com
 
+Start URL
+==============
+http://localhost:3000/
+
 General
 ==============
 Our design model separates model methods from UI methods.
@@ -52,6 +56,10 @@ Components
 Assumptions
 ==============
 1.	Users "authentication" is by name only
+
+Bonuses
+==============
+1.	We have implemented the bonus of adding a computer player to the room
 
 Remarks
 ==============

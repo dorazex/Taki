@@ -67,12 +67,11 @@ export default class BaseContainer extends React.Component {
     }
 
     handleSuccessedLogin() {
-        this.setState(() => ({ showLogin: 'rooms' }), this.getUserName);
+        this.setState(() => ({ show: 'rooms' }), this.getUserName);
     }
 
     handleLoginError() {
-        console.error('login failed')
-        this.setState(() => { showLogin: true });
+        this.setState(() => ({ currentUser: { name: '' }, show: 'login' }));
     }
 
     deleteRoomHandler() {
@@ -116,6 +115,9 @@ export default class BaseContainer extends React.Component {
                         })
                     }
                 })
+        }
+        else {
+            this.setState({ errMessage: 'Not selected room' });
         }
     }
 
@@ -189,7 +191,7 @@ export default class BaseContainer extends React.Component {
                         </tbody>
                     </table>
                 </div>
-                <RoomsContainer selectedRoomHandler={this.handleSelectedRoom} selected={this.state.selectedRoom} />
+                <RoomsContainer loginErrorHandler={this.handleLoginError} selectedRoomHandler={this.handleSelectedRoom} selected={this.state.selectedRoom} />
                 <CreateRoomModal show={this.state.showCreateRoomModal} handleClose={this.hideCreateRoomModal} errMessage={this.state.createErrMessage} handleCancel={this.handleCancel} />
             </div>
         )
@@ -213,7 +215,7 @@ export default class BaseContainer extends React.Component {
             })
             .catch(err => {
                 if (err.status === 401) { // incase we're getting 'unautorithed' as response
-                    this.setState(() => ({ showLogin: true }));
+                    this.setState(() => ({ show: 'login' }));
                 } else {
                     throw err; // in case we're getting an error
                 }

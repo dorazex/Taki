@@ -13,7 +13,10 @@ gameServer.use(bodyParser.urlencoded({ extended: true }));
 gameServer.get('/finishGame', (req, res) => {
     var roomid = req.cookies.roomid;
     var gameManager = roomsManager.getGames().get(roomid.toString());
-    if (gameManager.finishGame == true) {
+    if(!gameManager || gameManager == undefined) {
+        res.json({ finishGame: false });
+    }
+    else if (gameManager.finishGame == true) {
         res.json({ finishGame: true, winners: gameManager.winners, gameStatistics: gameManager.statistics });
     } else {
         res.json({ finishGame: false });
@@ -24,6 +27,9 @@ gameServer.get('/finishGame', (req, res) => {
 gameServer.get('/nextTurn', (req, res) => {
     var roomid = req.cookies.roomid;
     var gameManager = roomsManager.getGames().get(roomid.toString());
+    if(!gameManager || gameManager == undefined) {
+        res.sendStatus(200);
+    }
     gameManager.nextTurn();
     res.sendStatus(200);
 });

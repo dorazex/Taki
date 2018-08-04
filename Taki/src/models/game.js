@@ -45,7 +45,7 @@ class Game {
 	nextTurn() {
 		var playerIndex = this.currentPlayerIndex;
 		var currentPlayer = this.players[playerIndex];
-	
+
 		// now computers play their turns, updating the game view after each turn
 		if (currentPlayer.isComputerPlayer == true && this.gameRunning && !this.finishGame) {
 			this.computerPlay();  	// computer calculates the actual turn 
@@ -72,7 +72,9 @@ class Game {
 	}
 
 	turnOf() {
-		return this.players[this.currentPlayerIndex].name;
+		if (this.players[this.currentPlayerIndex])
+			return this.players[this.currentPlayerIndex].name;
+		else return '';
 	}
 
 	getGameRunning() {
@@ -114,12 +116,12 @@ class Game {
 		if (this.gameRunning) {
 			this.numOfUsersWithdraw++;
 		}
-		if((this.withComputer) && (this.numOfUsersWithdraw + 1 == this.roomInfo.getTotalPlayers())) {
+		if ((this.withComputer) && (this.numOfUsersWithdraw + 1 == this.roomInfo.getTotalPlayers())) {
 			this.removePlayer('Computer');
 			this.finishGame = true;
 			this.gameRunning = false;
 			this.newGame();
-		} 
+		}
 		else if (this.numOfUsersWithdraw == this.roomInfo.getTotalPlayers()) {
 			this.finishGame = true;
 			this.gameRunning = false;
