@@ -63,13 +63,13 @@ rooms.post('/deleteRoom', (req, res) => {
 	}
 
 	if (gameManager.getOrganizer() != username) {
-		res.status(403).json({ message: "Only the game's owner can remove it." });
+		res.status(403).json({ message: "Only a room's owner is allowed to delete it." });
 		return;
 	}
 	else {
 		if (gameManager.startGame == true || (gameManager.players.length != 0 && gameManager.withComputer == false) ||
 			(gameManager.players.length > 1 && gameManager.withComputer == true)) {
-			res.status(403).json({ message: "The game cannot be removed while it have players." });
+			res.status(403).json({ message: "A non empty game cannot be deleted." });
 			return;
 		}
 		else {
