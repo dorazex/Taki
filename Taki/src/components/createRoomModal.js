@@ -20,6 +20,10 @@ const CreateRoomModal = (props) => {
                     <div className="create-room-modal-players-div">
                         <label className="create-room-form-label">Total Players:&nbsp;</label>
                         <input className="totalPlayers-input" name="totalPlayers" />
+                        <br /><br />
+                    </div>
+                    <div className="create-room-modal-players-div">
+                        <label className="create-room-form-label">Add Computer Player?&nbsp;</label>
                         <input id="computer" name="computer" type="checkbox" />
                         <br /><br />
                     </div>
